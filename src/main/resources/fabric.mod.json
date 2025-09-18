@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "cyberbop",
+  "version": "${version}",
+  "name": "Cyberbopd",
+  "description": "Craft your cyber body",
+  "authors": [ "PinkGoosik", "Spusik", "VioletSomik" ],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/cyberbop",
+    "sources": "https://github.com/tyap-lyap/cyberbop",
+    "issues": "https://github.com/tyap-lyap/cyberbop/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/cyberbop/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [ "tyaplyap.cyberbop.CyberbopMod" ]
+  },
+  "mixins": [ "cyberbop.mixins.json" ],
+  "depends": {
+    "fabricloader": "*",
+    "fabric-api": "*",
+    "minecraft": ">=1.21",
+    "java": ">=21"
+  }
+}
