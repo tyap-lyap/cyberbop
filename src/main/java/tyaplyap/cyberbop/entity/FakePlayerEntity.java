@@ -143,5 +143,15 @@ public class FakePlayerEntity extends LivingEntity implements PolymerEntity {
 		return false;
 	}
 
+	@Override
+	public void onDeath(DamageSource damageSource) {
+		super.onDeath(damageSource);
+		if(ownerProfile != null && getServer() != null) {
+			var player = getServer().getPlayerManager().getPlayer(ownerProfile.getId());
+			if(player != null) {
+				player.kill();
+			}
+		}
 
+	}
 }
