@@ -1,2 +1,3 @@
 accessWidener	v1	named
 accessible field net/minecraft/entity/player/PlayerEntity PLAYER_MODEL_PARTS Lnet/minecraft/entity/data/TrackedData;
+accessible class net/minecraft/client/gui/hud/InGameHud$HeartType

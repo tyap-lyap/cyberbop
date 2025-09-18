@@ -4,8 +4,12 @@
   "package": "tyaplyap.cyberbop.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "PlayerEntityMixin"
   ],
   "client": [
+    "InGameHudMixin",
+    "LivingEntityRenderMixin",
+    "PlayerRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
