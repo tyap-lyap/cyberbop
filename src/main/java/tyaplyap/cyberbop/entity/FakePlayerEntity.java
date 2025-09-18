@@ -39,7 +39,7 @@ public class FakePlayerEntity extends LivingEntity implements PolymerEntity {
 		this.ownerModelParts = 0x7f;
 	}
 
-	protected FakePlayerEntity(EntityType<? extends LivingEntity> entityType, World world, GameProfile profile, int ownerModelParts) {
+	public FakePlayerEntity(EntityType<? extends LivingEntity> entityType, World world, GameProfile profile, int ownerModelParts) {
 		super(entityType, world);
 		this.ownerProfile = profile;
 		this.ownerModelParts = ownerModelParts;
