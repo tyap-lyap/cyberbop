@@ -17,22 +17,30 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tyaplyap.cyberbop.block.CyberbopBlocks;
+import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.client.CyborgModel;
 import tyaplyap.cyberbop.entity.FakePlayerEntity;
+import tyaplyap.cyberbop.item.CyberbopItems;
+import tyaplyap.cyberbop.item.parts.CyborgPart;
+import tyaplyap.cyberbop.item.parts.CyborgParts;
+import tyaplyap.cyberbop.item.parts.HeadCyborgPart;
+
 import static net.minecraft.server.command.CommandManager.*;
 
 public class CyberbopMod implements ModInitializer {
 	public static final String MOD_ID = "cyberbop";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	public static final EntityModelLayer CYBORG_LAYER = new EntityModelLayer(
-		id("cyborg"), "main");
+	public static final EntityModelLayer CYBORG_LAYER = new EntityModelLayer(id("cyborg"), "main");
 	public static final EntityType<FakePlayerEntity> FAKE_PLAYER_ENTITY = Registry.register(Registries.ENTITY_TYPE, Identifier.of(MOD_ID, "fake_player"), FabricEntityTypeBuilder.<FakePlayerEntity>create(SpawnGroup.MISC,FakePlayerEntity::new).dimensions(EntityDimensions.changing(0.6F, 1.99F)).trackedUpdateRate(2).build());
 
 	@Override
 	public void onInitialize() {
 		CyberbopBlocks.init();
+		CyberbopItems.init();
+		CyberbopBlockEntities.init();
 
 		EntityModelLayerRegistry.registerModelLayer(CYBORG_LAYER, CyborgModel::getTexturedModelData);
+		CyborgParts.init();
 
 		FabricDefaultAttributeRegistry.register(FAKE_PLAYER_ENTITY, LivingEntity.createLivingAttributes());
 

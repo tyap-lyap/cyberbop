@@ -15,7 +15,8 @@
 
   "environment": "*",
   "entrypoints": {
-    "main": [ "tyaplyap.cyberbop.CyberbopMod" ]
+    "main": [ "tyaplyap.cyberbop.CyberbopMod" ],
+    "client": [ "tyaplyap.cyberbop.client.CyberbopModClient" ]
   },
   "mixins": [ "cyberbop.mixins.json" ],
   "depends": {
