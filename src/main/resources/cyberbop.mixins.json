@@ -4,6 +4,7 @@
   "package": "tyaplyap.cyberbop.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "HungerManagerMixin",
     "PlayerEntityMixin"
   ],
   "client": [

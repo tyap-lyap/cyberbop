@@ -7,30 +7,47 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.util.Identifier;
 import tyaplyap.cyberbop.CyberbopMod;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class CyberbopBlocks {
 
-	public static final Block CONTROLLER = Registry.register(Registries.BLOCK, CyberbopMod.id("controller"), new ControllerBlock(AbstractBlock.Settings.create()));
-	public static final Block ASSEMBLER = Registry.register(Registries.BLOCK, CyberbopMod.id("assembler"), new Block(AbstractBlock.Settings.create()));
+	public static final Map<Identifier, BlockItem> ITEMS = new LinkedHashMap<>();
+	public static final Map<Identifier, Block> BLOCKS = new LinkedHashMap<>();
+
+	public static final Block CONTROLLER = add("controller", new ControllerBlock(AbstractBlock.Settings.create()));
+	public static final Block ASSEMBLER = add("assembler", new AssemblerBlock(AbstractBlock.Settings.create().nonOpaque()));
+
 	//test
-	public static final Block ENERGY_GENERATOR = new EnergyGeneratorBlock(AbstractBlock.Settings.create().strength(3.0f, 6.0f).sounds(BlockSoundGroup.METAL));
-	public static final Block ENERGY_WIRE = new EnergyWireBlock(AbstractBlock.Settings.create().strength(1.0f, 3.0f).sounds(BlockSoundGroup.METAL).nonOpaque());
-	public static final Block ENERGY_RECEIVER = new EnergyReceiverBlock(AbstractBlock.Settings.create().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL));
-	public static final Block BATTERY_TEST = new BatteryTestBlock(AbstractBlock.Settings.create().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL));
+	public static final Block ENERGY_GENERATOR = add("energy_generator", new EnergyGeneratorBlock(AbstractBlock.Settings.create().strength(3.0f, 6.0f).sounds(BlockSoundGroup.METAL)));
+	public static final Block ENERGY_WIRE = add("energy_wire", new EnergyWireBlock(AbstractBlock.Settings.create().strength(1.0f, 3.0f).sounds(BlockSoundGroup.METAL).nonOpaque()));
+	public static final Block ENERGY_RECEIVER = add("energy_receiver", new EnergyReceiverBlock(AbstractBlock.Settings.create().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL)));
+	public static final Block BATTERY_TEST = add("battery_test", new BatteryTestBlock(AbstractBlock.Settings.create().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL)));
 
 	public static void init() {
-		Registry.register(Registries.ITEM, CyberbopMod.id("controller"), new BlockItem(CONTROLLER, new Item.Settings()));
-		Registry.register(Registries.ITEM, CyberbopMod.id("assembler"), new BlockItem(ASSEMBLER, new Item.Settings()));
+		ITEMS.forEach((id, item) -> Registry.register(Registries.ITEM, id, item));
+		BLOCKS.forEach((id, block) -> Registry.register(Registries.BLOCK, id, block));
+	}
 
-		//test
-		Registry.register(Registries.BLOCK, CyberbopMod.id("energy_generator"), ENERGY_GENERATOR);
-		Registry.register(Registries.BLOCK, CyberbopMod.id("energy_wire"), ENERGY_WIRE);
-		Registry.register(Registries.ITEM, CyberbopMod.id("energy_generator"), new BlockItem(ENERGY_GENERATOR, new Item.Settings()));
-		Registry.register(Registries.ITEM, CyberbopMod.id("energy_wire"), new BlockItem(ENERGY_WIRE, new Item.Settings()));
-		Registry.register(Registries.BLOCK, CyberbopMod.id("energy_receiver"), ENERGY_RECEIVER);
-		Registry.register(Registries.ITEM, CyberbopMod.id("energy_receiver"), new BlockItem(ENERGY_RECEIVER, new Item.Settings()));
-		Registry.register(Registries.BLOCK, CyberbopMod.id("battery_test"), BATTERY_TEST);
-		Registry.register(Registries.ITEM, CyberbopMod.id("battery_test"), new BlockItem(BATTERY_TEST, new Item.Settings()));
+	public static Block add(String name, Block block) {
+		Item.Settings settings = new Item.Settings();
+		return addBlockItem(name, block, new BlockItem(block, settings));
+	}
+
+	public static Block addBlockItem(String name, Block block, BlockItem item) {
+		addBlock(name, block);
+		if (item != null) {
+			item.appendBlocks(Item.BLOCK_ITEMS, item);
+			ITEMS.put(CyberbopMod.id(name), item);
+		}
+		return block;
+	}
+
+	public static Block addBlock(String name, Block block) {
+		BLOCKS.put(CyberbopMod.id(name), block);
+		return block;
 	}
 }

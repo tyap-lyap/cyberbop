@@ -1,9 +1,9 @@
 package tyaplyap.cyberbop;
 
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.block.entity.BlockEntity;
@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -28,9 +29,7 @@ import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
 import tyaplyap.cyberbop.client.CyborgModel;
 import tyaplyap.cyberbop.entity.FakePlayerEntity;
 import tyaplyap.cyberbop.item.CyberbopItems;
-import tyaplyap.cyberbop.item.parts.CyborgPart;
-import tyaplyap.cyberbop.item.parts.CyborgParts;
-import tyaplyap.cyberbop.item.parts.HeadCyborgPart;
+import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderers;
 
 import static net.minecraft.server.command.CommandManager.*;
 
@@ -40,14 +39,24 @@ public class CyberbopMod implements ModInitializer {
 	public static final EntityModelLayer CYBORG_LAYER = new EntityModelLayer(id("cyborg"), "main");
 	public static final EntityType<FakePlayerEntity> FAKE_PLAYER_ENTITY = Registry.register(Registries.ENTITY_TYPE, Identifier.of(MOD_ID, "fake_player"), FabricEntityTypeBuilder.<FakePlayerEntity>create(SpawnGroup.MISC,FakePlayerEntity::new).dimensions(EntityDimensions.changing(0.6F, 1.99F)).trackedUpdateRate(2).build());
 
+	public static final ItemGroup ITEM_GROUP = FabricItemGroup.builder()
+		.displayName(Text.translatable("itemGroup.cyberbop.items"))
+		.entries((ctx, entries) -> {
+			CyberbopItems.ITEMS.forEach((id, item) -> entries.add(item.getDefaultStack()));
+			CyberbopBlocks.ITEMS.forEach((id, item) -> entries.add(item.getDefaultStack()));
+		})
+		.icon(CyberbopItems.ADVANCED_HEAD::getDefaultStack).build();
+
 	@Override
 	public void onInitialize() {
+		Registry.register(Registries.ITEM_GROUP, CyberbopMod.id("items"), CyberbopMod.ITEM_GROUP);
+
 		CyberbopBlocks.init();
 		CyberbopItems.init();
 		CyberbopBlockEntities.init();
 
 		EntityModelLayerRegistry.registerModelLayer(CYBORG_LAYER, CyborgModel::getTexturedModelData);
-		CyborgParts.init();
+		CyborgPartRenderers.init();
 
 		FabricDefaultAttributeRegistry.register(FAKE_PLAYER_ENTITY, LivingEntity.createLivingAttributes());
 

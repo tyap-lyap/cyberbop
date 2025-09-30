@@ -18,7 +18,8 @@ import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.client.CyborgModel;
 import tyaplyap.cyberbop.extension.LivingEntityRendererExtension;
 import tyaplyap.cyberbop.extension.PlayerExtension;
-import tyaplyap.cyberbop.item.parts.CyborgParts;
+import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderer;
+import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderers;
 
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRenderMixin<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements FeatureRendererContext<T, M>, LivingEntityRendererExtension {
@@ -53,8 +54,37 @@ public abstract class LivingEntityRenderMixin<T extends LivingEntity, M extends 
 	@Inject(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;pop()V", shift = At.Shift.BEFORE))
 	void afterRender(T livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
 		if (livingEntity instanceof PlayerExtension ex && ex.isCyborg()) {
-			CyborgParts.BASIC_HEAD.render(cyborgModel, matrixStack, vertexConsumerProvider, i, livingEntity);
-			CyborgParts.ADVANCED_ARM.render(cyborgModel, matrixStack, vertexConsumerProvider, i, livingEntity);
+//			CyborgParts.ADVANCED_HEAD.render(cyborgModel, matrixStack, vertexConsumerProvider, i, livingEntity);
+//			CyborgParts.ADVANCED_RIGHT_ARM.render(cyborgModel, matrixStack, vertexConsumerProvider, i, livingEntity);
+//			CyborgParts.ADVANCED_LEFT_ARM.render(cyborgModel, matrixStack, vertexConsumerProvider, i, livingEntity);
+//			CyborgParts.ADVANCED_BODY.render(cyborgModel, matrixStack, vertexConsumerProvider, i, livingEntity);
+//			CyborgParts.ADVANCED_RIGHT_LEG.render(cyborgModel, matrixStack, vertexConsumerProvider, i, livingEntity);
+//			CyborgParts.ADVANCED_LEFT_LEG.render(cyborgModel, matrixStack, vertexConsumerProvider, i, livingEntity);
+
+			if(!ex.geCyborgHead().isBlank()) {
+				CyborgPartRenderer part = CyborgPartRenderers.getPart(ex.geCyborgHead());
+				if(part != null) part.render(cyborgModel, matrixStack, vertexConsumerProvider, i, livingEntity);
+			}
+			if(!ex.getCyborgBody().isBlank()) {
+				CyborgPartRenderer part = CyborgPartRenderers.getPart(ex.getCyborgBody());
+				if(part != null) part.render(cyborgModel, matrixStack, vertexConsumerProvider, i, livingEntity);
+			}
+			if(!ex.getCyborgRightArm().isBlank()) {
+				CyborgPartRenderer part = CyborgPartRenderers.getPart(ex.getCyborgRightArm());
+				if(part != null) part.render(cyborgModel, matrixStack, vertexConsumerProvider, i, livingEntity);
+			}
+			if(!ex.getCyborgLeftArm().isBlank()) {
+				CyborgPartRenderer part = CyborgPartRenderers.getPart(ex.getCyborgLeftArm());
+				if(part != null) part.render(cyborgModel, matrixStack, vertexConsumerProvider, i, livingEntity);
+			}
+			if(!ex.getCyborgRightLeg().isBlank()) {
+				CyborgPartRenderer part = CyborgPartRenderers.getPart(ex.getCyborgRightLeg());
+				if(part != null) part.render(cyborgModel, matrixStack, vertexConsumerProvider, i, livingEntity);
+			}
+			if(!ex.getCyborgLeftLeg().isBlank()) {
+				CyborgPartRenderer part = CyborgPartRenderers.getPart(ex.getCyborgLeftLeg());
+				if(part != null) part.render(cyborgModel, matrixStack, vertexConsumerProvider, i, livingEntity);
+			}
 		}
 	}
 

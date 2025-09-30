@@ -1,0 +1,10 @@
+{
+  "values": [
+    "cyberbop:energy_generator",
+    "cyberbop:energy_wire",
+    "cyberbop:energy_receiver",
+    "cyberbop:battery_test",
+    "cyberbop:controller",
+    "cyberbop:assembler"
+  ]
+}

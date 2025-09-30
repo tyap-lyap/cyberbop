@@ -21,7 +21,7 @@ public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy{
 	}
 
 	public static void tick (World world, BlockPos pos, BlockState state, EnergyBlockEntity blockEntity) {
-		if (!world.isClient()) {
+		if (!world.isClient() && blockEntity.getFreakEnergyStored() != 0) {
 
 			List<Direction> directionsFind = new ArrayList<>(Arrays.stream(Direction.values()).toList());
 
