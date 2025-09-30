@@ -62,7 +62,7 @@ public class ControllerBlock extends BlockWithEntity {
 			((PlayerExtension)player).setCyborg(!((PlayerExtension)player).isCyborg());
 			player.sendMessage(Text.literal("isCyborg: " + ((PlayerExtension)player).isCyborg()));
 			if (player instanceof ServerPlayerEntity playerEntity) {
-				FakePlayerEntity fakePlayerEntity = new FakePlayerEntity(CyberbopMod.FAKE_PLAYER_ENTITY,world, playerEntity.getGameProfile(), playerEntity.getClientOptions().playerModelParts());
+				FakePlayerEntity fakePlayerEntity = new FakePlayerEntity(CyberbopMod.FAKE_PLAYER_ENTITY,world, playerEntity);
 				fakePlayerEntity.setPosition(playerEntity.getPos());
 				world.spawnEntity(fakePlayerEntity);
 			}

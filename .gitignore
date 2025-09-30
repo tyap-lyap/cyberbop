@@ -31,3 +31,19 @@ bin/
 # fabric
 
 run/
+Backup/AssemblerBlock.java
+Backup/BatteryTestBlock.java
+Backup/ControllerBlock.java
+Backup/CyberbopBlocks.java
+Backup/EnergyGeneratorBlock.java
+Backup/EnergyReceiverBlock.java
+Backup/EnergyWireBlock.java
+Backup/entity/AssemblerBlockEntity.java
+Backup/entity/BatteryTestBlockEntity.java
+Backup/entity/ControllerBlockEntity.java
+Backup/entity/CyberbopBlockEntities.java
+Backup/entity/EnergyBlockEntity.java
+Backup/entity/EnergyGeneratorBlockEntity.java
+Backup/entity/EnergyReceiverBlockEntity.java
+Backup/entity/EnergyWireBlockEntity.java
+Backup/entity/IEnergy.java

@@ -8,6 +8,28 @@ import tyaplyap.cyberbop.block.CyberbopBlocks;
 
 public class CyberbopBlockEntities {
 
+	public static final BlockEntityType<EnergyGeneratorBlockEntity> ENERGY_GENERATOR_BLOCK_ENTITY = register(
+		 "energy_generator",
+		BlockEntityType.Builder.create(EnergyGeneratorBlockEntity::new, CyberbopBlocks.ENERGY_GENERATOR).build()
+	);
+
+	public static final BlockEntityType<EnergyWireBlockEntity> ENERGY_WIRE_BLOCK_ENTITY = register(
+		"energy_wire",
+		BlockEntityType.Builder.create(EnergyWireBlockEntity::new, CyberbopBlocks.ENERGY_WIRE).build()
+	);
+
+	public static final BlockEntityType<EnergyTestReceiverBlockEntity> ENERGY_RECEIVER_BLOCK_ENTITY = register(
+		"energy_receiver",
+		BlockEntityType.Builder.create(EnergyTestReceiverBlockEntity::new, CyberbopBlocks.ENERGY_RECEIVER).build()
+	);
+
+	public static final BlockEntityType<BatteryTestBlockEntity> BATTERY_TEST_BLOCK_ENTITY = register(
+		"battery_test",
+		BlockEntityType.Builder.create(BatteryTestBlockEntity::new, CyberbopBlocks.BATTERY_TEST).build()
+	);
+
+
+
 	public static final BlockEntityType<ControllerBlockEntity> CONTROLLER = register(
 		"controller",
 		BlockEntityType.Builder.create(ControllerBlockEntity::new, CyberbopBlocks.CONTROLLER).build()

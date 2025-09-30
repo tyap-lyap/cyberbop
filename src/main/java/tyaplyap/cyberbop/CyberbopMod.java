@@ -1,9 +1,12 @@
 package tyaplyap.cyberbop;
 
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -14,10 +17,14 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tyaplyap.cyberbop.block.CyberbopBlocks;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
+import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
 import tyaplyap.cyberbop.client.CyborgModel;
 import tyaplyap.cyberbop.entity.FakePlayerEntity;
 import tyaplyap.cyberbop.item.CyberbopItems;
@@ -46,13 +53,31 @@ public class CyberbopMod implements ModInitializer {
 
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("cyberbop").then(literal("spawncyborg").executes(commandContext -> {
 			var player = commandContext.getSource().getPlayer();
-			var cyborg = new FakePlayerEntity(FAKE_PLAYER_ENTITY, commandContext.getSource().getWorld(), player.getGameProfile(), player.getClientOptions().playerModelParts());
+			var cyborg = new FakePlayerEntity(FAKE_PLAYER_ENTITY, commandContext.getSource().getWorld(), player);
 			cyborg.setPosition(commandContext.getSource().getPlayer().getPos());
 			commandContext.getSource().getWorld().spawnEntity(cyborg);
 
 			return 1;
 			}))
-			.executes(context -> {
+			.then(literal("setstore").then(argument("energy", IntegerArgumentType.integer(0, Integer.MAX_VALUE)).executes(commandContext -> {
+				if (commandContext.getSource().isExecutedByPlayer()) {
+					HitResult hitResult = commandContext.getSource().getPlayer().raycast(commandContext.getSource().getPlayer().getBlockInteractionRange(), 0.0F, false);
+					if (hitResult.getType() == HitResult.Type.BLOCK) {
+						BlockPos blockPos = ((BlockHitResult) hitResult).getBlockPos();
+						BlockEntity blockEntity = commandContext.getSource().getWorld().getBlockEntity(blockPos);
+						if (blockEntity instanceof EnergyBlockEntity energyBlock) {
+							energyBlock.setFreakEnergyStored(IntegerArgumentType.getInteger(commandContext, "energy"));
+						}
+					} else {
+						commandContext.getSource().sendFeedback(() -> Text.literal("No Block"), false);
+
+					}
+					return 1;
+				}
+				commandContext.getSource().sendFeedback(() -> Text.literal("Source not Player"), false);
+
+				return 0;
+			}))).executes(context -> {
 				context.getSource().sendFeedback(() -> Text.literal("Called /cyberbop with no arguments"), false);
 
 				return 1;
