@@ -34,6 +34,11 @@ public class FakePlayerEntity extends LivingEntity implements PolymerEntity {
 
 	private Property cachedSkin;
 
+	private final Property defaultSkin = new Property("textures",
+		"ewogICJ0aW1lc3RhbXAiIDogMTYxMzA4OTI4Mjg3NSwKICAicHJvZmlsZUlkIiA6ICIzZjM4YmViZGYwMWQ0MjNkYWI4MjczZjUwNGFiNGEyNyIsCiAgInByb2ZpbGVOYW1lIiA6ICJjazM0Nzk0MjM1NzUzNzMxIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzZkM2IwNmMzODUwNGZmYzAyMjliOTQ5MjE0N2M2OWZjZjU5ZmQyZWQ3ODg1Zjc4NTAyMTUyZjc3YjRkNTBkZTEiCiAgICB9CiAgfQp9",
+		"dlKt7xkRL0L4RgrT1dtDmRYF26vrpAJEgzv4PpRN7rD4W5fZyt7MenACHIA6gEaNQeRlLtZV1D/IHZWMigjvXDOoePz9PyjvZ052zz+16HKhGBh3J0ecU/fWZmPTdzNoglwe3Ut3qmr8ClSKvvhlCx0ChXmEXZukMOsUOQh+imdBhXxS8ys+jIAeO2qwFWxJOqqnA6w95Yj3+nL0cMbko7KCiDU6luqgU6ddIBEYEyIyrYrhXMRugpJ6OJkMxVG6avhNETry11+rB10mEz9PFYESOu4BVRGAUV5ppRR4ax5rnPUqp3JeFjozxgF1VrdYQVghlF4r2fmEGBeM9nJNQHRYBoE9AG4AVVtC3pgekit5xY+bxxm9VgBXPif2+e9vDanrdKQltmSk6TRBc9ReheHElLREV1dORKEhJAW1FwieYB8Cl3gcYbtGyBSB57E1hG2TAsh1Kk5ZZLmAuglelhjV9N1HWM9vMuO2ldz+2hlIMTpXqcN8qad6C8R/0qdeoaGR/LxZLUQCx1g+vakzY9oc2N8gHtQxKbzk4OMcO+btHPuL43ZoLxULgnRiu56Yy2gW48J/UDaRSR+cYWxoNWSBXDsDh8zxSCdgf0nq8/s27nkAmxo5S8+G8L9W2Gg6oPhF5NeJ0mRlhIkaVYh1+ftbENPJmKulL+Y2DS0Hydw=");
+
+
 	private int ownerModelParts;
 
 	public FakePlayerEntity(EntityType<? extends FakePlayerEntity> entityType, World world) {
@@ -46,7 +51,7 @@ public class FakePlayerEntity extends LivingEntity implements PolymerEntity {
 		this.setOwnerUuid(ownerProfile.getId());
 		this.ownerModelParts = player.getClientOptions().playerModelParts();
 		if (ownerProfile.getProperties().get("textures").stream().findAny().isPresent()) {
-			cachedSkin = ownerProfile.getProperties().get("textures").stream().findAny().get();
+			this.setSkin(ownerProfile.getProperties().get("textures").stream().findAny().get());
 		}
 		this.ownerName = ownerProfile.getName();
 	}
@@ -109,10 +114,15 @@ public class FakePlayerEntity extends LivingEntity implements PolymerEntity {
 	}
 
 	public Property getSkin() {
-		return this.cachedSkin.signature().isEmpty() || this.cachedSkin.value().isEmpty() ? new Property("textures",
-			"ewogICJ0aW1lc3RhbXAiIDogMTYxMzA4OTI4Mjg3NSwKICAicHJvZmlsZUlkIiA6ICIzZjM4YmViZGYwMWQ0MjNkYWI4MjczZjUwNGFiNGEyNyIsCiAgInByb2ZpbGVOYW1lIiA6ICJjazM0Nzk0MjM1NzUzNzMxIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzZkM2IwNmMzODUwNGZmYzAyMjliOTQ5MjE0N2M2OWZjZjU5ZmQyZWQ3ODg1Zjc4NTAyMTUyZjc3YjRkNTBkZTEiCiAgICB9CiAgfQp9",
-			"dlKt7xkRL0L4RgrT1dtDmRYF26vrpAJEgzv4PpRN7rD4W5fZyt7MenACHIA6gEaNQeRlLtZV1D/IHZWMigjvXDOoePz9PyjvZ052zz+16HKhGBh3J0ecU/fWZmPTdzNoglwe3Ut3qmr8ClSKvvhlCx0ChXmEXZukMOsUOQh+imdBhXxS8ys+jIAeO2qwFWxJOqqnA6w95Yj3+nL0cMbko7KCiDU6luqgU6ddIBEYEyIyrYrhXMRugpJ6OJkMxVG6avhNETry11+rB10mEz9PFYESOu4BVRGAUV5ppRR4ax5rnPUqp3JeFjozxgF1VrdYQVghlF4r2fmEGBeM9nJNQHRYBoE9AG4AVVtC3pgekit5xY+bxxm9VgBXPif2+e9vDanrdKQltmSk6TRBc9ReheHElLREV1dORKEhJAW1FwieYB8Cl3gcYbtGyBSB57E1hG2TAsh1Kk5ZZLmAuglelhjV9N1HWM9vMuO2ldz+2hlIMTpXqcN8qad6C8R/0qdeoaGR/LxZLUQCx1g+vakzY9oc2N8gHtQxKbzk4OMcO+btHPuL43ZoLxULgnRiu56Yy2gW48J/UDaRSR+cYWxoNWSBXDsDh8zxSCdgf0nq8/s27nkAmxo5S8+G8L9W2Gg6oPhF5NeJ0mRlhIkaVYh1+ftbENPJmKulL+Y2DS0Hydw=")
-			: this.cachedSkin;
+		return this.cachedSkin == null || this.cachedSkin.signature() == null || this.cachedSkin.value() == null ? this.defaultSkin : this.cachedSkin;
+	}
+
+	public void setSkin(Property property) {
+		if (property.value() == null || property.signature() == null) {
+			this.cachedSkin = this.defaultSkin;
+		} else {
+			this.cachedSkin = property;
+		}
 	}
 
 	protected SoundEvent getHurtSound(DamageSource source) {
