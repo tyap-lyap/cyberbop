@@ -27,7 +27,7 @@ public interface IEnergy {
 	int getFreakEnergyStored();
 
 	default boolean isReceiver() {
-		return type().equals(Type.RECEIVER);
+		return type().equals(Type.RECEIVER) || type().equals(Type.WIRE);
 	}
 
 	void transferEnergy(LinkedHashMap<Direction, EnergyBlockEntity> energyBlockEntities);

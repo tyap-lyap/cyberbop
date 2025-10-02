@@ -72,7 +72,7 @@ public class EnergyWireBlock extends BlockWithEntity {
 		if (shapes.isEmpty()) {
 			return SHAPE;
 		} else {
-			VoxelShape[] shapesArray = shapes.toArray(shapes.toArray(new VoxelShape[0]));
+			VoxelShape[] shapesArray = shapes.toArray(new VoxelShape[0]);
 
 			return VoxelShapes.union(SHAPE, shapesArray);
 		}

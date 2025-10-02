@@ -28,6 +28,11 @@ public class CyberbopBlockEntities {
 		BlockEntityType.Builder.create(BatteryTestBlockEntity::new, CyberbopBlocks.BATTERY_TEST).build()
 	);
 
+	public static final BlockEntityType<SolarPanelBlockEntity> SOLAR_PANEL_BLOCK_ENTITY = register(
+		"solar_panel",
+		BlockEntityType.Builder.create(SolarPanelBlockEntity::new, CyberbopBlocks.SOLAR_PANEL).build()
+	);
+
 
 
 	public static final BlockEntityType<ControllerBlockEntity> CONTROLLER = register(

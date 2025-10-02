@@ -16,11 +16,6 @@ public class BatteryTestBlockEntity extends EnergyBlockEntity{
 	}
 
 	@Override
-	public int transferRate() {
-		return 256000;
-	}
-
-	@Override
 	public Type type() {
 		return Type.BATTERY;
 	}

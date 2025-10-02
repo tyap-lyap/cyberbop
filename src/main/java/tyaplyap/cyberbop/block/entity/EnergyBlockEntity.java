@@ -23,9 +23,8 @@ public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy{
 	public static void tick (World world, BlockPos pos, BlockState state, EnergyBlockEntity blockEntity) {
 		if (!world.isClient() && blockEntity.getFreakEnergyStored() != 0) {
 
-			List<Direction> directionsFind = new ArrayList<>(Arrays.stream(Direction.values()).toList());
+			List<Direction> directionsFind = blockEntity.getRandomDirections();
 
-			Collections.shuffle(directionsFind);
 			List<Direction> directions = new ArrayList<>();
 			for (var directionNeighbor : directionsFind) {
 				if (!(blockEntity instanceof EnergyWireBlockEntity wireBlock && wireBlock.directionOutput.get(directionNeighbor) > 0)) {
@@ -36,6 +35,12 @@ public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy{
 				blockEntity.transferEnergy(blockEntity.findPriority(directions));
 			}
 		}
+	}
+
+	public List<Direction> getRandomDirections() {
+		List<Direction> directions = new ArrayList<>(Arrays.stream(Direction.values()).toList());
+		Collections.shuffle(directions);
+		return directions;
 	}
 
 	private LinkedHashMap<Direction,EnergyBlockEntity> findPriority(List<Direction> directions) {
@@ -53,21 +58,57 @@ public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy{
 		return energyBlockEntities;
 	}
 
+	public boolean isFull(){
+		return this.capacity() == this.getFreakEnergyStored();
+	}
+
+	public void balanceEnergy(EnergyWireBlockEntity wireBlock) {
+		if (!wireBlock.isFull() && (this.type().equals(Type.GENERATOR) || this.type().equals(Type.BATTERY))) {
+			List<EnergyBlockEntity> sourceNeighbors = new ArrayList<>();
+			for (var direction : Direction.values()) {
+				BlockEntity neighbor = this.getWorld().getBlockEntity(wireBlock.getPos().offset(direction));
+				if (neighbor instanceof EnergyBlockEntity energyBlockEntity && energyBlockEntity.getFreakEnergyStored() != 0 && (energyBlockEntity.type().equals(Type.BATTERY) || energyBlockEntity.type().equals(Type.GENERATOR))) {
+					sourceNeighbors.add(energyBlockEntity);
+				}
+			}
+			if (!sourceNeighbors.isEmpty()) {
+				int needEnergy = (wireBlock.capacity() - wireBlock.getFreakEnergyStored()) / sourceNeighbors.size();
+				if (needEnergy == 0) {
+					receive(capacity(), wireBlock);
+				} else {
+					for (var neighbor : sourceNeighbors) {
+						neighbor.receive(needEnergy, wireBlock);
+					}
+				}
+			}
+		}
+	}
+
+	public void receive(int transferRate, EnergyBlockEntity energyBlock) {
+
+			int transfer = Math.min(Math.min(transferRate, this.freakEnergyStored), energyBlock.capacity() - energyBlock.getFreakEnergyStored());
+
+
+			if (transfer > 0) {
+				energyBlock.receiveEnergy(transfer);
+				this.freakEnergyStored -= transfer;
+			}
+
+	}
+
 	@Override
 	public void transferEnergy(LinkedHashMap<Direction, EnergyBlockEntity> energyBlockEntities) {
 			if (this.getFreakEnergyStored() == 0 || energyBlockEntities.isEmpty()){
 				return;
 			}
-
 			for (var direction : energyBlockEntities.keySet()) {
 
 				EnergyBlockEntity energyBlock = energyBlockEntities.get(direction);
 
-				int transfer = Math.min(Math.min(transferRate(), this.freakEnergyStored), energyBlock.capacity() - energyBlock.getFreakEnergyStored());
-
-				if (transfer > 0) {
-					energyBlock.receiveEnergy(transfer);
-					this.freakEnergyStored -= transfer;
+				if (energyBlock instanceof EnergyWireBlockEntity  wire && (this.type().equals(IEnergy.Type.GENERATOR) || this.type().equals(IEnergy.Type.BATTERY))) {
+					this.balanceEnergy(wire);
+				} else {
+					this.receive(transferRate(), energyBlock);
 				}
 				if (energyBlock instanceof EnergyWireBlockEntity wire && !(this instanceof EnergyTestReceiverBlockEntity)) {
 					wire.directionOutput.put(direction, 15);
@@ -78,21 +119,6 @@ public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy{
 	public void receiveEnergy(int freakEnergy) {
 		int energyReceived = Math.min(capacity() - this.freakEnergyStored, freakEnergy);
 			this.freakEnergyStored += energyReceived;
-	}
-
-	@Override
-	public int capacity() {
-		return 40000;
-	}
-
-	@Override
-	public int transferRate() {
-		return 300;
-	}
-
-	@Override
-	public Type type() {
-		return Type.BATTERY;
 	}
 
 	@Override

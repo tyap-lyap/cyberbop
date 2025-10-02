@@ -5,6 +5,7 @@
     "cyberbop:energy_receiver",
     "cyberbop:battery_test",
     "cyberbop:controller",
-    "cyberbop:assembler"
+    "cyberbop:assembler",
+    "cyberbop:solar_panel"
   ]
 }
