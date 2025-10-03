@@ -107,7 +107,9 @@ public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy {
 			if (energyBlock instanceof EnergyWireBlockEntity wire && (this.type().equals(Type.GENERATOR) || this.type().equals(Type.BATTERY))) {
 				this.balanceEnergy(wire);
 			} else {
-				this.receive(transferRate(), energyBlock);
+				if (!energyBlock.type().equals(Type.GENERATOR) && !energyBlock.type().equals(Type.BATTERY)) {
+					this.receive(transferRate(), energyBlock);
+				}
 			}
 			if (energyBlock instanceof EnergyWireBlockEntity wire && !(this instanceof EnergyTestReceiverBlockEntity)) {
 				wire.directionOutput.get(direction).setTimer(15);
