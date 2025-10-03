@@ -94,6 +94,11 @@ public class PlayerEntityMixin implements PlayerExtension {
 	}
 
 	@Override
+	public int getCyborgMaxEnergy() {
+		return 10000;
+	}
+
+	@Override
 	public void setCyborgEnergy(int cyborgEnergy) {
 		PlayerEntity.class.cast(this).getDataTracker().set(CYBORG_ENERGY, cyborgEnergy);
 	}

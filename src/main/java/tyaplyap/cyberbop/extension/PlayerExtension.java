@@ -20,5 +20,6 @@ public interface PlayerExtension {
 	String getCyborgLeftLeg();
 
 	int getCyborgEnergy();
+	int getCyborgMaxEnergy();
 	void setCyborgEnergy(int cyborgEnergy);
 }

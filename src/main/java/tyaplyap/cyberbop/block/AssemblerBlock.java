@@ -1,7 +1,6 @@
 package tyaplyap.cyberbop.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
@@ -45,11 +44,6 @@ public class AssemblerBlock extends BlockWithEntity {
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
 		// Make sure to check world.isClient if you only want to tick only on serverside.
 		return validateTicker(type, CyberbopBlockEntities.ASSEMBLER, AssemblerBlockEntity::tick);
-	}
-
-	@Override
-	protected BlockRenderType getRenderType(BlockState state) {
-		return BlockRenderType.MODEL;
 	}
 
 	@Override
@@ -107,7 +101,7 @@ public class AssemblerBlock extends BlockWithEntity {
 			if(stack.isEmpty() && player instanceof PlayerExtension ex) {
 				if(!ex.isCyborg()) {
 					ex.setCyborg(true);
-					ex.setCyborgEnergy(1000);
+					ex.setCyborgEnergy(ex.getCyborgMaxEnergy());
 					ex.setCyborgHead(assembler.head);
 					ex.setCyborgBody(assembler.body);
 					ex.setCyborgRightArm(assembler.rightArm);
