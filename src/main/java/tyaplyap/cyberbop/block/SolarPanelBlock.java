@@ -11,7 +11,6 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
-import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
 import tyaplyap.cyberbop.block.entity.SolarPanelBlockEntity;
 
 public class SolarPanelBlock extends BlockWithEntity {
@@ -45,6 +44,6 @@ public class SolarPanelBlock extends BlockWithEntity {
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-		return validateTicker(type, CyberbopBlockEntities.SOLAR_PANEL_BLOCK_ENTITY, SolarPanelBlockEntity::tick);
+		return validateTicker(type, CyberbopBlockEntities.SOLAR_PANEL, SolarPanelBlockEntity::tick);
 	}
 }

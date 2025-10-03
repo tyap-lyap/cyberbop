@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import java.util.*;
 
 
-public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy{
+public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy {
 
 	private int freakEnergyStored;
 
@@ -21,13 +21,13 @@ public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy{
 	}
 
 	public static void tick (World world, BlockPos pos, BlockState state, EnergyBlockEntity blockEntity) {
-		if (!world.isClient() && blockEntity.getFreakEnergyStored() != 0) {
+		if (!world.isClient() && !blockEntity.type().equals(Type.RECEIVER) && blockEntity.getFreakEnergyStored() != 0) {
 
 			List<Direction> directionsFind = blockEntity.getRandomDirections();
 
 			List<Direction> directions = new ArrayList<>();
 			for (var directionNeighbor : directionsFind) {
-				if (!(blockEntity instanceof EnergyWireBlockEntity wireBlock && wireBlock.directionOutput.get(directionNeighbor) > 0)) {
+				if (!(blockEntity instanceof EnergyWireBlockEntity wireBlock && wireBlock.directionOutput.get(directionNeighbor).getTimer() > 0)) {
 					directions.add(directionNeighbor.getOpposite());
 				}
 			}
@@ -86,34 +86,36 @@ public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy{
 
 	public void receive(int transferRate, EnergyBlockEntity energyBlock) {
 
-			int transfer = Math.min(Math.min(transferRate, this.freakEnergyStored), energyBlock.capacity() - energyBlock.getFreakEnergyStored());
-
-
-			if (transfer > 0) {
-				energyBlock.receiveEnergy(transfer);
+		int transfer = Math.min(Math.min(transferRate, this.freakEnergyStored), energyBlock.capacity() - energyBlock.getFreakEnergyStored());
+		if (transfer > 0) {
+			energyBlock.receiveEnergy(transfer);
 				this.freakEnergyStored -= transfer;
+				markDirty();
 			}
 
 	}
 
 	@Override
 	public void transferEnergy(LinkedHashMap<Direction, EnergyBlockEntity> energyBlockEntities) {
-			if (this.getFreakEnergyStored() == 0 || energyBlockEntities.isEmpty()){
-				return;
-			}
-			for (var direction : energyBlockEntities.keySet()) {
+		if (this.getFreakEnergyStored() == 0 || energyBlockEntities.isEmpty()) {
+			return;
+		}
+		for (var direction : energyBlockEntities.keySet()) {
 
-				EnergyBlockEntity energyBlock = energyBlockEntities.get(direction);
+			EnergyBlockEntity energyBlock = energyBlockEntities.get(direction);
 
-				if (energyBlock instanceof EnergyWireBlockEntity  wire && (this.type().equals(IEnergy.Type.GENERATOR) || this.type().equals(IEnergy.Type.BATTERY))) {
-					this.balanceEnergy(wire);
-				} else {
-					this.receive(transferRate(), energyBlock);
-				}
-				if (energyBlock instanceof EnergyWireBlockEntity wire && !(this instanceof EnergyTestReceiverBlockEntity)) {
-					wire.directionOutput.put(direction, 15);
+			if (energyBlock instanceof EnergyWireBlockEntity wire && (this.type().equals(Type.GENERATOR) || this.type().equals(Type.BATTERY))) {
+				this.balanceEnergy(wire);
+			} else {
+				this.receive(transferRate(), energyBlock);
+			}
+			if (energyBlock instanceof EnergyWireBlockEntity wire && !(this instanceof EnergyTestReceiverBlockEntity)) {
+				wire.directionOutput.get(direction).setTimer(15);
+				if (this.type().equals(Type.GENERATOR)) {
+					wire.directionOutput.get(direction).setSource("test");
 				}
 			}
+		}
 	}
 
 	public void receiveEnergy(int freakEnergy) {

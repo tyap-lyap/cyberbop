@@ -8,7 +8,7 @@ public class EnergyGeneratorBlockEntity extends EnergyBlockEntity {
 	private final int generationRate = 1302;
 
 	public EnergyGeneratorBlockEntity(BlockPos pos, BlockState state) {
-		super(CyberbopBlockEntities.ENERGY_GENERATOR_BLOCK_ENTITY, pos, state);
+		super(CyberbopBlockEntities.ENERGY_GENERATOR, pos, state);
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class EnergyGeneratorBlockEntity extends EnergyBlockEntity {
 
 	@Override
 	public int transferRate() {
-		return 256000;
+		return capacity();
 	}
 
 	public static void tick(World world, BlockPos pos, BlockState state, EnergyGeneratorBlockEntity blockEntity) {

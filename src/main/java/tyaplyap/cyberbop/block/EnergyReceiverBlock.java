@@ -48,7 +48,7 @@ public class EnergyReceiverBlock extends BlockWithEntity {
 
 	@Override
 	public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-		return validateTicker(type, CyberbopBlockEntities.ENERGY_RECEIVER_BLOCK_ENTITY, EnergyTestReceiverBlockEntity::tick);
+		return validateTicker(type, CyberbopBlockEntities.ENERGY_RECEIVER, EnergyTestReceiverBlockEntity::tick);
 	}
 
 	@Override

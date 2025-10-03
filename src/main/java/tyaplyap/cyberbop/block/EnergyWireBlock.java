@@ -11,7 +11,6 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -23,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.block.entity.EnergyWireBlockEntity;
-import tyaplyap.cyberbop.block.entity.IEnergy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,7 +111,7 @@ public class EnergyWireBlock extends BlockWithEntity {
 
 	@Override
 	public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-		return validateTicker(type, CyberbopBlockEntities.ENERGY_WIRE_BLOCK_ENTITY, EnergyWireBlockEntity::tick);
+		return validateTicker(type, CyberbopBlockEntities.ENERGY_WIRE, EnergyWireBlockEntity::tick);
 	}
 
 	public boolean canConnect(BlockState state) {

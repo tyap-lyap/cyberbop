@@ -36,6 +36,6 @@ public class BatteryTestBlock extends BlockWithEntity {
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-		return validateTicker(type, CyberbopBlockEntities.BATTERY_TEST_BLOCK_ENTITY, BatteryTestBlockEntity::tick);
+		return validateTicker(type, CyberbopBlockEntities.BATTERY_TEST, BatteryTestBlockEntity::tick);
 	}
 }

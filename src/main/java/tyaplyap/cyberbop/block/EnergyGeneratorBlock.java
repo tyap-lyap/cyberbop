@@ -37,6 +37,6 @@ public class EnergyGeneratorBlock extends BlockWithEntity {
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-		return validateTicker(type, CyberbopBlockEntities.SOLAR_PANEL_BLOCK_ENTITY, EnergyGeneratorBlockEntity::tick);
+		return validateTicker(type, CyberbopBlockEntities.SOLAR_PANEL, EnergyGeneratorBlockEntity::tick);
 	}
 }

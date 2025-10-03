@@ -12,7 +12,7 @@ public class EnergyTestReceiverBlockEntity extends EnergyBlockEntity {
 	private boolean isActive = false;
 
 	public EnergyTestReceiverBlockEntity(BlockPos pos, BlockState state) {
-		super(CyberbopBlockEntities.ENERGY_RECEIVER_BLOCK_ENTITY, pos, state);
+		super(CyberbopBlockEntities.ENERGY_RECEIVER, pos, state);
 	}
 
 	public static void tick(World world, BlockPos pos, BlockState state, EnergyTestReceiverBlockEntity blockEntity) {

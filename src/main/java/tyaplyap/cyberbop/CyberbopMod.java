@@ -28,6 +28,7 @@ import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
 import tyaplyap.cyberbop.client.CyborgModel;
 import tyaplyap.cyberbop.entity.FakePlayerEntity;
+import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderers;
 
@@ -82,9 +83,20 @@ public class CyberbopMod implements ModInitializer {
 
 					}
 					return 1;
+				} else {
+					commandContext.getSource().sendFeedback(() -> Text.literal("Source not Player"), false);
+					return 0;
 				}
-				commandContext.getSource().sendFeedback(() -> Text.literal("Source not Player"), false);
 
+			}))).then(literal("setstoreCyborg").then(argument("energy", IntegerArgumentType.integer(0, Integer.MAX_VALUE)).executes(commandContext -> {
+				if (commandContext.getSource().isExecutedByPlayer()) {
+					if (commandContext.getSource().getPlayer() instanceof PlayerExtension cyborg && cyborg.isCyborg()) {
+						cyborg.setCyborgEnergy(IntegerArgumentType.getInteger(commandContext, "energy"));
+					}
+				} else {
+					commandContext.getSource().sendFeedback(() -> Text.literal("Source not Player"), false);
+					return 0;
+				}
 				return 0;
 			}))).executes(context -> {
 				context.getSource().sendFeedback(() -> Text.literal("Called /cyberbop with no arguments"), false);

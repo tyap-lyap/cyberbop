@@ -27,6 +27,7 @@ public class CyberbopBlocks {
 	public static final Block ENERGY_RECEIVER = add("energy_receiver", new EnergyReceiverBlock(AbstractBlock.Settings.create().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL)));
 	public static final Block BATTERY_TEST = add("battery_test", new BatteryTestBlock(AbstractBlock.Settings.create().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL)));
 	public static final Block SOLAR_PANEL = add("solar_panel", new SolarPanelBlock(AbstractBlock.Settings.create().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL)));
+	public static final Block CHARGING_PAD = add("charging_pad", new ChargingPadBlock(AbstractBlock.Settings.create().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL)));
 
 	public static void init() {
 		ITEMS.forEach((id, item) -> Registry.register(Registries.ITEM, id, item));

@@ -6,6 +6,7 @@
     "cyberbop:battery_test",
     "cyberbop:controller",
     "cyberbop:assembler",
-    "cyberbop:solar_panel"
+    "cyberbop:solar_panel",
+    "cyberbop:charging_pad"
   ]
 }

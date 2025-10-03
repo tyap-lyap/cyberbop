@@ -30,7 +30,7 @@ public class CyberbopModClient implements ClientModInitializer {
 		EntityModelLayerRegistry.registerModelLayer(ASSEMBLER_LAYER, AssemblerModel::getTexturedModelData);
 
 		BlockEntityRendererFactories.register(CyberbopBlockEntities.ASSEMBLER, ctx -> new AssemblerRenderer<>());
-		BlockEntityRendererFactories.register(CyberbopBlockEntities.ENERGY_WIRE_BLOCK_ENTITY, ctx -> new WiresRenderer<>(ctx));
+		BlockEntityRendererFactories.register(CyberbopBlockEntities.ENERGY_WIRE, ctx -> new WiresRenderer<>(ctx));
 
 		HudRenderCallback.EVENT.register((context, tickDeltaManager) -> {
 			MinecraftClient client = MinecraftClient.getInstance();
@@ -55,8 +55,7 @@ public class CyberbopModClient implements ClientModInitializer {
 		if(player instanceof PlayerExtension ex && ex.isCyborg()) {
 			context.drawTexture(background, x, y, 0, 0, 81, 8, 81, 8);
 
-			int width = (int)(80.0F * ((float)ex.getCyborgEnergy() / (float)ex.getCyborgMaxEnergy()));
-
+			int width = (int)(80.0F * Math.clamp((float)ex.getCyborgEnergy() / (float)ex.getCyborgMaxEnergy(), 0, 1));
 			context.drawTexture(overlay, x, y, 0, 0, 1 + width, 8, 81, 8);
 		}
 	}

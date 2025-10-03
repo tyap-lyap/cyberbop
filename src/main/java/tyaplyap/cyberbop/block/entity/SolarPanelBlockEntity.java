@@ -9,12 +9,17 @@ public class SolarPanelBlockEntity extends EnergyBlockEntity{
 	private int minY;
 
 	public SolarPanelBlockEntity(BlockPos pos, BlockState state) {
-		super(CyberbopBlockEntities.SOLAR_PANEL_BLOCK_ENTITY, pos, state);
+		super(CyberbopBlockEntities.SOLAR_PANEL, pos, state);
 	}
 
 	@Override
 	public int capacity() {
 		return 2400000;
+	}
+
+	@Override
+	public int transferRate() {
+		return capacity();
 	}
 
 	@Override
@@ -44,6 +49,7 @@ public class SolarPanelBlockEntity extends EnergyBlockEntity{
 
 			if (blockEntity.getFreakEnergyStored() < blockEntity.capacity()) {
 				blockEntity.setFreakEnergyStored(Math.min(blockEntity.capacity(), blockEntity.getFreakEnergyStored() + generationRate));
+				blockEntity.markDirty();
 			}
 
 		}

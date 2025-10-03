@@ -10,18 +10,18 @@ import java.util.Map;
 
 public class EnergyWireBlockEntity extends EnergyBlockEntity {
 
-	public Map<Direction, Integer> directionOutput = new HashMap<>();
+	public Map<Direction, Value> directionOutput = new HashMap<>();
 	public EnergyWireBlockEntity(BlockPos pos, BlockState state) {
-		super(CyberbopBlockEntities.ENERGY_WIRE_BLOCK_ENTITY, pos, state);
+		super(CyberbopBlockEntities.ENERGY_WIRE, pos, state);
 		for (var direction : Direction.values()) {
-			directionOutput.put(direction, 0);
+			directionOutput.put(direction, new Value(0, "none"));
 		}
 	}
 
 	private void timerSide() {
 		for (Direction direction : Direction.values()) {
-			if (directionOutput.get(direction).intValue() > 0) {
-				this.directionOutput.put(direction, directionOutput.get(direction).intValue() - 1);
+			if (directionOutput.get(direction).getTimer() > 0) {
+				directionOutput.get(direction).setTimer(directionOutput.get(direction).getTimer() - 1);
 			}
 		}
 	}
@@ -47,4 +47,31 @@ public class EnergyWireBlockEntity extends EnergyBlockEntity {
 	public int transferRate() {
 		return 24000;
 	}
+
+	public class Value {
+		private int timer;
+		private String source;
+
+		public Value(Integer timer, String source) {
+			this.timer = timer;
+			this.source = source;
+		}
+
+		public int getTimer() {
+			return timer;
+		}
+
+		public void setTimer(int timer) {
+			this.timer = timer;
+		}
+
+		public String getSource() {
+			return source;
+		}
+
+		public void setSource(String source) {
+			this.source = source;
+		}
+	}
+
 }
