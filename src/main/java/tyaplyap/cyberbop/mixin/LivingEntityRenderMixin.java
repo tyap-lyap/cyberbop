@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tyaplyap.cyberbop.CyberbopMod;
+import tyaplyap.cyberbop.client.CyberbopModClient;
 import tyaplyap.cyberbop.client.CyborgModel;
 import tyaplyap.cyberbop.extension.LivingEntityRendererExtension;
 import tyaplyap.cyberbop.extension.PlayerExtension;
@@ -35,7 +35,7 @@ public abstract class LivingEntityRenderMixin<T extends LivingEntity, M extends 
 
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void onInit(EntityRendererFactory.Context ctx, EntityModel entityModel, float shadowRadius, CallbackInfo ci) {
-		this.cyborgModel = new CyborgModel(ctx.getPart(CyberbopMod.CYBORG_LAYER));
+		this.cyborgModel = new CyborgModel(ctx.getPart(CyberbopModClient.CYBORG_LAYER));
 		this.backModel = model;
 	}
 

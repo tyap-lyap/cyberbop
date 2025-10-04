@@ -3,7 +3,6 @@ package tyaplyap.cyberbop.block.entity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
@@ -51,6 +50,14 @@ public class AssemblerBlockEntity extends BlockEntity {
 		this.body = nbt.getString("body");
 		this.rightLeg = nbt.getString("rightLeg");
 		this.leftLeg = nbt.getString("leftLeg");
+	}
+
+	public boolean isEmpty() {
+		return head.isBlank() && body.isBlank() && rightArm.isBlank() && leftArm.isBlank() && rightLeg.isBlank() && leftLeg.isBlank();
+	}
+
+	public boolean isComplete() {
+		return !head.isBlank() && !body.isBlank() && !rightArm.isBlank() && !leftArm.isBlank() && !rightLeg.isBlank() && !leftLeg.isBlank();
 	}
 
 	@Override

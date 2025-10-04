@@ -1,0 +1,30 @@
+{
+  "itemGroup.cyberbop.items": "Cyberbop Items",
+
+  "item.cyberbop.jetpack": "Jetpack",
+  "item.cyberbop.flight_module": "Flight Module",
+  "item.cyberbop.extra_battery": "Extra Battery",
+  "item.cyberbop.solar_cell_module": "Solar Cell Module",
+
+  "item.cyberbop.basic_cyborg_head": "Basic Cyborg Head",
+  "item.cyberbop.basic_cyborg_body": "Basic Cyborg Body",
+  "item.cyberbop.basic_cyborg_arm": "Basic Cyborg Arm",
+  "item.cyberbop.basic_cyborg_leg": "Basic Cyborg Leg",
+
+  "item.cyberbop.advanced_cyborg_head": "Advanced Cyborg Head",
+  "item.cyberbop.advanced_cyborg_body": "Advanced Cyborg Body",
+  "item.cyberbop.advanced_cyborg_arm": "Advanced Cyborg Arm",
+  "item.cyberbop.advanced_cyborg_leg": "Advanced Cyborg Leg",
+
+  "item.cyberbop.debug_energy_stick": "Debug Energy Stick",
+
+  "block.cyberbop.controller": "Controller",
+  "block.cyberbop.assembler": "Assembler",
+  "block.cyberbop.energy_wire": "Energy Wire",
+  "block.cyberbop.solar_panel": "Solar Panel",
+  "block.cyberbop.charging_pad": "Charging Pad",
+
+  "block.cyberbop.energy_generator": "Debug Energy Generator",
+  "block.cyberbop.energy_receiver": "Debug Energy Receiver",
+  "block.cyberbop.battery_test": "Debug Battery"
+}

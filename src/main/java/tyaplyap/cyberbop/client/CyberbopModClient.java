@@ -17,17 +17,25 @@ import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.client.model.AssemblerModel;
 import tyaplyap.cyberbop.client.render.AssemblerRenderer;
 import tyaplyap.cyberbop.client.render.WiresRenderer;
+import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderers;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 
 public class CyberbopModClient implements ClientModInitializer {
 
 	public static final EntityModelLayer WIRES_LAYER = new EntityModelLayer(CyberbopMod.id("wires"), "main");
 	public static final EntityModelLayer ASSEMBLER_LAYER = new EntityModelLayer(CyberbopMod.id("assembler"), "main");
+	public static final EntityModelLayer CYBORG_LAYER = new EntityModelLayer(CyberbopMod.id("cyborg"), "main");
+
+	public static final Identifier ENERGY_BACKGROUND = CyberbopMod.id("textures/gui/energy_bar_background.png");
+	public static final Identifier BLUE_ENERGY_OVERLAY = CyberbopMod.id("textures/gui/energy_bar_overlay.png");
+	public static final Identifier GREEN_ENERGY_OVERLAY = CyberbopMod.id("textures/gui/energy_bar_overlay_green.png");
 
 	@Override
 	public void onInitializeClient() {
 		EntityModelLayerRegistry.registerModelLayer(WIRES_LAYER, WiresRenderer::getTexturedModelData);
 		EntityModelLayerRegistry.registerModelLayer(ASSEMBLER_LAYER, AssemblerModel::getTexturedModelData);
+		EntityModelLayerRegistry.registerModelLayer(CYBORG_LAYER, CyborgModel::getTexturedModelData);
+		CyborgPartRenderers.init();
 
 		BlockEntityRendererFactories.register(CyberbopBlockEntities.ASSEMBLER, ctx -> new AssemblerRenderer<>());
 		BlockEntityRendererFactories.register(CyberbopBlockEntities.ENERGY_WIRE, ctx -> new WiresRenderer<>(ctx));
@@ -48,15 +56,12 @@ public class CyberbopModClient implements ClientModInitializer {
 	static void renderHud(ClientWorld world, ClientPlayerEntity player, DrawContext context, RenderTickCounter tickDeltaManager) {
 		int x = context.getScaledWindowWidth() / 2 + 10;
 		int y = context.getScaledWindowHeight() - 39;
-		Identifier background = CyberbopMod.id("textures/gui/energy_bar_background.png");
-		Identifier overlay = CyberbopMod.id("textures/gui/energy_bar_overlay.png");
-		Identifier overlayGreen = CyberbopMod.id("textures/gui/energy_bar_overlay_green.png");
 
 		if(player instanceof PlayerExtension ex && ex.isCyborg()) {
-			context.drawTexture(background, x, y, 0, 0, 81, 8, 81, 8);
+			context.drawTexture(ENERGY_BACKGROUND, x, y, 0, 0, 81, 8, 81, 8);
 
 			int width = (int)(80.0F * Math.clamp((float)ex.getCyborgEnergy() / (float)ex.getCyborgMaxEnergy(), 0, 1));
-			context.drawTexture(overlay, x, y, 0, 0, 1 + width, 8, 81, 8);
+			context.drawTexture(BLUE_ENERGY_OVERLAY, x, y, 0, 0, 1 + width, 8, 81, 8);
 		}
 	}
 }
