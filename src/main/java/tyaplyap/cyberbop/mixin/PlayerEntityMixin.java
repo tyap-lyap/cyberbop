@@ -45,7 +45,7 @@ public class PlayerEntityMixin implements PlayerExtension {
 	void writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
 		nbt.putBoolean("isCyborg", isCyborg());
 
-		nbt.putString("cyborgHead", geCyborgHead());
+		nbt.putString("cyborgHead", getCyborgHead());
 		nbt.putString("cyborgBody", getCyborgBody());
 		nbt.putString("cyborgRightArm", getCyborgRightArm());
 		nbt.putString("cyborgLeftArm", getCyborgLeftArm());
@@ -144,7 +144,7 @@ public class PlayerEntityMixin implements PlayerExtension {
 	}
 
 	@Override
-	public String geCyborgHead() {
+	public String getCyborgHead() {
 		return PlayerEntity.class.cast(this).getDataTracker().get(HEAD);
 	}
 

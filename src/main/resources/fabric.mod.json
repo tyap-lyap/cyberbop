@@ -3,14 +3,14 @@
   "id": "cyberbop",
   "version": "${version}",
   "name": "Cyberbopd",
-  "description": "Craft your cyber body",
+  "description": "Build your custom cyber body and experience the world through a new, better form. ",
   "authors": [ "PinkGoosik", "Spusik", "VioletSomik" ],
   "contact": {
-    "homepage": "https://modrinth.com/mod/cyberbop",
+    "homepage": "https://curseforge.com/minecraft/mc-mods/cyberbop",
     "sources": "https://github.com/tyap-lyap/cyberbop",
     "issues": "https://github.com/tyap-lyap/cyberbop/issues"
   },
-  "license": "MIT",
+  "license": "ARR",
   "icon": "assets/cyberbop/icon.png",
 
   "environment": "*",

@@ -7,11 +7,17 @@
   "item.cyberbop.flight_module": "Flight Module",
   "item.cyberbop.extra_battery": "Extra Battery",
   "item.cyberbop.solar_cell_module": "Solar Cell Module",
+  "item.cyberbop.night_vision_module": "Night Vision Module",
 
   "item.cyberbop.basic_cyborg_head": "Basic Cyborg Head",
   "item.cyberbop.basic_cyborg_body": "Basic Cyborg Body",
   "item.cyberbop.basic_cyborg_arm": "Basic Cyborg Arm",
   "item.cyberbop.basic_cyborg_leg": "Basic Cyborg Leg",
+
+  "item.cyberbop.golden_cyborg_head": "Golden Cyborg Head",
+  "item.cyberbop.golden_cyborg_body": "Golden Cyborg Body",
+  "item.cyberbop.golden_cyborg_arm": "Golden Cyborg Arm",
+  "item.cyberbop.golden_cyborg_leg": "Golden Cyborg Leg",
 
   "item.cyberbop.advanced_cyborg_head": "Advanced Cyborg Head",
   "item.cyberbop.advanced_cyborg_body": "Advanced Cyborg Body",

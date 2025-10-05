@@ -15,6 +15,13 @@ public class CyborgPartRenderers {
 	public static final CyborgPartRenderer BASIC_RIGHT_LEG = register(new BasicRightLegCyborgPart("basic_right_leg", "textures/entity/basic_cyborg.png"));
 	public static final CyborgPartRenderer BASIC_LEFT_LEG = register(new BasicLeftLegCyborgPart("basic_left_leg", "textures/entity/basic_cyborg.png"));
 
+	public static final CyborgPartRenderer GOLDEN_HEAD = register(new BasicHeadCyborgPart("golden_head", "textures/entity/golden_cyborg.png"));
+	public static final CyborgPartRenderer GOLDEN_RIGHT_ARM = register(new BasicRightArmCyborgPart("golden_right_arm", "textures/entity/golden_cyborg.png"));
+	public static final CyborgPartRenderer GOLDEN_LEFT_ARM = register(new BasicLeftArmCyborgPart("golden_left_arm", "textures/entity/golden_cyborg.png"));
+	public static final CyborgPartRenderer GOLDEN_BODY = register(new BasicBodyCyborgPart("golden_body", "textures/entity/golden_cyborg.png"));
+	public static final CyborgPartRenderer GOLDEN_RIGHT_LEG = register(new BasicRightLegCyborgPart("golden_right_leg", "textures/entity/golden_cyborg.png"));
+	public static final CyborgPartRenderer GOLDEN_LEFT_LEG = register(new BasicLeftLegCyborgPart("golden_left_leg", "textures/entity/golden_cyborg.png"));
+
 	public static final CyborgPartRenderer ADVANCED_HEAD = register(new HeadCyborgPart("advanced_head", "textures/entity/robot.png"));
 	public static final CyborgPartRenderer ADVANCED_RIGHT_ARM = register(new RightArmCyborgPart("advanced_right_arm", "textures/entity/advanced.png"));
 	public static final CyborgPartRenderer ADVANCED_LEFT_ARM = register(new LeftArmCyborgPart("advanced_left_arm", "textures/entity/advanced.png"));

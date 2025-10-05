@@ -1,5 +1,6 @@
 package tyaplyap.cyberbop.client.render.parts;
 
+import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
@@ -15,6 +16,11 @@ public abstract class CyborgPartRenderer {
 
 	abstract public void render(PlayerEntityModel<?> contextModel, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, LivingEntity entity);
 	abstract public void renderAssembler(float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay);
+
+
+	public ModelPart getModelPart() {
+		return null;
+	}
 
 	abstract public void register();
 }

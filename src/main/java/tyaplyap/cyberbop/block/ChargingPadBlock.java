@@ -1,6 +1,5 @@
 package tyaplyap.cyberbop.block;
 
-import com.mojang.logging.LogUtils;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -11,15 +10,14 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
+import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.block.entity.ChargingPadBlockEntity;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 
 public class ChargingPadBlock extends BlockWithEntity {
-	private static final Logger LOGGER = LogUtils.getLogger();
 
-	protected static final VoxelShape SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0);
+	protected static final VoxelShape SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 5.0, 16.0);
 
 	protected ChargingPadBlock(Settings settings) {
 		super(settings);
@@ -35,7 +33,7 @@ public class ChargingPadBlock extends BlockWithEntity {
 		ChargingPadBlockEntity chargingPadBlock = world.getBlockEntity(pos, CyberbopBlockEntities.CHARGING_PAD).orElse(null);
 		if (!world.isClient) {
 			if (chargingPadBlock == null) {
-				LOGGER.warn("Ignoring receive energy attempt for Charging Pad without matching block entity at {}", pos);
+				CyberbopMod.LOGGER.warn("Ignoring receive energy attempt for Charging Pad without matching block entity at {}", pos);
 			} else {
 				if (0 < chargingPadBlock.capacity() && entity instanceof ServerPlayerEntity player && player instanceof PlayerExtension cyborg && cyborg.isCyborg() && cyborg.getCyborgEnergy() != cyborg.getCyborgMaxEnergy()) {
 					int transfer = Math.min(Math.min(chargingPadBlock.transferRate(), chargingPadBlock.getFreakEnergyStored()), cyborg.getCyborgMaxEnergy() - cyborg.getCyborgEnergy());

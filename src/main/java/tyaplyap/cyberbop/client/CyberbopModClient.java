@@ -46,22 +46,28 @@ public class CyberbopModClient implements ClientModInitializer {
 
 		HudRenderCallback.EVENT.register((context, tickDeltaManager) -> {
 			MinecraftClient client = MinecraftClient.getInstance();
-			if(client.world != null && client.player instanceof PlayerExtension ex && ex.isCyborg()) {
-				if(FabricLoader.getInstance().isDevelopmentEnvironment()) {
-					context.drawText(MinecraftClient.getInstance().textRenderer, "Cyborg Energy: " + ex.getCyborgEnergy(), 10, 200, 0xFFFFFFFF, true);
-				}
-
+			if(client.world != null) {
+				renderDebug(client.world, client.player, context, tickDeltaManager);
 				renderHud(client.world, client.player, context, tickDeltaManager);
 			}
 
 		});
 	}
 
+	static void renderDebug(ClientWorld world, ClientPlayerEntity player, DrawContext context, RenderTickCounter tickDeltaManager) {
+		if(FabricLoader.getInstance().isDevelopmentEnvironment()) {
+			if(player instanceof PlayerExtension ex && ex.isCyborg()) {
+				context.drawText(MinecraftClient.getInstance().textRenderer, "Cyborg Energy: " + ex.getCyborgEnergy(), 10, context.getScaledWindowHeight() / 2, 0xFFFFFFFF, true);
+			}
+		}
+	}
+
 	static void renderHud(ClientWorld world, ClientPlayerEntity player, DrawContext context, RenderTickCounter tickDeltaManager) {
 		int x = context.getScaledWindowWidth() / 2 + 10;
 		int y = context.getScaledWindowHeight() - 39;
+		var interactionManager = MinecraftClient.getInstance().interactionManager;
 
-		if(player instanceof PlayerExtension ex && ex.isCyborg()) {
+		if(player instanceof PlayerExtension ex && ex.isCyborg() && interactionManager != null && interactionManager.hasStatusBars()) {
 			context.drawTexture(ENERGY_BACKGROUND, x, y, 0, 0, 81, 8, 81, 8);
 
 			int width = (int)(80.0F * Math.clamp((float)ex.getCyborgEnergy() / (float)ex.getCyborgMaxEnergy(), 0, 1));

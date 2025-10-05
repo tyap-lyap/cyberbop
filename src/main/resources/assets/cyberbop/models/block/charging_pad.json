@@ -1,22 +1,23 @@
 {
-  "parent": "block/thin_block",
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"texture_size": [32, 32],
 	"textures": {
 		"0": "cyberbop:block/charging_pad",
-		"1": "cyberbop:block/solar_panel_side",
-		"2": "cyberbop:block/solar_panel_bottom",
-    "particle": "cyberbop:block/charging_pad"
+		"particle": "cyberbop:block/charging_pad"
 	},
 	"elements": [
 		{
 			"from": [0, 0, 0],
-			"to": [16, 12, 16],
+			"to": [16, 5, 16],
 			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#1"},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#1"},
-				"south": {"uv": [0, 0, 16, 16], "texture": "#1"},
-				"west": {"uv": [0, 0, 16, 16], "texture": "#1"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#2"}
+				"north": {"uv": [8, 0, 16, 2.5], "texture": "#0"},
+				"east": {"uv": [8, 2.5, 16, 5], "texture": "#0"},
+				"south": {"uv": [8, 5, 16, 7.5], "texture": "#0"},
+				"west": {"uv": [8, 7.5, 16, 10], "texture": "#0"},
+				"up": {"uv": [8, 8, 0, 0], "texture": "#0"},
+				"down": {"uv": [8, 8, 0, 16], "texture": "#0"}
 			}
 		}
 	]

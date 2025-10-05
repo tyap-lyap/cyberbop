@@ -1,6 +1,7 @@
 package tyaplyap.cyberbop.block;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
@@ -19,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import tyaplyap.cyberbop.block.entity.AssemblerBlockEntity;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.extension.PlayerExtension;
+import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.item.CyborgArmPartItem;
 import tyaplyap.cyberbop.item.CyborgLegPartItem;
 import tyaplyap.cyberbop.item.CyborgPartItem;
@@ -136,7 +138,7 @@ public class AssemblerBlock extends BlockWithEntity {
 				else {
 					if(assembler.isEmpty()) {
 						ex.setCyborg(false);
-						assembler.head = ex.geCyborgHead();
+						assembler.head = ex.getCyborgHead();
 						assembler.body = ex.getCyborgBody();
 						assembler.rightArm = ex.getCyborgRightArm();
 						assembler.leftArm = ex.getCyborgLeftArm();
@@ -157,5 +159,20 @@ public class AssemblerBlock extends BlockWithEntity {
 			}
 		}
 		return ActionResult.PASS;
+	}
+
+
+	@Override
+	public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+		if(!world.isClient() && world.getBlockEntity(pos) instanceof AssemblerBlockEntity assembler) {
+			if(!assembler.head.isBlank()) Block.dropStack(world, pos, CyberbopItems.partToItem(assembler.head).getDefaultStack());
+			if(!assembler.body.isBlank()) Block.dropStack(world, pos, CyberbopItems.partToItem(assembler.body).getDefaultStack());
+			if(!assembler.rightArm.isBlank()) Block.dropStack(world, pos, CyberbopItems.partToItem(assembler.rightArm).getDefaultStack());
+			if(!assembler.leftArm.isBlank()) Block.dropStack(world, pos, CyberbopItems.partToItem(assembler.leftArm).getDefaultStack());
+			if(!assembler.rightLeg.isBlank()) Block.dropStack(world, pos, CyberbopItems.partToItem(assembler.rightLeg).getDefaultStack());
+			if(!assembler.leftLeg.isBlank()) Block.dropStack(world, pos, CyberbopItems.partToItem(assembler.leftLeg).getDefaultStack());
+		}
+
+		return super.onBreak(world, pos, state, player);
 	}
 }

@@ -12,7 +12,7 @@ public interface PlayerExtension {
 	void setCyborgRightLeg(String rightLeg);
 	void setCyborgLeftLeg(String leftLeg);
 
-	String geCyborgHead();
+	String getCyborgHead();
 	String getCyborgBody();
 	String getCyborgRightArm();
 	String getCyborgLeftArm();
