@@ -7,6 +7,7 @@
     "cyberbop:controller",
     "cyberbop:assembler",
     "cyberbop:solar_panel",
-    "cyberbop:charging_pad"
+    "cyberbop:charging_pad",
+    "cyberbop:furnace_generator"
   ]
 }

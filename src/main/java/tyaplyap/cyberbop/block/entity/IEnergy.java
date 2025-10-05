@@ -30,9 +30,9 @@ public interface IEnergy {
 		return type().equals(Type.RECEIVER) || type().equals(Type.WIRE);
 	}
 
-	void transferEnergy(LinkedHashMap<Direction, EnergyBlockEntity> energyBlockEntities);
+	default void transferEnergy(LinkedHashMap<Direction, EnergyBlockEntity> energyBlockEntities) {}
 
-	void receiveEnergy(int freakEnergy);
+	default void receiveEnergy(int freakEnergy) {}
 
 	enum Type {
 		BATTERY(),

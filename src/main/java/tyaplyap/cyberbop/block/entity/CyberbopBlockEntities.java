@@ -38,6 +38,10 @@ public class CyberbopBlockEntities {
 		BlockEntityType.Builder.create(ChargingPadBlockEntity::new, CyberbopBlocks.CHARGING_PAD).build()
 	);
 
+	public static final BlockEntityType<FurnaceGeneratorBlockEntity> FURNACE_GENERATOR = register(
+		"furnace_generator",
+		BlockEntityType.Builder.create(FurnaceGeneratorBlockEntity::new, CyberbopBlocks.FURNACE_GENERATOR).build()
+	);
 
 	public static final BlockEntityType<ControllerBlockEntity> CONTROLLER = register(
 		"controller",

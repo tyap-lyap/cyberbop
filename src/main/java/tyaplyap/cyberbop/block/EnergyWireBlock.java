@@ -111,7 +111,7 @@ public class EnergyWireBlock extends BlockWithEntity {
 
 	@Override
 	public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-		return validateTicker(type, CyberbopBlockEntities.ENERGY_WIRE, EnergyWireBlockEntity::tick);
+		return world.isClient ? null : validateTicker(type, CyberbopBlockEntities.ENERGY_WIRE, EnergyWireBlockEntity::tick);
 	}
 
 	public boolean canConnect(BlockState state) {

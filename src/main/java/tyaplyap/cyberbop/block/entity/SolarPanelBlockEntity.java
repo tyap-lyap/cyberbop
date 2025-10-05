@@ -29,9 +29,7 @@ public class SolarPanelBlockEntity extends EnergyBlockEntity{
 
 	public static void tick (World world, BlockPos pos, BlockState state, SolarPanelBlockEntity blockEntity) {
 		EnergyBlockEntity.tick(world, pos, state, blockEntity);
-
-
-		if (!world.isClient && world.getTimeOfDay() % 24000 < 13000) {
+		if (world.getTimeOfDay() % 24000 < 13000) {
 
 			BlockPos blockPos = new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ());
 

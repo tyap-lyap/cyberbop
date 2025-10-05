@@ -21,7 +21,7 @@ public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy {
 	}
 
 	public static void tick (World world, BlockPos pos, BlockState state, EnergyBlockEntity blockEntity) {
-		if (!world.isClient() && !blockEntity.type().equals(Type.RECEIVER) && blockEntity.getFreakEnergyStored() != 0) {
+		if (!blockEntity.type().equals(Type.RECEIVER) && blockEntity.getFreakEnergyStored() != 0) {
 
 			List<Direction> directionsFind = blockEntity.getRandomDirections();
 
@@ -59,7 +59,7 @@ public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy {
 	}
 
 	public boolean isFull(){
-		return this.capacity() == this.getFreakEnergyStored();
+		return this.capacity() == this.getFreakEnergyStored() || this.capacity() < this.getFreakEnergyStored();
 	}
 
 	public void balanceEnergy(EnergyWireBlockEntity wireBlock) {

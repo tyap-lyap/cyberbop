@@ -14,6 +14,8 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.resource.featuretoggle.FeatureSet;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -27,12 +29,15 @@ import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
 import tyaplyap.cyberbop.entity.FakePlayerEntity;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.item.CyberbopItems;
+import tyaplyap.cyberbop.screen.FurnaceGeneratorScreenHandler;
 
 import static net.minecraft.server.command.CommandManager.*;
 
 public class CyberbopMod implements ModInitializer {
 	public static final String MOD_ID = "cyberbop";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
+	public static final ScreenHandlerType<FurnaceGeneratorScreenHandler> FURNACE_GENERATOR_SCREEN = Registry.register(Registries.SCREEN_HANDLER, id("furnace_generator"), new ScreenHandlerType<>(FurnaceGeneratorScreenHandler::new, FeatureSet.empty()));
 
 	public static final EntityType<FakePlayerEntity> FAKE_PLAYER_ENTITY = Registry.register(Registries.ENTITY_TYPE, Identifier.of(MOD_ID, "fake_player"), FabricEntityTypeBuilder.<FakePlayerEntity>create(SpawnGroup.MISC,FakePlayerEntity::new).dimensions(EntityDimensions.changing(0.6F, 1.99F)).trackedUpdateRate(2).build());
 
@@ -46,6 +51,7 @@ public class CyberbopMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+
 		Registry.register(Registries.ITEM_GROUP, CyberbopMod.id("items"), CyberbopMod.ITEM_GROUP);
 
 		CyberbopBlocks.init();

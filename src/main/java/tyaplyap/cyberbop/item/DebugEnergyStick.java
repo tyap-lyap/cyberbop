@@ -1,5 +1,6 @@
 package tyaplyap.cyberbop.item;
 
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -10,10 +11,11 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.world.World;
 import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
+import tyaplyap.cyberbop.block.entity.IEnergy;
 
 public class DebugEnergyStick extends Item {
 
-	EnergyBlockEntity energyBlock = null;
+	BlockEntity energyBlock = null;
 
 	public DebugEnergyStick(Settings settings) {
 		super(settings);
@@ -24,8 +26,8 @@ public class DebugEnergyStick extends Item {
 	}
 	@Override
 	public ActionResult useOnBlock(ItemUsageContext context) {
-		if (context.getWorld().getBlockEntity(context.getBlockPos()) instanceof EnergyBlockEntity blockEntity) {
-			energyBlock = blockEntity;
+		if (context.getWorld().getBlockEntity(context.getBlockPos()) instanceof IEnergy) {
+			energyBlock = context.getWorld().getBlockEntity(context.getBlockPos());
 
 		}
 		return ActionResult.SUCCESS;
@@ -33,9 +35,8 @@ public class DebugEnergyStick extends Item {
 
 	@Override
 	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-		super.inventoryTick(stack, world, entity, slot, selected);
-		if ( energyBlock != null && entity instanceof ServerPlayerEntity player && !world.isClient) {
-			sendMessage(player, Text.of(energyBlock.type().toString() + "§a Stored:" + energyBlock.getFreakEnergyStored()));
+		if ( energyBlock != null && entity instanceof ServerPlayerEntity player && !world.isClient && energyBlock instanceof IEnergy energy) {
+			sendMessage(player, Text.of(energy.type().toString() + "§a Stored:" + energy.getFreakEnergyStored()));
 			if (world.getBlockEntity(energyBlock.getPos()) == null) {
 				energyBlock = null;
 			}

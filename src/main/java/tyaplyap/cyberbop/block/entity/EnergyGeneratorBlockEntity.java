@@ -27,9 +27,7 @@ public class EnergyGeneratorBlockEntity extends EnergyBlockEntity {
 	}
 
 	public static void tick(World world, BlockPos pos, BlockState state, EnergyGeneratorBlockEntity blockEntity) {
-		if (world.isClient()) return;
-
-		if (blockEntity.getFreakEnergyStored() < blockEntity.capacity()) {
+		if (blockEntity.isFull()) {
 			blockEntity.setFreakEnergyStored(Math.min(blockEntity.capacity(), blockEntity.getFreakEnergyStored() + blockEntity.generationRate));
 		}
 		EnergyBlockEntity.tick(world, pos, state, blockEntity);

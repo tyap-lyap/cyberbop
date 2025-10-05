@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
@@ -18,6 +19,7 @@ import tyaplyap.cyberbop.client.model.AssemblerModel;
 import tyaplyap.cyberbop.client.render.AssemblerRenderer;
 import tyaplyap.cyberbop.client.render.WiresRenderer;
 import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderers;
+import tyaplyap.cyberbop.client.screen.FurnaceGeneratorClientScreen;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 
 public class CyberbopModClient implements ClientModInitializer {
@@ -32,6 +34,8 @@ public class CyberbopModClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		HandledScreens.register(CyberbopMod.FURNACE_GENERATOR_SCREEN, FurnaceGeneratorClientScreen::new);
+
 		EntityModelLayerRegistry.registerModelLayer(WIRES_LAYER, WiresRenderer::getTexturedModelData);
 		EntityModelLayerRegistry.registerModelLayer(ASSEMBLER_LAYER, AssemblerModel::getTexturedModelData);
 		EntityModelLayerRegistry.registerModelLayer(CYBORG_LAYER, CyborgModel::getTexturedModelData);

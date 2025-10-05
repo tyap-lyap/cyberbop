@@ -16,9 +16,7 @@ public class EnergyTestReceiverBlockEntity extends EnergyBlockEntity {
 	}
 
 	public static void tick(World world, BlockPos pos, BlockState state, EnergyTestReceiverBlockEntity blockEntity) {
-		if (!world.isClient()) {
 			blockEntity.updateReceiver();
-		}
 	}
 
 	@Override
