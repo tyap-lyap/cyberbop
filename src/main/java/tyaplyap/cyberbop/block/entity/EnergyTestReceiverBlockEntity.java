@@ -38,8 +38,8 @@ public class EnergyTestReceiverBlockEntity extends EnergyBlockEntity {
 		boolean wasActive = isActive;
 		int consumption = energyConsumption();
 
-		if (this.getFreakEnergyStored() >= consumption) {
-			setFreakEnergyStored(getFreakEnergyStored() - consumption);
+		if (this.getEnergyStored() >= consumption) {
+			setEnergyStored(getEnergyStored() - consumption);
 			isActive = true;
 		} else {
 			isActive = false;

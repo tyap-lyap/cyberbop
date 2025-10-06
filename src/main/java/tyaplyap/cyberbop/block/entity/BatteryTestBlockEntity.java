@@ -7,7 +7,7 @@ public class BatteryTestBlockEntity extends EnergyBlockEntity{
 
 	public BatteryTestBlockEntity(BlockPos pos, BlockState state) {
 		super(CyberbopBlockEntities.BATTERY_TEST, pos, state);
-		setFreakEnergyStored(Integer.MAX_VALUE);
+		setEnergyStored(Integer.MAX_VALUE);
 	}
 
 	@Override

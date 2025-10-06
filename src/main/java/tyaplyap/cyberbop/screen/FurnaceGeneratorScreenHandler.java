@@ -1,39 +1,43 @@
 package tyaplyap.cyberbop.screen;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.AbstractCookingRecipe;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.block.entity.FurnaceGeneratorBlockEntity;
 import tyaplyap.cyberbop.screen.slot.BucketOutputSlot;
 import tyaplyap.cyberbop.screen.slot.FurnaceFuelSlot;
+import tyaplyap.cyberbop.packet.EnergyGuiUpdatePacket;
 import tyaplyap.cyberbop.util.ImplInventory;
 
 public class FurnaceGeneratorScreenHandler extends ScreenHandler {
 
 	private final Inventory inventory;
-
 	private final PropertyDelegate propertyDelegate;
-
-	public FurnaceGeneratorScreenHandler(int syncId, PlayerInventory playerInventory) {
-		this(CyberbopMod.FURNACE_GENERATOR_SCREEN, syncId, playerInventory, ImplInventory.ofSize(2), new ArrayPropertyDelegate(4));
+	private final ServerPlayerEntity serverPlayer;
+	private FurnaceGeneratorBlockEntity furnaceGeneratorBlock;
+	public FurnaceGeneratorScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos) {
+		this(CyberbopMod.FURNACE_GENERATOR_SCREEN, syncId, playerInventory, ImplInventory.ofSize(2), new ArrayPropertyDelegate(4), pos, null);
+		this.furnaceGeneratorBlock = (FurnaceGeneratorBlockEntity) playerInventory.player.getWorld().getBlockEntity(pos);
 	}
 
-	public FurnaceGeneratorScreenHandler(ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ImplInventory inventory, PropertyDelegate propertyDelegate) {
+	public FurnaceGeneratorScreenHandler(ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ImplInventory inventory, PropertyDelegate propertyDelegate, BlockPos pos, ServerPlayerEntity serverPlayer) {
 		super(type, syncId);
+		this.serverPlayer = serverPlayer;
+		this.furnaceGeneratorBlock = (FurnaceGeneratorBlockEntity) playerInventory.player.getWorld().getBlockEntity(pos);
 		checkSize(inventory,2);
-		checkDataCount(propertyDelegate, 4);
+		checkDataCount(propertyDelegate, 2);
 		this.inventory = inventory;
 		this.addSlot(new FurnaceFuelSlot( inventory, 0, 80, 17));
 		this.addSlot(new BucketOutputSlot(inventory,1,80,53));
@@ -48,7 +52,8 @@ public class FurnaceGeneratorScreenHandler extends ScreenHandler {
 		for (int i = 0; i < 9; i++) {
 			this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
 		}
-	this.propertyDelegate = propertyDelegate;
+
+		this.propertyDelegate = propertyDelegate;
 		this.addProperties(this.propertyDelegate);
 
 	}
@@ -58,31 +63,11 @@ public class FurnaceGeneratorScreenHandler extends ScreenHandler {
 		return this.propertyDelegate.get(0) > 0;
 	}
 
-//	@Override
-//	public ItemStack quickMove(PlayerEntity player, int invSlot) {
-//		ItemStack newStack = ItemStack.EMPTY;
-//		Slot slot = this.slots.get(invSlot);
-//		if (slot != null && slot.hasStack()) {
-//			ItemStack originalStack = slot.getStack();
-//			newStack = originalStack.copy();
-//			if (invSlot < this.inventory.size()) {
-//					if (!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true)) {
-//						return ItemStack.EMPTY;
-//					}
-//				} else if (!this.insertItem(originalStack, 1, this.inventory.size(), false)) {
-//					return ItemStack.EMPTY;
-//				}
-//
-//
-//			if (originalStack.isEmpty()) {
-//				slot.setStack(ItemStack.EMPTY);
-//			} else {
-//				slot.markDirty();
-//			}
-//		}
-//		return newStack;
-//	}
-
+	@Override
+	public void sendContentUpdates() {
+		ServerPlayNetworking.send(serverPlayer, new EnergyGuiUpdatePacket(furnaceGeneratorBlock.getEnergyStored(), furnaceGeneratorBlock.capacity()));
+		super.sendContentUpdates();
+	}
 
 	public float getFuelProgress() {
 		int i = this.propertyDelegate.get(1);
@@ -93,18 +78,19 @@ public class FurnaceGeneratorScreenHandler extends ScreenHandler {
 		return MathHelper.clamp((float)this.propertyDelegate.get(0) / i, 0.0F, 1.0F);
 	}
 
-	public float getEnergyHeight() {
-		//System.out.println((float)this.propertyDelegate.get(2));
-		//System.out.println((float)this.propertyDelegate.get(3));
-		return (68 * (MathHelper.clamp((float)this.propertyDelegate.get(3) / this.propertyDelegate.get(2), 0.0F, 1.0F)));
-		//return this.propertyDelegate.get(2); // MathHelper.clamp((float)this.propertyDelegate.get(3) / this.propertyDelegate.get(2), 0.0F, 1.0F);
+	@Override
+	public void onClosed(PlayerEntity player) {
+		if (player instanceof ServerPlayerEntity serverPlayer) {
+		ServerPlayNetworking.send(serverPlayer, new EnergyGuiUpdatePacket(0, 0));
+		}
+		super.onClosed(player);
 	}
 
 	@Override
 	public ItemStack quickMove(PlayerEntity player, int slot) {
 		ItemStack itemStack = ItemStack.EMPTY;
 		Slot slot2 = this.slots.get(slot);
-		if (slot2 != null && slot2.hasStack()) {
+		if (slot2.hasStack()) {
 			ItemStack itemStack2 = slot2.getStack();
 			itemStack = itemStack2.copy();
 			if (slot == 1) {

@@ -14,14 +14,14 @@ import java.util.*;
 
 public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy {
 
-	private int freakEnergyStored;
+	private int energyStored;
 
 	public EnergyBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 	}
 
 	public static void tick (World world, BlockPos pos, BlockState state, EnergyBlockEntity blockEntity) {
-		if (!blockEntity.type().equals(Type.RECEIVER) && blockEntity.getFreakEnergyStored() != 0) {
+		if (!blockEntity.type().equals(Type.RECEIVER) && blockEntity.getEnergyStored() != 0) {
 
 			List<Direction> directionsFind = blockEntity.getRandomDirections();
 
@@ -59,22 +59,23 @@ public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy {
 	}
 
 	public boolean isFull(){
-		return this.capacity() == this.getFreakEnergyStored() || this.capacity() < this.getFreakEnergyStored();
+		return this.capacity() == this.getEnergyStored() || this.capacity() < this.getEnergyStored();
 	}
 
+//НЕ ЗАБЫТЬ ПЕРЕПИСАТЬ!!!!!!!!!!!!!!!!!!
 	public void balanceEnergy(EnergyWireBlockEntity wireBlock) {
 		if (!wireBlock.isFull() && (this.type().equals(Type.GENERATOR) || this.type().equals(Type.BATTERY))) {
 			List<EnergyBlockEntity> sourceNeighbors = new ArrayList<>();
 			for (var direction : Direction.values()) {
 				BlockEntity neighbor = this.getWorld().getBlockEntity(wireBlock.getPos().offset(direction));
-				if (neighbor instanceof EnergyBlockEntity energyBlockEntity && energyBlockEntity.getFreakEnergyStored() != 0 && (energyBlockEntity.type().equals(Type.BATTERY) || energyBlockEntity.type().equals(Type.GENERATOR))) {
+				if (neighbor instanceof EnergyBlockEntity energyBlockEntity && energyBlockEntity.getEnergyStored() != 0 && (energyBlockEntity.type().equals(Type.BATTERY) || energyBlockEntity.type().equals(Type.GENERATOR))) {
 					sourceNeighbors.add(energyBlockEntity);
 				}
 			}
 			if (!sourceNeighbors.isEmpty()) {
-				int needEnergy = (wireBlock.capacity() - wireBlock.getFreakEnergyStored()) / sourceNeighbors.size();
+				int needEnergy = (wireBlock.capacity() - wireBlock.getEnergyStored()) / sourceNeighbors.size();
 				if (needEnergy == 0) {
-					receive(capacity(), wireBlock);
+					receive(transferRate(), wireBlock);
 				} else {
 					for (var neighbor : sourceNeighbors) {
 						neighbor.receive(needEnergy, wireBlock);
@@ -86,10 +87,10 @@ public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy {
 
 	public void receive(int transferRate, EnergyBlockEntity energyBlock) {
 
-		int transfer = Math.min(Math.min(transferRate, this.freakEnergyStored), energyBlock.capacity() - energyBlock.getFreakEnergyStored());
+		int transfer = Math.min(Math.min(transferRate, this.energyStored), energyBlock.capacity() - energyBlock.getEnergyStored());
 		if (transfer > 0) {
 			energyBlock.receiveEnergy(transfer);
-				this.freakEnergyStored -= transfer;
+				this.energyStored -= transfer;
 				markDirty();
 			}
 
@@ -97,7 +98,7 @@ public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy {
 
 	@Override
 	public void transferEnergy(LinkedHashMap<Direction, EnergyBlockEntity> energyBlockEntities) {
-		if (this.getFreakEnergyStored() == 0 || energyBlockEntities.isEmpty()) {
+		if (this.getEnergyStored() == 0 || energyBlockEntities.isEmpty()) {
 			return;
 		}
 		for (var direction : energyBlockEntities.keySet()) {
@@ -120,28 +121,28 @@ public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy {
 		}
 	}
 
-	public void receiveEnergy(int freakEnergy) {
-		int energyReceived = Math.min(capacity() - this.freakEnergyStored, freakEnergy);
-			this.freakEnergyStored += energyReceived;
+	public void receiveEnergy(int energy) {
+		int energyReceived = Math.min(capacity() - this.energyStored, energy);
+			this.energyStored += energyReceived;
 	}
 
 	@Override
-	public int getFreakEnergyStored() {
-		return freakEnergyStored;
+	public int getEnergyStored() {
+		return energyStored;
 	}
 
 	@Override
-	public void setFreakEnergyStored(int storedEnergy) {
-		this.freakEnergyStored = storedEnergy;
+	public void setEnergyStored(int storedEnergy) {
+		this.energyStored = storedEnergy;
 	}
 
 	@Override
 	protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-		nbt.putInt("FreakEnergy", this.getFreakEnergyStored());
+		nbt.putInt("EnergyStored", this.getEnergyStored());
 	}
 
 	@Override
 	protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-		this.setFreakEnergyStored(nbt.getInt("FreakEnergy"));
+		this.setEnergyStored(nbt.getInt("EnergyStored"));
 	}
 }

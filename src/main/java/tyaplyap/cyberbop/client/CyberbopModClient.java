@@ -1,6 +1,7 @@
 package tyaplyap.cyberbop.client;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.loader.api.FabricLoader;
@@ -20,7 +21,9 @@ import tyaplyap.cyberbop.client.render.AssemblerRenderer;
 import tyaplyap.cyberbop.client.render.WiresRenderer;
 import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderers;
 import tyaplyap.cyberbop.client.screen.FurnaceGeneratorClientScreen;
+import tyaplyap.cyberbop.client.util.EnergySynchronization;
 import tyaplyap.cyberbop.extension.PlayerExtension;
+import tyaplyap.cyberbop.packet.EnergyGuiUpdatePacket;
 
 public class CyberbopModClient implements ClientModInitializer {
 
@@ -34,6 +37,12 @@ public class CyberbopModClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		ClientPlayNetworking.registerGlobalReceiver(EnergyGuiUpdatePacket.ID, (payload, context) -> {
+			context.client().execute(() -> {
+				EnergySynchronization.updateEnergyInGui(payload.storedEnergy, payload.capacity);
+			});
+		});
+
 		HandledScreens.register(CyberbopMod.FURNACE_GENERATOR_SCREEN, FurnaceGeneratorClientScreen::new);
 
 		EntityModelLayerRegistry.registerModelLayer(WIRES_LAYER, WiresRenderer::getTexturedModelData);

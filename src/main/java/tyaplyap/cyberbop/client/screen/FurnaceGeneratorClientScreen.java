@@ -9,18 +9,20 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import tyaplyap.cyberbop.CyberbopMod;
+import tyaplyap.cyberbop.client.util.EnergySynchronization;
 import tyaplyap.cyberbop.screen.FurnaceGeneratorScreenHandler;
+
+import java.util.List;
 
 public class FurnaceGeneratorClientScreen extends HandledScreen<FurnaceGeneratorScreenHandler> {
 
 	public FurnaceGeneratorClientScreen(FurnaceGeneratorScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, title);
 	}
-	// A path to the gui texture. In this example we use the texture from the dispenser
 
 	private static final Identifier TEXTURE = CyberbopMod.id("textures/gui/container/furnace_generator.png");
-	// For versions before 1.21:
-	// private static final Identifier TEXTURE = new Identifier("minecraft", "textures/gui/container/dispenser.png");
+	private static final Identifier ENERGY_BAR = CyberbopMod.id("container/energy_bar");
+	private static final Identifier LIT_PROGRESS = CyberbopMod.id("container/furnace_generator_lit_progress");
 
 	@Override
 	protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
@@ -30,30 +32,31 @@ public class FurnaceGeneratorClientScreen extends HandledScreen<FurnaceGenerator
 		int x = (width - backgroundWidth) / 2;
 		int y = (height - backgroundHeight) / 2;
 		context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight);
-		int i = this.x;
-		int j = this.y;
+
 		if (this.handler.isBurning()) {
-			int l = MathHelper.ceil(this.handler.getFuelProgress() * 13.0F) + 1;
-			context.drawGuiTexture(CyberbopMod.id("container/furnace_generator_lit_progress"), 14, 14, 0, 14 - l, i + 80, j + 36 + 14 - l, 14, l);
+			int height_lit = MathHelper.ceil(this.handler.getFuelProgress() * 13.0F) + 1;
+			context.drawGuiTexture(LIT_PROGRESS, 14, 14, 0, 14 - height_lit, this.x + 80, this.y + 36 + 14 - height_lit, 14, height_lit);
 		}
 
+		int height_bar = (int)(68 * (MathHelper.clamp((float) EnergySynchronization.getEnergy()[0] / EnergySynchronization.getEnergy()[1], 0.0F, 1.0F))) +1;
 
-
-		int height = (int)this.handler.getEnergyHeight() + 1;
-		context.drawGuiTexture(CyberbopMod.id("container/energy_bar"), 12, 69, 0, 69 - height, i + 154, j + 78 - height, 12, height);
+		context.drawGuiTexture(ENERGY_BAR, 12, 69, 0, 69 - height_bar, this.x + 154, this.y + 78 - height_bar, 12, height_bar);
 	}
 
 	@Override
 	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
 		renderBackground(context, mouseX, mouseY, delta);
 		super.render(context, mouseX, mouseY, delta);
+
+		if (this.isPointWithinBounds(154, 9, 12, 68, mouseX, mouseY)) {
+			context.drawTooltip(this.textRenderer, List.of(Text.of("Energy Stored: " ), Text.of(EnergySynchronization.getEnergy()[0] + "/" + EnergySynchronization.getEnergy()[1])), mouseX, mouseY);
+		}
+
 		drawMouseoverTooltip(context, mouseX, mouseY);
 	}
 
 	@Override
 	protected void init() {
 		super.init();
-		// Center the title
-		titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2;
 	}
 }

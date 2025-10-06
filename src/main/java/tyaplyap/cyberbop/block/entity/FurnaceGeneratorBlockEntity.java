@@ -3,24 +3,19 @@ package tyaplyap.cyberbop.block.entity;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import tyaplyap.cyberbop.CyberbopMod;
@@ -34,10 +29,6 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 
 	private int fuelTime;
 
-	private int capacity;
-
-	private int storedEnergy;
-
 	protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
 		@Override
 		public int get(int index) {
@@ -46,10 +37,6 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 					return burnTime;
 				case 1:
 					return fuelTime;
-				case 2:
-					return capacity;
-				case 3:
-					return storedEnergy;
 				default:
 					return 0;
 			}
@@ -64,19 +51,12 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 				case 1:
 					fuelTime = value;
 					break;
-				case 2:
-					capacity = value;
-					break;
-				case 3:
-					storedEnergy = value;
-					break;
-
 			}
 		}
 
 		@Override
 		public int size() {
-			return 4;
+			return 2;
 		}
 	};
 
@@ -104,7 +84,7 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 
 	@Override
 	public int transferRate() {
-		return Integer.MAX_VALUE;
+		return 1000;
 	}
 
 	@Override
@@ -113,14 +93,12 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 	}
 
 	public static void tick (World world, BlockPos pos, BlockState state, FurnaceGeneratorBlockEntity blockEntity) {
+
 		EnergyBlockEntity.tick(world, pos, state, blockEntity);
-		//blockEntity.capacity = (int)(68 * (MathHelper.clamp((float)blockEntity.getFreakEnergyStored() / blockEntity.capacity(), 0.0F, 1.0F)));
-		blockEntity.capacity = blockEntity.capacity();
-		blockEntity.storedEnergy = blockEntity.getFreakEnergyStored();
 		if (blockEntity.isBurning()) {
 			blockEntity.burnTime--;
 			if (!blockEntity.isFull()) {
-				blockEntity.setFreakEnergyStored(Math.min(blockEntity.capacity(), blockEntity.getFreakEnergyStored() + 256));
+				blockEntity.setEnergyStored(Math.min(blockEntity.capacity(), blockEntity.getEnergyStored() + 256));
 			}
 		}
 
@@ -150,6 +128,7 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 				}
 			}
 		}
+
 		state = state.with(AbstractFurnaceBlock.LIT, blockEntity.isBurning());
 		world.setBlockState(pos, state, Block.NOTIFY_ALL);
 	}
@@ -174,8 +153,9 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 
 	@Override
 	protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
-		return new FurnaceGeneratorScreenHandler(CyberbopMod.FURNACE_GENERATOR_SCREEN, syncId, playerInventory, this, propertyDelegate);
+		return new FurnaceGeneratorScreenHandler(CyberbopMod.FURNACE_GENERATOR_SCREEN, syncId, playerInventory, this, propertyDelegate, pos, (ServerPlayerEntity) playerInventory.player);
 	}
+
 
 	@Override
 	protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
@@ -190,5 +170,24 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 		this.inventory = DefaultedList.ofSize(this.size(), ItemStack.EMPTY);
 		Inventories.readNbt(nbt, this.inventory, registryLookup);
 		this.burnTime = nbt.getShort("BurnTime");
+	}
+
+//	@Override
+//	public Packet<ClientPlayPacketListener> toUpdatePacket() {
+//		return BlockEntityUpdateS2CPacket.create(this);
+//	}
+
+//	@Override
+//	public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
+//		NbtCompound nbtCompound = super.toInitialChunkDataNbt(registryLookup);
+//		this.writeNbt(nbtCompound, registryLookup);
+//		nbtCompound.putShort("BurnTime", (short) this.burnTime);
+//		nbtCompound.putInt("EnergyStored", this.getFreakEnergyStored());
+//		return nbtCompound;
+//	}
+
+	@Override
+	public BlockPos getScreenOpeningData(ServerPlayerEntity serverPlayerEntity) {
+		return pos;
 	}
 }

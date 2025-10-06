@@ -4,8 +4,10 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
@@ -14,7 +16,6 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -30,6 +31,7 @@ import tyaplyap.cyberbop.entity.FakePlayerEntity;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.screen.FurnaceGeneratorScreenHandler;
+import tyaplyap.cyberbop.packet.EnergyGuiUpdatePacket;
 
 import static net.minecraft.server.command.CommandManager.*;
 
@@ -37,7 +39,7 @@ public class CyberbopMod implements ModInitializer {
 	public static final String MOD_ID = "cyberbop";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	public static final ScreenHandlerType<FurnaceGeneratorScreenHandler> FURNACE_GENERATOR_SCREEN = Registry.register(Registries.SCREEN_HANDLER, id("furnace_generator"), new ScreenHandlerType<>(FurnaceGeneratorScreenHandler::new, FeatureSet.empty()));
+	public static final ScreenHandlerType<FurnaceGeneratorScreenHandler> FURNACE_GENERATOR_SCREEN = Registry.register(Registries.SCREEN_HANDLER, id("furnace_generator"), new ExtendedScreenHandlerType<>(FurnaceGeneratorScreenHandler::new, BlockPos.PACKET_CODEC));
 
 	public static final EntityType<FakePlayerEntity> FAKE_PLAYER_ENTITY = Registry.register(Registries.ENTITY_TYPE, Identifier.of(MOD_ID, "fake_player"), FabricEntityTypeBuilder.<FakePlayerEntity>create(SpawnGroup.MISC,FakePlayerEntity::new).dimensions(EntityDimensions.changing(0.6F, 1.99F)).trackedUpdateRate(2).build());
 
@@ -51,7 +53,7 @@ public class CyberbopMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-
+		PayloadTypeRegistry.playS2C().register(EnergyGuiUpdatePacket.ID, EnergyGuiUpdatePacket.PACKET_CODEC);
 		Registry.register(Registries.ITEM_GROUP, CyberbopMod.id("items"), CyberbopMod.ITEM_GROUP);
 
 		CyberbopBlocks.init();
@@ -75,7 +77,7 @@ public class CyberbopMod implements ModInitializer {
 						BlockPos blockPos = ((BlockHitResult) hitResult).getBlockPos();
 						BlockEntity blockEntity = commandContext.getSource().getWorld().getBlockEntity(blockPos);
 						if (blockEntity instanceof EnergyBlockEntity energyBlock) {
-							energyBlock.setFreakEnergyStored(IntegerArgumentType.getInteger(commandContext, "energy"));
+							energyBlock.setEnergyStored(IntegerArgumentType.getInteger(commandContext, "energy"));
 						}
 					} else {
 						commandContext.getSource().sendFeedback(() -> Text.literal("No Block"), false);

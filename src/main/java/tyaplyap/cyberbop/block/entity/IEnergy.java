@@ -2,7 +2,7 @@ package tyaplyap.cyberbop.block.entity;
 
 import net.minecraft.util.math.Direction;
 
-import java.util.LinkedHashMap;;
+import java.util.LinkedHashMap;
 
 public interface IEnergy {
 
@@ -22,17 +22,17 @@ public interface IEnergy {
 		return Type.BATTERY;
 	}
 
-	void setFreakEnergyStored(int energy);
+	void setEnergyStored(int energy);
 
-	int getFreakEnergyStored();
+	int getEnergyStored();
 
 	default boolean isReceiver() {
-		return type().equals(Type.RECEIVER) || type().equals(Type.WIRE);
+		return type().equals(Type.RECEIVER);
 	}
 
 	default void transferEnergy(LinkedHashMap<Direction, EnergyBlockEntity> energyBlockEntities) {}
 
-	default void receiveEnergy(int freakEnergy) {}
+	default void receiveEnergy(int energy) {}
 
 	enum Type {
 		BATTERY(),

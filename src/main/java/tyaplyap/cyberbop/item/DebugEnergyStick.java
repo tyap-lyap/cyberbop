@@ -10,7 +10,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.world.World;
-import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
 import tyaplyap.cyberbop.block.entity.IEnergy;
 
 public class DebugEnergyStick extends Item {
@@ -36,7 +35,7 @@ public class DebugEnergyStick extends Item {
 	@Override
 	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
 		if ( energyBlock != null && entity instanceof ServerPlayerEntity player && !world.isClient && energyBlock instanceof IEnergy energy) {
-			sendMessage(player, Text.of(energy.type().toString() + "§a Stored:" + energy.getFreakEnergyStored()));
+			sendMessage(player, Text.of(energy.type().toString() + "§a Stored:" + energy.getEnergyStored()));
 			if (world.getBlockEntity(energyBlock.getPos()) == null) {
 				energyBlock = null;
 			}

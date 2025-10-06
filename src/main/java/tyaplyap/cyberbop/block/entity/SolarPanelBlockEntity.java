@@ -36,7 +36,7 @@ public class SolarPanelBlockEntity extends EnergyBlockEntity{
 			int topY = world.getTopY(Heightmap.Type.WORLD_SURFACE, pos.getX(), pos.getZ());
 			for (int y = pos.getY(); y < topY; y++) {
 				BlockState blockState = world.getBlockState(new BlockPos(pos.getX(), y, pos.getZ()));
-				if (blockEntity.capacity() == blockEntity.getFreakEnergyStored() || blockState.getOpacity(world, blockPos) >= 15) {
+				if (blockEntity.capacity() == blockEntity.getEnergyStored() || blockState.getOpacity(world, blockPos) >= 15) {
 
 					return;
 				}
@@ -45,8 +45,8 @@ public class SolarPanelBlockEntity extends EnergyBlockEntity{
 
 			int generationRate = world.isRaining() ? 128 : 256;
 
-			if (blockEntity.getFreakEnergyStored() < blockEntity.capacity()) {
-				blockEntity.setFreakEnergyStored(Math.min(blockEntity.capacity(), blockEntity.getFreakEnergyStored() + generationRate));
+			if (blockEntity.getEnergyStored() < blockEntity.capacity()) {
+				blockEntity.setEnergyStored(Math.min(blockEntity.capacity(), blockEntity.getEnergyStored() + generationRate));
 				blockEntity.markDirty();
 			}
 

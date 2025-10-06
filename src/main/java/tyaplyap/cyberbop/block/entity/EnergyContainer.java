@@ -1,5 +1,6 @@
 package tyaplyap.cyberbop.block.entity;
 
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -13,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Nameable;
@@ -22,7 +22,7 @@ import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 import tyaplyap.cyberbop.util.ImplInventory;
 
-public abstract class EnergyContainer extends EnergyBlockEntity implements Nameable, NamedScreenHandlerFactory, ImplInventory, SidedInventory {
+public abstract class EnergyContainer extends EnergyBlockEntity implements Nameable, ExtendedScreenHandlerFactory, ImplInventory, SidedInventory {
 
 	@Nullable
 	private Text customName;
@@ -33,7 +33,7 @@ public abstract class EnergyContainer extends EnergyBlockEntity implements Namea
 
 	@Override
 	public int[] getAvailableSlots(Direction side) {
-		return new int[]{0};//[0]
+		return new int[0];
 	}
 
 	@Override
