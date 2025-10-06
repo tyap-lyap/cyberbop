@@ -58,5 +58,6 @@ public class FurnaceGeneratorClientScreen extends HandledScreen<FurnaceGenerator
 	@Override
 	protected void init() {
 		super.init();
+		titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2;
 	}
 }

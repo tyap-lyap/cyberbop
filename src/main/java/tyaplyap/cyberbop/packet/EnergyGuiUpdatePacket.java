@@ -15,7 +15,7 @@ public class EnergyGuiUpdatePacket implements CustomPayload {
 
 	public static final Identifier PACKET_ID = Identifier.of(CyberbopMod.MOD_ID,"energy_gui_update");
 	public static final CustomPayload.Id<EnergyGuiUpdatePacket> ID = new CustomPayload.Id<>(PACKET_ID);
-	public static PacketCodec<RegistryByteBuf, EnergyGuiUpdatePacket> PACKET_CODEC = PacketCodec.tuple(PacketCodecs.INTEGER, EnergyGuiUpdatePacket::getStoredEnergy, PacketCodecs.INTEGER, EnergyGuiUpdatePacket::getCapacity, EnergyGuiUpdatePacket::new);
+	public static final PacketCodec<RegistryByteBuf, EnergyGuiUpdatePacket> PACKET_CODEC = PacketCodec.tuple(PacketCodecs.INTEGER, EnergyGuiUpdatePacket::getStoredEnergy, PacketCodecs.INTEGER, EnergyGuiUpdatePacket::getCapacity, EnergyGuiUpdatePacket::new);
 
 
 	public EnergyGuiUpdatePacket(int storedEnergy, int capacity) {
