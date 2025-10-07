@@ -95,7 +95,8 @@ public class FurnaceGeneratorBlock extends BlockWithEntity {
 			BlockEntity blockEntity = world.getBlockEntity(pos);
 			if (blockEntity instanceof FurnaceGeneratorBlockEntity furnaceGeneratorBlock) {
 				ItemScatterer.spawn(world, pos, furnaceGeneratorBlock);
-				world.updateComparators(pos,this);
+				super.onStateReplaced(state, world, pos, newState, moved);
+				world.updateComparators(pos, this);
 			}
 			super.onStateReplaced(state, world, pos, newState, moved);
 		}

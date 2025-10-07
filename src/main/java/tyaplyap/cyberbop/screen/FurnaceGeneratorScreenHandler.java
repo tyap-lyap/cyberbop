@@ -29,13 +29,14 @@ public class FurnaceGeneratorScreenHandler extends ScreenHandler {
 	private FurnaceGeneratorBlockEntity furnaceGeneratorBlock;
 	public FurnaceGeneratorScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos) {
 		this(CyberbopMod.FURNACE_GENERATOR_SCREEN, syncId, playerInventory, ImplInventory.ofSize(2), new ArrayPropertyDelegate(4), pos, null);
-		this.furnaceGeneratorBlock = (FurnaceGeneratorBlockEntity) playerInventory.player.getWorld().getBlockEntity(pos);
 	}
 
 	public FurnaceGeneratorScreenHandler(ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ImplInventory inventory, PropertyDelegate propertyDelegate, BlockPos pos, ServerPlayerEntity serverPlayer) {
 		super(type, syncId);
 		this.serverPlayer = serverPlayer;
-		this.furnaceGeneratorBlock = (FurnaceGeneratorBlockEntity) playerInventory.player.getWorld().getBlockEntity(pos);
+		if (serverPlayer != null && !serverPlayer.getWorld().isClient) {
+			this.furnaceGeneratorBlock = (FurnaceGeneratorBlockEntity) playerInventory.player.getWorld().getBlockEntity(pos);
+		}
 		checkSize(inventory,2);
 		checkDataCount(propertyDelegate, 2);
 		this.inventory = inventory;
