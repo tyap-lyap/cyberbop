@@ -66,7 +66,6 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 
 	protected DefaultedList<ItemStack> inventory = DefaultedList.ofSize(2, ItemStack.EMPTY);
 
-
 	@Override
 	protected Text getContainerName() {
 		return Text.translatable("container.cyberbop.furnace_generator");
@@ -134,6 +133,16 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 	}
 
 	@Override
+	public int[] getAvailableSlots(Direction side) {
+		return new int[]{0,1};
+	}
+
+	@Override
+	public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+		return slot == 1;
+	}
+
+	@Override
 	public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
 		return slot == 0;
 	}
@@ -155,7 +164,6 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 	protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
 		return new FurnaceGeneratorScreenHandler(CyberbopMod.FURNACE_GENERATOR_SCREEN, syncId, playerInventory, this, propertyDelegate, pos, (ServerPlayerEntity) playerInventory.player);
 	}
-
 
 	@Override
 	protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {

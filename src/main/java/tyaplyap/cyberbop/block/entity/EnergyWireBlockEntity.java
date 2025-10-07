@@ -26,8 +26,6 @@ public class EnergyWireBlockEntity extends EnergyBlockEntity {
 		}
 	}
 
-
-
 	public static void tick (World world, BlockPos pos, BlockState state, EnergyWireBlockEntity blockEntity) {
 		blockEntity.timerSide();
 		EnergyBlockEntity.tick(world, pos, state, blockEntity);
