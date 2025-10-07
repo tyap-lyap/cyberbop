@@ -14,10 +14,10 @@ public class CyberbopItems {
 	public static final Map<Identifier, Item> ITEMS = new LinkedHashMap<>();
 
 	public static final Item FLIGHT_MODULE = add("flight_module", new Item(new Item.Settings().maxCount(1)));
-	public static final Item EXTRA_BATTERY = add("extra_battery", new Item(new Item.Settings().maxCount(1)));
+	public static final Item EXTRA_BATTERY = add("extra_battery", new CyborgModuleItem(new Item.Settings().maxCount(1), "extra_battery"));
 	public static final Item JETPACK = add("jetpack", new Item(new Item.Settings().maxCount(1)));
 	public static final Item SOLAR_CELL_MODULE = add("solar_cell_module", new Item(new Item.Settings().maxCount(1)));
-	public static final Item NIGHT_VISION_MODULE = add("night_vision_module", new Item(new Item.Settings().maxCount(1)));
+	public static final Item NIGHT_VISION_MODULE = add("night_vision_module", new NightVisionModule(new Item.Settings().maxCount(1), "night_vision_module"));
 
 	public static final Item BASIC_HEAD = add("basic_cyborg_head", new CyborgPartItem("basic_head", new Item.Settings().maxCount(1)));
 	public static final Item BASIC_BODY = add("basic_cyborg_body", new CyborgPartItem("basic_body", new Item.Settings().maxCount(1)));
@@ -52,5 +52,12 @@ public class CyberbopItems {
 			if(item instanceof CyborgLegPartItem partItem) if(partItem.left.equals(part) || partItem.right.equals(part)) return item;
 		}
 		return Items.AIR;
+	}
+
+	public static CyborgModuleItem getModule(String module) {
+		for(Item item : ITEMS.values()) {
+			if(item instanceof CyborgModuleItem moduleItem && moduleItem.getModuleName().equals(module)) return moduleItem;
+		}
+		return null;
 	}
 }

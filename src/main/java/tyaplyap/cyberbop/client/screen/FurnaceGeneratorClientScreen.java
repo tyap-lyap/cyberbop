@@ -31,7 +31,7 @@ public class FurnaceGeneratorClientScreen extends HandledScreen<FurnaceGenerator
 		RenderSystem.setShaderTexture(0, TEXTURE);
 		int x = (width - backgroundWidth) / 2;
 		int y = (height - backgroundHeight) / 2;
-		context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight);
+		context.drawTexture(TEXTURE, x, y, 0, 0, 179, backgroundHeight);
 
 		if (this.handler.isBurning()) {
 			int height_lit = MathHelper.ceil(this.handler.getFuelProgress() * 13.0F) + 1;
@@ -40,7 +40,7 @@ public class FurnaceGeneratorClientScreen extends HandledScreen<FurnaceGenerator
 
 		int height_bar = (int)(68 * (MathHelper.clamp((float) EnergySynchronization.getEnergy()[0] / EnergySynchronization.getEnergy()[1], 0.0F, 1.0F))) +1;
 
-		context.drawGuiTexture(ENERGY_BAR, 12, 69, 0, 69 - height_bar, this.x + 154, this.y + 78 - height_bar, 12, height_bar);
+		context.drawGuiTexture(ENERGY_BAR, 12, 69, 0, 69 - height_bar, this.x + 156, this.y + 78 - height_bar, 12, height_bar);
 	}
 
 	@Override

@@ -8,11 +8,13 @@ import net.minecraft.client.util.math.MatrixStack;
 public class AssemblerModel extends Model {
 	public final ModelPart bone;
 	private final ModelPart handle;
+	private final ModelPart overlay;
 
 	public AssemblerModel(ModelPart root) {
 		super(RenderLayer::getEntityTranslucent);
 		this.bone = root.getChild("bone");
 		this.handle = root.getChild("handle");
+		this.overlay = root.getChild("overlay");
 	}
 
 	public static TexturedModelData getTexturedModelData() {
@@ -25,6 +27,8 @@ public class AssemblerModel extends Model {
 		ModelPartData cube_r1 = handle.addChild("cube_r1", ModelPartBuilder.create().uv(0, 32).cuboid(-1.0F, -9.0F, -1.0F, 2.0F, 8.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -30.0F, 5.0F, 0.2182F, 0.0F, 0.0F));
 
 		ModelPartData base = modelPartData.addChild("base", ModelPartBuilder.create().uv(0, 0).cuboid(-16.0F, -16.0F, 0.0F, 16.0F, 16.0F, 16.0F, new Dilation(0.0F)), ModelTransform.pivot(8.0F, 24.0F, -8.0F));
+
+		ModelPartData overlay = modelPartData.addChild("overlay", ModelPartBuilder.create().uv(0, 0).cuboid(-16.0F, -16.0F, 0.0F, 16.0F, 16.0F, 16.0F, new Dilation(0.01F)), ModelTransform.pivot(8.0F, 24.0F, -8.0F));
 		return TexturedModelData.of(modelData, 64, 64);
 	}
 

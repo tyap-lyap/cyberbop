@@ -19,10 +19,17 @@
     "client": [ "tyaplyap.cyberbop.client.CyberbopModClient" ]
   },
   "mixins": [ "cyberbop.mixins.json" ],
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/DcemWeskeZ"
+      }
+    }
+  },
   "depends": {
     "fabricloader": "*",
     "fabric-api": "*",
-    "minecraft": ">=1.21",
+    "minecraft": "${minecraft_version_range}",
     "java": ">=21"
   }
 }

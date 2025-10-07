@@ -31,6 +31,7 @@
   "block.cyberbop.energy_wire": "Energy Wire",
   "block.cyberbop.solar_panel": "Solar Panel",
   "block.cyberbop.charging_pad": "Charging Pad",
+  "block.cyberbop.furnace_generator": "Furnace Generator",
 
   "block.cyberbop.energy_generator": "Debug Energy Generator",
   "block.cyberbop.energy_receiver": "Debug Energy Receiver",

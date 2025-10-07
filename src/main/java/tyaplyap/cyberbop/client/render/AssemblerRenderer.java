@@ -16,13 +16,14 @@ import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderers;
 
 public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockEntityRenderer<T> {
 	ModelPart model;
+	ModelPart overlayPart;
 
 	@Override
 	public void render(T entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
 		if(model == null) {
 			model = MinecraftClient.getInstance().getEntityModelLoader().getModelPart(CyberbopModClient.ASSEMBLER_LAYER);
+			overlayPart = model.getChild("overlay");
 		}
-
 		var world = entity.getWorld();
 
 		if(world != null && !entity.isRemoved()) {
@@ -32,6 +33,7 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 			matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
 
 			VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentCull(CyberbopMod.id("textures/entity/assembler.png")));
+			overlayPart.visible = false;
 			model.render(matrices, vertexConsumer, light, overlay);
 
 			matrices.pop();
@@ -60,6 +62,21 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 				CyborgPartRenderer part = CyborgPartRenderers.getPart(entity.leftLeg);
 				if(part != null) part.renderAssembler(tickDelta, matrices, vertexConsumers, light, overlay);
 			}
+
+			renderOverlay(entity, tickDelta, matrices, vertexConsumers, light, overlay);
 		}
+	}
+
+	public void renderOverlay(T entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+		matrices.push();
+		matrices.translate(0.5, 1.5, 0.5);
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
+		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+
+		VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentEmissive(CyberbopMod.id("textures/entity/assembler_overlay.png")));
+		overlayPart.visible = true;
+		overlayPart.render(matrices, vertexConsumer, light, overlay);
+
+		matrices.pop();
 	}
 }

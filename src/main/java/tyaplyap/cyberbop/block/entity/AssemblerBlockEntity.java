@@ -20,6 +20,10 @@ public class AssemblerBlockEntity extends BlockEntity {
 	public String rightLeg = "";
 	public String leftLeg = "";
 
+	public String module1 = "";
+	public String module2 = "";
+	public String module3 = "";
+
 	public AssemblerBlockEntity(BlockPos pos, BlockState state) {
 		super(CyberbopBlockEntities.ASSEMBLER, pos, state);
 	}
@@ -38,6 +42,10 @@ public class AssemblerBlockEntity extends BlockEntity {
 		nbt.putString("body", this.body);
 		nbt.putString("rightLeg", this.rightLeg);
 		nbt.putString("leftLeg", this.leftLeg);
+
+		nbt.putString("module1", this.module1);
+		nbt.putString("module2", this.module2);
+		nbt.putString("module3", this.module3);
 	}
 
 	@Override
@@ -50,6 +58,10 @@ public class AssemblerBlockEntity extends BlockEntity {
 		this.body = nbt.getString("body");
 		this.rightLeg = nbt.getString("rightLeg");
 		this.leftLeg = nbt.getString("leftLeg");
+
+		this.module1 = nbt.getString("module1");
+		this.module2 = nbt.getString("module2");
+		this.module3 = nbt.getString("module3");
 	}
 
 	public boolean isEmpty() {
@@ -58,6 +70,20 @@ public class AssemblerBlockEntity extends BlockEntity {
 
 	public boolean isComplete() {
 		return !head.isBlank() && !body.isBlank() && !rightArm.isBlank() && !leftArm.isBlank() && !rightLeg.isBlank() && !leftLeg.isBlank();
+	}
+
+	public boolean containsModule(String module) {
+		return ((module1 != null && module1.equals(module)) || (module2 != null && module2.equals(module)) || (module3 != null && module3.equals(module)));
+	}
+
+	public void addModule(String module) {
+		if(module1 == null || module1.isBlank()) module1 = module;
+		else if(module2 == null || module2.isBlank()) module2 = module;
+		else if(module3 == null || module3.isBlank()) module3 = module;
+	}
+
+	public boolean hasEmptyModuleSlot() {
+		return (module1 == null || module1.isBlank()) || (module2 == null || module2.isBlank()) || (module3 == null || module3.isBlank());
 	}
 
 	@Override

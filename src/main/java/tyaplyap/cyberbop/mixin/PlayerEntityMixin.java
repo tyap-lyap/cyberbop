@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tyaplyap.cyberbop.extension.PlayerExtension;
+import tyaplyap.cyberbop.item.CyberbopItems;
 
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin implements PlayerExtension {
@@ -29,6 +30,10 @@ public class PlayerEntityMixin implements PlayerExtension {
 
 	private static final TrackedData<Integer> CYBORG_ENERGY = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
+	private static final TrackedData<String> MODULE_1 = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.STRING);
+	private static final TrackedData<String> MODULE_2 = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.STRING);
+	private static final TrackedData<String> MODULE_3 = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.STRING);
+
 	@Inject(method = "initDataTracker", at = @At("HEAD"))
 	void initDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
 		builder.add(IS_CYBORG, false);
@@ -39,6 +44,10 @@ public class PlayerEntityMixin implements PlayerExtension {
 		builder.add(RIGHT_LEG, "");
 		builder.add(LEFT_LEG, "");
 		builder.add(CYBORG_ENERGY, 0);
+
+		builder.add(MODULE_1, "");
+		builder.add(MODULE_2, "");
+		builder.add(MODULE_3, "");
 	}
 
 	@Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
@@ -53,6 +62,10 @@ public class PlayerEntityMixin implements PlayerExtension {
 		nbt.putString("cyborgLeftLeg", getCyborgLeftLeg());
 
 		nbt.putInt("cyborgEnergy", getCyborgEnergy());
+
+		nbt.putString("module1", getModule1());
+		nbt.putString("module2", getModule2());
+		nbt.putString("module3", getModule3());
 	}
 
 	@Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
@@ -67,13 +80,17 @@ public class PlayerEntityMixin implements PlayerExtension {
 		if(nbt.contains("cyborgLeftLeg")) setCyborgLeftLeg(nbt.getString("cyborgLeftLeg"));
 
 		if(nbt.contains("cyborgEnergy")) setCyborgEnergy(nbt.getInt("cyborgEnergy"));
+
+		if(nbt.contains("module1")) setModule1(nbt.getString("module1"));
+		if(nbt.contains("module2")) setModule2(nbt.getString("module2"));
+		if(nbt.contains("module3")) setModule3(nbt.getString("module3"));
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	void tick(CallbackInfo ci) {
 		if((Object)this instanceof ServerPlayerEntity player) {
-			if(player.interactionManager.getGameMode().equals(GameMode.SURVIVAL)) {
-				if(isCyborg()) {
+			if(isCyborg()) {
+				if(player.interactionManager.getGameMode().equals(GameMode.SURVIVAL)) {
 					if(getCyborgEnergy() != 0) {
 						setCyborgEnergy(getCyborgEnergy() - 1);
 					}
@@ -84,6 +101,15 @@ public class PlayerEntityMixin implements PlayerExtension {
 						}
 					}
 				}
+
+				var moduleItem1 = CyberbopItems.getModule(getModule1());
+				if(moduleItem1 != null) moduleItem1.tick(player.getServerWorld(), player);
+
+				var moduleItem2 = CyberbopItems.getModule(getModule2());
+				if(moduleItem2 != null) moduleItem2.tick(player.getServerWorld(), player);
+
+				var moduleItem3 = CyberbopItems.getModule(getModule3());
+				if(moduleItem3 != null) moduleItem3.tick(player.getServerWorld(), player);
 			}
 		}
 	}
@@ -95,6 +121,7 @@ public class PlayerEntityMixin implements PlayerExtension {
 
 	@Override
 	public int getCyborgMaxEnergy() {
+		if(containsModule("extra_battery")) return 15000;
 		return 10000;
 	}
 
@@ -173,5 +200,38 @@ public class PlayerEntityMixin implements PlayerExtension {
 		return PlayerEntity.class.cast(this).getDataTracker().get(LEFT_LEG);
 	}
 
+	@Override
+	public boolean containsModule(String module) {
+		return (getModule1().equals(module) || getModule2().equals(module) || getModule3().equals(module));
+	}
 
+	@Override
+	public String getModule1() {
+		return PlayerEntity.class.cast(this).getDataTracker().get(MODULE_1);
+	}
+
+	@Override
+	public String getModule2() {
+		return PlayerEntity.class.cast(this).getDataTracker().get(MODULE_2);
+	}
+
+	@Override
+	public String getModule3() {
+		return PlayerEntity.class.cast(this).getDataTracker().get(MODULE_3);
+	}
+
+	@Override
+	public void setModule1(String module) {
+		PlayerEntity.class.cast(this).getDataTracker().set(MODULE_1, module);
+	}
+
+	@Override
+	public void setModule2(String module) {
+		PlayerEntity.class.cast(this).getDataTracker().set(MODULE_2, module);
+	}
+
+	@Override
+	public void setModule3(String module) {
+		PlayerEntity.class.cast(this).getDataTracker().set(MODULE_3, module);
+	}
 }

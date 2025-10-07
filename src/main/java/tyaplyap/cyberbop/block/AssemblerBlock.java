@@ -20,10 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import tyaplyap.cyberbop.block.entity.AssemblerBlockEntity;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.extension.PlayerExtension;
-import tyaplyap.cyberbop.item.CyberbopItems;
-import tyaplyap.cyberbop.item.CyborgArmPartItem;
-import tyaplyap.cyberbop.item.CyborgLegPartItem;
-import tyaplyap.cyberbop.item.CyborgPartItem;
+import tyaplyap.cyberbop.item.*;
 
 import java.util.Set;
 
@@ -54,6 +51,15 @@ public class AssemblerBlock extends BlockWithEntity {
 		if(!world.isClient() && world.getBlockEntity(pos) instanceof AssemblerBlockEntity assembler) {
 
 			ItemStack stack = player.getStackInHand(Hand.MAIN_HAND);
+
+			if(stack.getItem() instanceof CyborgModuleItem moduleItem) {
+				if(assembler.hasEmptyModuleSlot() && !assembler.containsModule(moduleItem.getModuleName())) {
+					assembler.addModule(moduleItem.getModuleName());
+					player.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
+					assembler.updateListeners();
+					return ActionResult.SUCCESS;
+				}
+			}
 
 			if(stack.getItem() instanceof CyborgPartItem part) {
 
@@ -105,7 +111,7 @@ public class AssemblerBlock extends BlockWithEntity {
 				if(!ex.isCyborg()) {
 					if(assembler.isComplete()) {
 						ex.setCyborg(true);
-						ex.setCyborgEnergy(ex.getCyborgMaxEnergy());
+						ex.setCyborgEnergy(10000);
 						ex.setCyborgHead(assembler.head);
 						ex.setCyborgBody(assembler.body);
 						ex.setCyborgRightArm(assembler.rightArm);
@@ -113,12 +119,20 @@ public class AssemblerBlock extends BlockWithEntity {
 						ex.setCyborgRightLeg(assembler.rightLeg);
 						ex.setCyborgLeftLeg(assembler.leftLeg);
 
+						if(assembler.module1 != null) ex.setModule1(assembler.module1);
+						if(assembler.module2 != null) ex.setModule2(assembler.module2);
+						if(assembler.module3 != null) ex.setModule3(assembler.module3);
+
 						assembler.head = "";
 						assembler.body = "";
 						assembler.rightArm = "";
 						assembler.leftArm = "";
 						assembler.rightLeg = "";
 						assembler.leftLeg = "";
+
+						assembler.module1 = "";
+						assembler.module2 = "";
+						assembler.module3 = "";
 						assembler.updateListeners();
 
 						player.teleport((ServerWorld) world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, Set.of(), 180, 0);
@@ -144,6 +158,19 @@ public class AssemblerBlock extends BlockWithEntity {
 						assembler.leftArm = ex.getCyborgLeftArm();
 						assembler.rightLeg = ex.getCyborgRightLeg();
 						assembler.leftLeg = ex.getCyborgLeftLeg();
+
+						var moduleItem1 = CyberbopItems.getModule(ex.getModule1());
+						if(moduleItem1 != null) moduleItem1.onModuleRemoved((ServerWorld)world, player);
+
+						var moduleItem2 = CyberbopItems.getModule(ex.getModule2());
+						if(moduleItem2 != null) moduleItem2.onModuleRemoved((ServerWorld)world, player);
+
+						var moduleItem3 = CyberbopItems.getModule(ex.getModule3());
+						if(moduleItem3 != null) moduleItem3.onModuleRemoved((ServerWorld)world, player);
+
+						assembler.module1 = ex.getModule1();
+						assembler.module2 = ex.getModule2();
+						assembler.module3 = ex.getModule3();
 						assembler.updateListeners();
 
 						ex.setCyborgHead("");
@@ -152,6 +179,11 @@ public class AssemblerBlock extends BlockWithEntity {
 						ex.setCyborgLeftArm("");
 						ex.setCyborgRightLeg("");
 						ex.setCyborgLeftLeg("");
+
+						ex.setModule1("");
+						ex.setModule2("");
+						ex.setModule3("");
+
 						return ActionResult.SUCCESS;
 					}
 

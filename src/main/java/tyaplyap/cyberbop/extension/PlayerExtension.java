@@ -22,4 +22,14 @@ public interface PlayerExtension {
 	int getCyborgEnergy();
 	int getCyborgMaxEnergy();
 	void setCyborgEnergy(int cyborgEnergy);
+
+	String getModule1();
+	String getModule2();
+	String getModule3();
+
+	void setModule1(String module);
+	void setModule2(String module);
+	void setModule3(String module);
+
+	boolean containsModule(String module);
 }

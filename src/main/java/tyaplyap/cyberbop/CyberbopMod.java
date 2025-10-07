@@ -13,6 +13,7 @@ import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -33,6 +34,9 @@ import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.screen.FurnaceGeneratorScreenHandler;
 import tyaplyap.cyberbop.packet.EnergyGuiUpdatePacket;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static net.minecraft.server.command.CommandManager.*;
 
 public class CyberbopMod implements ModInitializer {
@@ -43,11 +47,17 @@ public class CyberbopMod implements ModInitializer {
 
 	public static final EntityType<FakePlayerEntity> FAKE_PLAYER_ENTITY = Registry.register(Registries.ENTITY_TYPE, Identifier.of(MOD_ID, "fake_player"), FabricEntityTypeBuilder.<FakePlayerEntity>create(SpawnGroup.MISC,FakePlayerEntity::new).dimensions(EntityDimensions.changing(0.6F, 1.99F)).trackedUpdateRate(2).build());
 
+	static ArrayList<Item> debugItems = new ArrayList<>(List.of(CyberbopItems.DEBUG_ENERGY_STICK, CyberbopBlocks.BATTERY_TEST.asItem(), CyberbopBlocks.ENERGY_RECEIVER.asItem(), CyberbopBlocks.ENERGY_GENERATOR.asItem()));
+
 	public static final ItemGroup ITEM_GROUP = FabricItemGroup.builder()
 		.displayName(Text.translatable("itemGroup.cyberbop.items"))
 		.entries((ctx, entries) -> {
-			CyberbopItems.ITEMS.forEach((id, item) -> entries.add(item.getDefaultStack()));
-			CyberbopBlocks.ITEMS.forEach((id, item) -> entries.add(item.getDefaultStack()));
+			CyberbopItems.ITEMS.forEach((id, item) -> {
+				if(!debugItems.contains(item)) entries.add(item.getDefaultStack());
+			});
+			CyberbopBlocks.ITEMS.forEach((id, item) -> {
+				if(!debugItems.contains(item)) entries.add(item.getDefaultStack());
+			});
 		})
 		.icon(CyberbopItems.ADVANCED_HEAD::getDefaultStack).build();
 
