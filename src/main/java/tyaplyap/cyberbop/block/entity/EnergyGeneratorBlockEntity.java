@@ -27,7 +27,7 @@ public class EnergyGeneratorBlockEntity extends EnergyBlockEntity {
 	}
 
 	public static void tick(World world, BlockPos pos, BlockState state, EnergyGeneratorBlockEntity blockEntity) {
-		if (blockEntity.isFull()) {
+		if (!blockEntity.isFull()) {
 			blockEntity.setEnergyStored(Math.min(blockEntity.capacity(), blockEntity.getEnergyStored() + blockEntity.generationRate));
 		}
 		EnergyBlockEntity.tick(world, pos, state, blockEntity);
