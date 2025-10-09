@@ -18,11 +18,10 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import tyaplyap.cyberbop.CyberbopMod;
-import tyaplyap.cyberbop.item.CyborgArmPartItem;
-import tyaplyap.cyberbop.item.CyborgLegPartItem;
 import tyaplyap.cyberbop.item.CyborgModuleItem;
 import tyaplyap.cyberbop.item.CyborgPartItem;
 import tyaplyap.cyberbop.screen.AssemblerScreenHandler;
+import tyaplyap.cyberbop.util.CyborgPartType;
 
 import java.util.Map;
 
@@ -105,7 +104,7 @@ public class AssemblerBlockEntity extends EnergyContainer {
 	}
 
 	public boolean isComplete() {
-		return !getHead().isEmpty() && isValid(getHead(), "head") && !getBody().isEmpty() && isValid(getBody(), "body") && !getRightArm().isEmpty() && isValid(getRightArm(), "right_arm") && !getLeftArm().isEmpty() && isValid(getLeftArm(), "left_arm") && !getRightLeg().isEmpty() && isValid(getRightLeg(), "right_leg") && !getLeftLeg().isEmpty()  && isValid(getLeftLeg(), "left_leg");
+		return !getHead().isEmpty() && isValid(getHead(), CyborgPartType.HEAD) && !getBody().isEmpty() && isValid(getBody(), CyborgPartType.BODY) && !getRightArm().isEmpty() && isValid(getRightArm(), CyborgPartType.RIGHT_ARM) && !getLeftArm().isEmpty() && isValid(getLeftArm(), CyborgPartType.LEFT_ARM) && !getRightLeg().isEmpty() && isValid(getRightLeg(), CyborgPartType.RIGHT_LEG) && !getLeftLeg().isEmpty()  && isValid(getLeftLeg(), CyborgPartType.LEFT_LEG);
 	}
 
 	public boolean containsModule(Item moduleStack) {
@@ -121,15 +120,15 @@ public class AssemblerBlockEntity extends EnergyContainer {
 		};
 	}
 
-	public void setModule(int id, Item module){
+	public void setModule(int id, ItemStack module) {
 			switch (id) {
-				case 1 -> this.getItems().set(6, module.getDefaultStack());
-				case 2 -> this.getItems().set(7, module.getDefaultStack());
-				case 3 -> this.getItems().set(8, module.getDefaultStack());
+				case 1 -> this.getItems().set(6, module);
+				case 2 -> this.getItems().set(7, module);
+				case 3 -> this.getItems().set(8, module);
 			}
 	}
 
-	public void addModule(Item module) {
+	public void addModule(ItemStack module) {
 		if(getModule(1).isEmpty()) setModule(1, module);
 		else if(getModule(2).isEmpty()) setModule(2, module);
 		else if(getModule(3).isEmpty()) setModule(3, module);
@@ -139,16 +138,11 @@ public class AssemblerBlockEntity extends EnergyContainer {
 		return (getModule(1).isEmpty()) || (getModule(2).isEmpty()) || (getModule(3).isEmpty());
 	}
 
-	public boolean isValid(ItemStack itemStack, String part) {
-		return switch (itemStack.getItem()) {
-			case CyborgPartItem item when part.equals("head") && item.partName.contains(part) -> true;
-			case CyborgPartItem item when part.equals("body") && item.partName.contains(part) -> true;
-			case CyborgArmPartItem item when part.equals("right_arm") && item.right.contains(part) -> true;
-			case CyborgArmPartItem item when part.equals("left_arm") && item.left.contains(part) -> true;
-			case CyborgLegPartItem item when part.equals("right_leg") && item.right.contains(part) -> true;
-			case CyborgLegPartItem item when part.equals("left_leg") && item.left.contains(part) -> true;
-			case null, default -> false;
-		};
+	public boolean isValid(ItemStack itemStack, CyborgPartType partType) {
+		if(itemStack.getItem() instanceof CyborgPartItem partItem) {
+			return partItem.getPartName(partType) != null;
+		}
+		return false;
 	}
 
 	public ItemStack getHead() {return this.getItems().get(0);}
@@ -162,6 +156,44 @@ public class AssemblerBlockEntity extends EnergyContainer {
 	public ItemStack getRightLeg() {return this.getItems().get(4);}
 
 	public ItemStack getLeftLeg() {return this.getItems().get(5);}
+
+	public ItemStack getPartStack(CyborgPartType partType) {
+		switch (partType) {
+			case HEAD -> {
+				return getHead();
+			}
+			case BODY -> {
+				return getBody();
+			}
+			case RIGHT_ARM -> {
+				return getRightArm();
+			}
+			case LEFT_ARM -> {
+				return getLeftArm();
+			}
+			case RIGHT_LEG -> {
+				return getRightLeg();
+			}
+			case LEFT_LEG -> {
+				return getLeftLeg();
+			}
+		}
+		return ItemStack.EMPTY;
+	}
+
+	public void setPartStack(CyborgPartType partType, ItemStack stack) {
+		int id = 0;
+		switch (partType) {
+			case HEAD -> id = 0;
+			case BODY -> id = 1;
+			case RIGHT_ARM -> id = 2;
+			case LEFT_ARM -> id = 3;
+			case RIGHT_LEG -> id = 4;
+			case LEFT_LEG -> id = 5;
+		}
+
+		setStack(id, stack);
+	}
 
 	@Override
 	public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {

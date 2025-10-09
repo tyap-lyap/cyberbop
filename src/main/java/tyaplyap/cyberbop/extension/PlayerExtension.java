@@ -1,33 +1,73 @@
 package tyaplyap.cyberbop.extension;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import tyaplyap.cyberbop.block.entity.IEnergy;
+import tyaplyap.cyberbop.util.CyborgPartType;
+
+import java.util.ArrayList;
 
 public interface PlayerExtension extends IEnergy {
 
 	boolean isCyborg();
 	void setCyborg(boolean isCyborg);
 
-	void setCyborgHead(String head);
-	void setCyborgBody(String body);
-	void setCyborgRightArm(String rightArm);
-	void setCyborgLeftArm(String leftArm);
-	void setCyborgRightLeg(String rightLeg);
-	void setCyborgLeftLeg(String leftLeg);
+	void setCyborgHead(ItemStack head);
+	void setCyborgBody(ItemStack body);
+	void setCyborgRightArm(ItemStack rightArm);
+	void setCyborgLeftArm(ItemStack leftArm);
+	void setCyborgRightLeg(ItemStack rightLeg);
+	void setCyborgLeftLeg(ItemStack leftLeg);
 
-	String getCyborgHead();
-	String getCyborgBody();
-	String getCyborgRightArm();
-	String getCyborgLeftArm();
-	String getCyborgRightLeg();
-	String getCyborgLeftLeg();
+	ItemStack getCyborgHead();
+	ItemStack getCyborgBody();
+	ItemStack getCyborgRightArm();
+	ItemStack getCyborgLeftArm();
+	ItemStack getCyborgRightLeg();
+	ItemStack getCyborgLeftLeg();
 
-	String getModule1();
-	String getModule2();
-	String getModule3();
+	default ItemStack getCyborgPart(CyborgPartType partType) {
+		switch (partType) {
+			case HEAD -> {
+				return getCyborgHead();
+			}
+			case BODY -> {
+				return getCyborgBody();
+			}
+			case RIGHT_ARM -> {
+				return getCyborgRightArm();
+			}
+			case LEFT_ARM -> {
+				return getCyborgLeftArm();
+			}
+			case RIGHT_LEG -> {
+				return getCyborgRightLeg();
+			}
+			case LEFT_LEG -> {
+				return getCyborgLeftLeg();
+			}
+		}
+		return ItemStack.EMPTY;
+	}
 
-	void setModule1(String module);
-	void setModule2(String module);
-	void setModule3(String module);
+	default void clearAllParts() {
+		this.setCyborgHead(ItemStack.EMPTY);
+		this.setCyborgBody(ItemStack.EMPTY);
+		this.setCyborgRightArm(ItemStack.EMPTY);
+		this.setCyborgLeftArm(ItemStack.EMPTY);
+		this.setCyborgRightLeg(ItemStack.EMPTY);
+		this.setCyborgLeftLeg(ItemStack.EMPTY);
+	}
 
-	boolean containsModule(String module);
+	ItemStack getModule1();
+	ItemStack getModule2();
+	ItemStack getModule3();
+
+	void setModule1(ItemStack module);
+	void setModule2(ItemStack module);
+	void setModule3(ItemStack module);
+
+	ArrayList<ItemStack> getModules();
+
+	boolean containsModule(Item module);
 }

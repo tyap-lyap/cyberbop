@@ -1,7 +1,10 @@
 package tyaplyap.cyberbop.client.render.parts;
 
+import net.minecraft.item.ItemStack;
 import tyaplyap.cyberbop.client.render.parts.advanced.*;
 import tyaplyap.cyberbop.client.render.parts.basic.*;
+import tyaplyap.cyberbop.item.CyborgPartItem;
+import tyaplyap.cyberbop.util.CyborgPartType;
 
 import java.util.ArrayList;
 
@@ -38,10 +41,13 @@ public class CyborgPartRenderers {
 		PARTS.forEach(part -> part.register());
 	}
 
-	public static CyborgPartRenderer getPart(String name) {
-		for(CyborgPartRenderer part : PARTS) {
-			if(part.name.equals(name)) return part;
+	public static CyborgPartRenderer get(ItemStack item, CyborgPartType partType) {
+		if(item.getItem() instanceof CyborgPartItem partItem && partItem.getPartName(partType) != null) {
+			for(CyborgPartRenderer renderer : PARTS) {
+				if(renderer.name.equals(partItem.getPartName(partType))) return renderer;
+			}
 		}
+
 		return null;
 	}
 }

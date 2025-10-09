@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tyaplyap.cyberbop.extension.PlayerExtension;
-import tyaplyap.cyberbop.item.CyberbopItems;
+import tyaplyap.cyberbop.util.CyborgPartType;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerMixin extends PlayerEntity implements PlayerExtension {
@@ -25,12 +25,11 @@ public abstract class ServerPlayerMixin extends PlayerEntity implements PlayerEx
 	@Inject(method = "onDeath", at = @At("HEAD"))
 	void onDeath(DamageSource damageSource, CallbackInfo ci) {
 		if (!this.isSpectator() && this.getWorld() instanceof ServerWorld serverWorld) {
-			this.dropItem(CyberbopItems.partToItem(getCyborgHead()), 0);
-			this.dropItem(CyberbopItems.partToItem(getCyborgBody()), 0);
-			this.dropItem(CyberbopItems.partToItem(getCyborgRightArm()), 0);
-			this.dropItem(CyberbopItems.partToItem(getCyborgLeftArm()), 0);
-			this.dropItem(CyberbopItems.partToItem(getCyborgRightLeg()), 0);
-			this.dropItem(CyberbopItems.partToItem(getCyborgLeftLeg()), 0);
+			CyborgPartType.forEach(partType -> {
+				this.dropStack(getCyborgPart(partType));
+			});
+
+			getModules().forEach(this::dropStack);
 		}
 	}
 }

@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderer;
 import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderers;
+import tyaplyap.cyberbop.util.CyborgPartType;
 
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRenderMixin<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements FeatureRendererContext<T, M> {
@@ -40,30 +41,10 @@ public abstract class LivingEntityRenderMixin<T extends LivingEntity, M extends 
 	void afterRender(T livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
 		if (livingEntity instanceof PlayerExtension ex && ex.isCyborg()) {
 
-			if(!ex.getCyborgHead().isBlank()) {
-				CyborgPartRenderer part = CyborgPartRenderers.getPart(ex.getCyborgHead());
-				if(part != null) part.render((PlayerEntityModel<?>)model, matrixStack, vertexConsumerProvider, i, livingEntity);
-			}
-			if(!ex.getCyborgBody().isBlank()) {
-				CyborgPartRenderer part = CyborgPartRenderers.getPart(ex.getCyborgBody());
-				if(part != null) part.render((PlayerEntityModel<?>)model, matrixStack, vertexConsumerProvider, i, livingEntity);
-			}
-			if(!ex.getCyborgRightArm().isBlank()) {
-				CyborgPartRenderer part = CyborgPartRenderers.getPart(ex.getCyborgRightArm());
-				if(part != null) part.render((PlayerEntityModel<?>)model, matrixStack, vertexConsumerProvider, i, livingEntity);
-			}
-			if(!ex.getCyborgLeftArm().isBlank()) {
-				CyborgPartRenderer part = CyborgPartRenderers.getPart(ex.getCyborgLeftArm());
-				if(part != null) part.render((PlayerEntityModel<?>)model, matrixStack, vertexConsumerProvider, i, livingEntity);
-			}
-			if(!ex.getCyborgRightLeg().isBlank()) {
-				CyborgPartRenderer part = CyborgPartRenderers.getPart(ex.getCyborgRightLeg());
-				if(part != null) part.render((PlayerEntityModel<?>)model, matrixStack, vertexConsumerProvider, i, livingEntity);
-			}
-			if(!ex.getCyborgLeftLeg().isBlank()) {
-				CyborgPartRenderer part = CyborgPartRenderers.getPart(ex.getCyborgLeftLeg());
-				if(part != null) part.render((PlayerEntityModel<?>)model, matrixStack, vertexConsumerProvider, i, livingEntity);
-			}
+			CyborgPartType.forEach(partType -> {
+				CyborgPartRenderer renderer = CyborgPartRenderers.get(ex.getCyborgPart(partType), partType);
+				if(renderer != null) renderer.render((PlayerEntityModel<?>)model, matrixStack, vertexConsumerProvider, i, livingEntity);
+			});
 		}
 	}
 }

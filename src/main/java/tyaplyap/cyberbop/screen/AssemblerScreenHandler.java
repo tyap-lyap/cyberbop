@@ -1,7 +1,6 @@
 package tyaplyap.cyberbop.screen;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -11,15 +10,12 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.block.entity.AssemblerBlockEntity;
-import tyaplyap.cyberbop.block.entity.FurnaceGeneratorBlockEntity;
 import tyaplyap.cyberbop.packet.EnergyGuiUpdatePacket;
-import tyaplyap.cyberbop.screen.slot.BucketOutputSlot;
 import tyaplyap.cyberbop.screen.slot.CyborgModuleSlot;
 import tyaplyap.cyberbop.screen.slot.CyborgPartSlot;
-import tyaplyap.cyberbop.screen.slot.FurnaceFuelSlot;
+import tyaplyap.cyberbop.util.CyborgPartType;
 import tyaplyap.cyberbop.util.ImplInventory;
 
 public class AssemblerScreenHandler extends ScreenHandler {
@@ -41,12 +37,12 @@ public class AssemblerScreenHandler extends ScreenHandler {
 		}
 		checkSize(inventory,9);
 		this.inventory = inventory;
-		this.addSlot(new CyborgPartSlot(inventory, 0, 80, 13,"head"));
-		this.addSlot(new CyborgPartSlot(inventory, 1, 80, 35,"body"));
-		this.addSlot(new CyborgPartSlot(inventory, 2, 102, 30,"right_arm"));
-		this.addSlot(new CyborgPartSlot(inventory, 3, 58, 30,"left_arm"));
-		this.addSlot(new CyborgPartSlot(inventory, 4, 96, 57,"right_leg"));
-		this.addSlot(new CyborgPartSlot(inventory, 5, 64, 57,"left_leg"));
+		this.addSlot(new CyborgPartSlot(inventory, 0, 80, 13, CyborgPartType.HEAD));
+		this.addSlot(new CyborgPartSlot(inventory, 1, 80, 35,CyborgPartType.BODY));
+		this.addSlot(new CyborgPartSlot(inventory, 2, 102, 30,CyborgPartType.RIGHT_ARM));
+		this.addSlot(new CyborgPartSlot(inventory, 3, 58, 30,CyborgPartType.LEFT_ARM));
+		this.addSlot(new CyborgPartSlot(inventory, 4, 96, 57,CyborgPartType.RIGHT_LEG));
+		this.addSlot(new CyborgPartSlot(inventory, 5, 64, 57,CyborgPartType.LEFT_LEG));
 		this.addSlot(new CyborgModuleSlot(inventory,6,8, 12, MODULE_SLOTS));
 		this.addSlot(new CyborgModuleSlot(inventory,7,8, 30, MODULE_SLOTS));
 		this.addSlot(new CyborgModuleSlot(inventory,8,8, 48, MODULE_SLOTS));

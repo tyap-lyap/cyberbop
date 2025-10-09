@@ -38,6 +38,13 @@ public class BasicHeadCyborgPart extends CyborgPartRenderer {
 
 		VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityCutoutNoCull(CyberbopMod.id(texture)));
 		model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
+
+		matrices.push();
+		model.copyTransform(contextModel.head);
+		VertexConsumer emissiveConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentEmissive(CyberbopMod.id(texture.replace(".png", "_emission.png"))));
+		model.render(matrices, emissiveConsumer, light, OverlayTexture.DEFAULT_UV);
+		matrices.pop();
+
 	}
 
 	@Override
@@ -52,6 +59,14 @@ public class BasicHeadCyborgPart extends CyborgPartRenderer {
 		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
 		VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityCutoutNoCull(CyberbopMod.id(texture)));
 		model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
+		matrices.pop();
+
+		matrices.push();
+		matrices.translate(0.5, 2.5, 0.5);
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
+		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+		VertexConsumer emissiveConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentEmissive(CyberbopMod.id(texture.replace(".png", "_emission.png"))));
+		model.render(matrices, emissiveConsumer, light, OverlayTexture.DEFAULT_UV);
 		matrices.pop();
 	}
 

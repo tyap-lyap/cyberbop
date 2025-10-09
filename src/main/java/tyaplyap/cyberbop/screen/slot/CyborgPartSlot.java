@@ -1,30 +1,23 @@
 package tyaplyap.cyberbop.screen.slot;
 
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
-import tyaplyap.cyberbop.item.CyborgArmPartItem;
-import tyaplyap.cyberbop.item.CyborgLegPartItem;
 import tyaplyap.cyberbop.item.CyborgPartItem;
+import tyaplyap.cyberbop.util.CyborgPartType;
 
 public class CyborgPartSlot extends Slot {
 
-	private final String partName;
+	private final CyborgPartType partType;
 
-	public CyborgPartSlot(Inventory inventory, int index, int x, int y, String partName) {
+	public CyborgPartSlot(Inventory inventory, int index, int x, int y, CyborgPartType partType) {
 		super(inventory, index, x, y);
-		this.partName = partName;
+		this.partType = partType;
 	}
 
 	@Override
 	public boolean canInsert(ItemStack stack) {
-		Item cyborgPart = stack.getItem();
-		if (cyborgPart instanceof CyborgPartItem part && part.partName.contains(this.partName)) {
-			return true;
-		} else if (cyborgPart instanceof CyborgArmPartItem part && (part.right.contains(this.partName) || part.left.contains(this.partName))) {
-			return true;
-		} else return cyborgPart instanceof CyborgLegPartItem part && (part.right.contains(this.partName) || part.left.contains(this.partName));
+		return (stack.getItem() instanceof CyborgPartItem partItem && partItem.getPartName(partType) != null);
 	}
 
 	@Override

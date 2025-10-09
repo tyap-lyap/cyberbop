@@ -1,8 +1,6 @@
 package tyaplyap.cyberbop.client.render;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.model.Model;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -15,12 +13,11 @@ import net.minecraft.util.math.Vec3d;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.block.entity.AssemblerBlockEntity;
 import tyaplyap.cyberbop.client.CyberbopModClient;
-import tyaplyap.cyberbop.client.model.debug.ErrorModel;
 import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderer;
 import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderers;
-import tyaplyap.cyberbop.item.CyborgArmPartItem;
-import tyaplyap.cyberbop.item.CyborgLegPartItem;
-import tyaplyap.cyberbop.item.CyborgPartItem;
+import tyaplyap.cyberbop.util.CyborgPartType;
+
+import java.util.Map;
 
 public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockEntityRenderer<T> {
 	ModelPart model;
@@ -31,6 +28,15 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 	boolean reverse;
 
 	ModelPart errorModel;
+
+	final Map<CyborgPartType, Vec3d> errorPosForPart = Map.of(
+		CyborgPartType.HEAD, new Vec3d(0.5, 4.3, 0.5),
+		CyborgPartType.BODY, new Vec3d(0.5, 3.7, 0.5),
+		CyborgPartType.RIGHT_ARM, new Vec3d(1, 3.8, 0.5),
+		CyborgPartType.LEFT_ARM, new Vec3d(0, 3.8, 0.5),
+		CyborgPartType.RIGHT_LEG, new Vec3d(0.7, 3.1, 0.5),
+		CyborgPartType.LEFT_LEG, new Vec3d(0.3, 3.1, 0.5)
+	);
 
 	@Override
 	public void render(T entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
@@ -53,54 +59,15 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 
 			matrices.pop();
 
-			if(!entity.getHead().isEmpty()) {
-				if (entity.getHead().getItem() instanceof CyborgPartItem item && item.partName.contains("head")) {
-					CyborgPartRenderer part = CyborgPartRenderers.getPart(((CyborgPartItem) entity.getHead().getItem()).partName);
-					if (part != null) part.renderAssembler(tickDelta, matrices, vertexConsumers, light, overlay);
-				} else {
-					renderError(matrices,tickDelta,vertexConsumers,entity.tickError, overlay, new Vec3d(0.5, 4.3, 0.5));
+			CyborgPartType.forEach(partType -> {
+				CyborgPartRenderer renderer = CyborgPartRenderers.get(entity.getPartStack(partType), partType);
+				if(renderer != null) {
+					renderer.renderAssembler(tickDelta, matrices, vertexConsumers, light, overlay);
 				}
-			}
-			if(!entity.getBody().isEmpty()) {
-				if (entity.getBody().getItem() instanceof CyborgPartItem item && item.partName.contains("body")) {
-					CyborgPartRenderer part = CyborgPartRenderers.getPart(((CyborgPartItem) entity.getBody().getItem()).partName);
-					if (part != null) part.renderAssembler(tickDelta, matrices, vertexConsumers, light, overlay);
-				} else {
-					renderError(matrices,tickDelta,vertexConsumers,entity.tickError, overlay, new Vec3d(0.5, 3.7, 0.5));
+				else {
+					if(!entity.getPartStack(partType).isEmpty()) renderError(matrices, tickDelta, vertexConsumers, entity.tickError, overlay, errorPosForPart.get(partType));
 				}
-			}
-			if(!entity.getRightArm().isEmpty()) {
-				if (entity.getRightArm().getItem() instanceof CyborgArmPartItem) {
-					CyborgPartRenderer part = CyborgPartRenderers.getPart(((CyborgArmPartItem) entity.getRightArm().getItem()).right);
-					if (part != null) part.renderAssembler(tickDelta, matrices, vertexConsumers, light, overlay);
-				} else {
-					renderError(matrices,tickDelta,vertexConsumers,entity.tickError, overlay, new Vec3d(1, 3.8, 0.5));
-				}
-			}
-			if(!entity.getLeftArm().isEmpty()) {
-				if (entity.getLeftArm().getItem() instanceof CyborgArmPartItem) {
-					CyborgPartRenderer part = CyborgPartRenderers.getPart(((CyborgArmPartItem) entity.getLeftArm().getItem()).left);
-					if (part != null) part.renderAssembler(tickDelta, matrices, vertexConsumers, light, overlay);
-				} else {
-					renderError(matrices,tickDelta,vertexConsumers,entity.tickError, overlay, new Vec3d(0, 3.8, 0.5));
-				}
-			}
-			if(!entity.getRightLeg().isEmpty()) {
-				if (entity.getRightLeg().getItem() instanceof CyborgLegPartItem) {
-					CyborgPartRenderer part = CyborgPartRenderers.getPart(((CyborgLegPartItem) entity.getRightLeg().getItem()).right);
-					if (part != null) part.renderAssembler(tickDelta, matrices, vertexConsumers, light, overlay);
-				} else {
-					renderError(matrices,tickDelta,vertexConsumers,entity.tickError, overlay, new Vec3d(0.7, 3.1, 0.5));
-				}
-			}
-			if(!entity.getLeftLeg().isEmpty()) {
-				if (entity.getLeftLeg().getItem() instanceof CyborgLegPartItem) {
-					CyborgPartRenderer part = CyborgPartRenderers.getPart(((CyborgLegPartItem) entity.getLeftLeg().getItem()).left);
-					if (part != null) part.renderAssembler(tickDelta, matrices, vertexConsumers, light, overlay);
-				} else {
-					renderError(matrices,tickDelta,vertexConsumers,entity.tickError, overlay, new Vec3d(0.3, 3.1, 0.5));
-				}
-			}
+			});
 
 			renderOverlay(entity, tickDelta, matrices, vertexConsumers, light, overlay);
 		}

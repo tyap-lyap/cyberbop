@@ -1,28 +1,19 @@
 package tyaplyap.cyberbop.mixin;
 
-import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
-import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderers;
 import tyaplyap.cyberbop.extension.PlayerExtension;
+import tyaplyap.cyberbop.util.CyborgPartType;
 
 @Mixin(PlayerEntityRenderer.class)
 public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
@@ -37,7 +28,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
 	@Inject(method = "renderLeftArm", at = @At("HEAD"), cancellable = true)
 	void renderLeftArm(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, AbstractClientPlayerEntity player, CallbackInfo ci) {
 		if(player instanceof PlayerExtension ex && ex.isCyborg()) {
-			var modelPart = CyborgPartRenderers.getPart(ex.getCyborgLeftArm());
+			var modelPart = CyborgPartRenderers.get(ex.getCyborgLeftArm(), CyborgPartType.LEFT_ARM);
 			if(modelPart != null) {
 				PlayerEntityModel<AbstractClientPlayerEntity> playerEntityModel = this.getModel();
 				this.setModelPose(player);
@@ -56,7 +47,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
 	@Inject(method = "renderRightArm", at = @At("HEAD"), cancellable = true)
 	void renderRightArm(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, AbstractClientPlayerEntity player, CallbackInfo ci) {
 		if(player instanceof PlayerExtension ex && ex.isCyborg()) {
-			var modelPart = CyborgPartRenderers.getPart(ex.getCyborgRightArm());
+			var modelPart = CyborgPartRenderers.get(ex.getCyborgRightArm(), CyborgPartType.RIGHT_ARM);
 			if(modelPart != null) {
 				PlayerEntityModel<AbstractClientPlayerEntity> playerEntityModel = this.getModel();
 				this.setModelPose(player);
