@@ -61,7 +61,7 @@ public class PlayerEntityMixin implements PlayerExtension {
 		nbt.putString("cyborgRightLeg", getCyborgRightLeg());
 		nbt.putString("cyborgLeftLeg", getCyborgLeftLeg());
 
-		nbt.putInt("cyborgEnergy", getCyborgEnergy());
+		nbt.putInt("cyborgEnergy", getEnergyStored());
 
 		nbt.putString("module1", getModule1());
 		nbt.putString("module2", getModule2());
@@ -79,7 +79,7 @@ public class PlayerEntityMixin implements PlayerExtension {
 		if(nbt.contains("cyborgRightLeg")) setCyborgRightLeg(nbt.getString("cyborgRightLeg"));
 		if(nbt.contains("cyborgLeftLeg")) setCyborgLeftLeg(nbt.getString("cyborgLeftLeg"));
 
-		if(nbt.contains("cyborgEnergy")) setCyborgEnergy(nbt.getInt("cyborgEnergy"));
+		if(nbt.contains("cyborgEnergy")) setEnergyStored(nbt.getInt("cyborgEnergy"));
 
 		if(nbt.contains("module1")) setModule1(nbt.getString("module1"));
 		if(nbt.contains("module2")) setModule2(nbt.getString("module2"));
@@ -91,8 +91,8 @@ public class PlayerEntityMixin implements PlayerExtension {
 		if((Object)this instanceof ServerPlayerEntity player) {
 			if(isCyborg()) {
 				if(player.interactionManager.getGameMode().equals(GameMode.SURVIVAL)) {
-					if(getCyborgEnergy() != 0) {
-						setCyborgEnergy(getCyborgEnergy() - 1);
+					if(getEnergyStored() != 0) {
+						setEnergyStored(getEnergyStored() - 1);
 					}
 					else {
 						if (player.getWorld().getTime() % 20L == 0L) {
@@ -115,19 +115,9 @@ public class PlayerEntityMixin implements PlayerExtension {
 	}
 
 	@Override
-	public int getCyborgEnergy() {
-		return PlayerEntity.class.cast(this).getDataTracker().get(CYBORG_ENERGY);
-	}
-
-	@Override
-	public int getCyborgMaxEnergy() {
+	public int capacity() {
 		if(containsModule("extra_battery")) return 15000;
 		return 10000;
-	}
-
-	@Override
-	public void setCyborgEnergy(int cyborgEnergy) {
-		PlayerEntity.class.cast(this).getDataTracker().set(CYBORG_ENERGY, cyborgEnergy);
 	}
 
 	@Override
@@ -233,5 +223,20 @@ public class PlayerEntityMixin implements PlayerExtension {
 	@Override
 	public void setModule3(String module) {
 		PlayerEntity.class.cast(this).getDataTracker().set(MODULE_3, module);
+	}
+
+	@Override
+	public void setEnergyStored(int cyborgEnergy) {
+		PlayerEntity.class.cast(this).getDataTracker().set(CYBORG_ENERGY, cyborgEnergy);
+	}
+
+	@Override
+	public Type type() {
+		return Type.BATTERY;
+	}
+
+	@Override
+	public int getEnergyStored() {
+		return PlayerEntity.class.cast(this).getDataTracker().get(CYBORG_ENERGY);
 	}
 }

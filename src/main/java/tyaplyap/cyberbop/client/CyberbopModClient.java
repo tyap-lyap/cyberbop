@@ -17,9 +17,11 @@ import net.minecraft.util.Identifier;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.client.model.AssemblerModel;
+import tyaplyap.cyberbop.client.model.debug.ErrorModel;
 import tyaplyap.cyberbop.client.render.AssemblerRenderer;
 import tyaplyap.cyberbop.client.render.WiresRenderer;
 import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderers;
+import tyaplyap.cyberbop.client.screen.AssemblerClientScreen;
 import tyaplyap.cyberbop.client.screen.FurnaceGeneratorClientScreen;
 import tyaplyap.cyberbop.client.util.EnergySynchronization;
 import tyaplyap.cyberbop.extension.PlayerExtension;
@@ -29,6 +31,7 @@ public class CyberbopModClient implements ClientModInitializer {
 
 	public static final EntityModelLayer WIRES_LAYER = new EntityModelLayer(CyberbopMod.id("wires"), "main");
 	public static final EntityModelLayer ASSEMBLER_LAYER = new EntityModelLayer(CyberbopMod.id("assembler"), "main");
+	public static final EntityModelLayer ERROR_LAYER = new EntityModelLayer(CyberbopMod.id("layer"), "main");
 	public static final EntityModelLayer CYBORG_LAYER = new EntityModelLayer(CyberbopMod.id("cyborg"), "main");
 
 	public static final Identifier ENERGY_BACKGROUND = CyberbopMod.id("textures/gui/energy_bar_background.png");
@@ -39,15 +42,17 @@ public class CyberbopModClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		ClientPlayNetworking.registerGlobalReceiver(EnergyGuiUpdatePacket.ID, (payload, context) -> {
 			context.client().execute(() -> {
-				EnergySynchronization.updateEnergyInGui(payload.storedEnergy, payload.capacity);
+				EnergySynchronization.updateEnergyInGui(payload.storedEnergy(), payload.capacity());
 			});
 		});
 
 		HandledScreens.register(CyberbopMod.FURNACE_GENERATOR_SCREEN, FurnaceGeneratorClientScreen::new);
+		HandledScreens.register(CyberbopMod.ASSEMBLER_SCREEN, AssemblerClientScreen::new);
 
 		EntityModelLayerRegistry.registerModelLayer(WIRES_LAYER, WiresRenderer::getTexturedModelData);
 		EntityModelLayerRegistry.registerModelLayer(ASSEMBLER_LAYER, AssemblerModel::getTexturedModelData);
 		EntityModelLayerRegistry.registerModelLayer(CYBORG_LAYER, CyborgModel::getTexturedModelData);
+		EntityModelLayerRegistry.registerModelLayer(ERROR_LAYER, ErrorModel::getTexturedModelData);
 		CyborgPartRenderers.init();
 
 		BlockEntityRendererFactories.register(CyberbopBlockEntities.ASSEMBLER, ctx -> new AssemblerRenderer<>());
@@ -65,8 +70,8 @@ public class CyberbopModClient implements ClientModInitializer {
 
 	static void renderDebug(ClientWorld world, ClientPlayerEntity player, DrawContext context, RenderTickCounter tickDeltaManager) {
 		if(FabricLoader.getInstance().isDevelopmentEnvironment()) {
-			if(player instanceof PlayerExtension ex && ex.isCyborg()) {
-				context.drawText(MinecraftClient.getInstance().textRenderer, "Cyborg Energy: " + ex.getCyborgEnergy(), 10, context.getScaledWindowHeight() / 2, 0xFFFFFFFF, true);
+			if(player instanceof PlayerExtension cyborg && cyborg.isCyborg()) {
+				context.drawText(MinecraftClient.getInstance().textRenderer, "Cyborg Energy: " + cyborg.getEnergyStored(), 10, context.getScaledWindowHeight() / 2, 0xFFFFFFFF, true);
 			}
 		}
 	}
@@ -79,7 +84,7 @@ public class CyberbopModClient implements ClientModInitializer {
 		if(player instanceof PlayerExtension ex && ex.isCyborg() && interactionManager != null && interactionManager.hasStatusBars()) {
 			context.drawTexture(ENERGY_BACKGROUND, x, y, 0, 0, 81, 8, 81, 8);
 
-			int width = (int)(80.0F * Math.clamp((float)ex.getCyborgEnergy() / (float)ex.getCyborgMaxEnergy(), 0, 1));
+			int width = (int)(80.0F * Math.clamp((float)ex.getEnergyStored() / (float)ex.capacity(), 0, 1));
 			context.drawTexture(BLUE_ENERGY_OVERLAY, x, y, 0, 0, 1 + width, 8, 81, 8);
 		}
 	}

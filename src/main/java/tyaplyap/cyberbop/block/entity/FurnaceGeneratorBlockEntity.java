@@ -13,6 +13,7 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -122,6 +123,8 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 							outputFuel.increment(1);
 						} else if (inputFuel.isEmpty()) {
 							blockEntity.inventory.set(0, new ItemStack(outputFuelItem));
+						} else {
+							ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(outputFuelItem));
 						}
 					}
 				}

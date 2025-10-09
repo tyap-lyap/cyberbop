@@ -31,6 +31,7 @@ import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
 import tyaplyap.cyberbop.entity.FakePlayerEntity;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.item.CyberbopItems;
+import tyaplyap.cyberbop.screen.AssemblerScreenHandler;
 import tyaplyap.cyberbop.screen.FurnaceGeneratorScreenHandler;
 import tyaplyap.cyberbop.packet.EnergyGuiUpdatePacket;
 
@@ -44,6 +45,7 @@ public class CyberbopMod implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	public static final ScreenHandlerType<FurnaceGeneratorScreenHandler> FURNACE_GENERATOR_SCREEN = Registry.register(Registries.SCREEN_HANDLER, id("furnace_generator"), new ExtendedScreenHandlerType<>(FurnaceGeneratorScreenHandler::new, BlockPos.PACKET_CODEC));
+	public static final ScreenHandlerType<AssemblerScreenHandler> ASSEMBLER_SCREEN = Registry.register(Registries.SCREEN_HANDLER, id("assembler"), new ExtendedScreenHandlerType<>(AssemblerScreenHandler::new, BlockPos.PACKET_CODEC));
 
 	public static final EntityType<FakePlayerEntity> FAKE_PLAYER_ENTITY = Registry.register(Registries.ENTITY_TYPE, Identifier.of(MOD_ID, "fake_player"), FabricEntityTypeBuilder.<FakePlayerEntity>create(SpawnGroup.MISC,FakePlayerEntity::new).dimensions(EntityDimensions.changing(0.6F, 1.99F)).trackedUpdateRate(2).build());
 
@@ -102,7 +104,7 @@ public class CyberbopMod implements ModInitializer {
 			}))).then(literal("setstoreCyborg").then(argument("energy", IntegerArgumentType.integer(0, Integer.MAX_VALUE)).executes(commandContext -> {
 				if (commandContext.getSource().isExecutedByPlayer()) {
 					if (commandContext.getSource().getPlayer() instanceof PlayerExtension cyborg && cyborg.isCyborg()) {
-						cyborg.setCyborgEnergy(IntegerArgumentType.getInteger(commandContext, "energy"));
+						cyborg.setEnergyStored(IntegerArgumentType.getInteger(commandContext, "energy"));
 					}
 				} else {
 					commandContext.getSource().sendFeedback(() -> Text.literal("Source not Player"), false);

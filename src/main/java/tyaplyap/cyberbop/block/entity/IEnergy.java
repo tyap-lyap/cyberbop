@@ -1,9 +1,5 @@
 package tyaplyap.cyberbop.block.entity;
 
-import net.minecraft.util.math.Direction;
-
-import java.util.LinkedHashMap;
-
 public interface IEnergy {
 
 	default int capacity() {
@@ -30,9 +26,19 @@ public interface IEnergy {
 		return type().equals(Type.RECEIVER);
 	}
 
-	default void transferEnergy(LinkedHashMap<Direction, EnergyBlockEntity> energyBlockEntities) {}
+	default boolean transferEnergy(int transferEnergy, IEnergy container) {
+		int transfer = Math.min(Math.min(transferEnergy, getEnergyStored()), container.capacity() - container.getEnergyStored());
+		if (transfer > 0) {
+			container.receiveEnergy(transfer);
+			setEnergyStored(getEnergyStored() - transfer);
+			return true;
+		}
+		return false;
+	}
 
-	default void receiveEnergy(int energy) {}
+	default void receiveEnergy(int energy) {
+			setEnergyStored(getEnergyStored() + Math.min(capacity() - getEnergyStored(), energy));
+	}
 
 	enum Type {
 		BATTERY(),

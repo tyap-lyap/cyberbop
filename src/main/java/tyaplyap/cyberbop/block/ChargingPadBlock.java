@@ -35,14 +35,8 @@ public class ChargingPadBlock extends BlockWithEntity {
 			if (chargingPadBlock == null) {
 				CyberbopMod.LOGGER.warn("Ignoring receive energy attempt for Charging Pad without matching block entity at {}", pos);
 			} else {
-				if (0 < chargingPadBlock.capacity() && entity instanceof ServerPlayerEntity player && player instanceof PlayerExtension cyborg && cyborg.isCyborg() && cyborg.getCyborgEnergy() != cyborg.getCyborgMaxEnergy()) {
-					int transfer = Math.min(Math.min(chargingPadBlock.transferRate(), chargingPadBlock.getEnergyStored()), cyborg.getCyborgMaxEnergy() - cyborg.getCyborgEnergy());
-					if (transfer > 0) {
-						int energyReceived = Math.min(chargingPadBlock.capacity() - cyborg.getCyborgMaxEnergy(), transfer);
-						chargingPadBlock.setEnergyStored(chargingPadBlock.getEnergyStored() - transfer);
-						cyborg.setCyborgEnergy(cyborg.getCyborgEnergy() + energyReceived);
-						chargingPadBlock.markDirty();
-					}
+				if (0 < chargingPadBlock.getEnergyStored() && entity instanceof ServerPlayerEntity player && player instanceof PlayerExtension cyborg && cyborg.isCyborg() && cyborg.getEnergyStored() != cyborg.capacity()) {
+					if (chargingPadBlock.transferEnergy(chargingPadBlock.transferRate(), cyborg)) chargingPadBlock.markDirty();
 				}
 			}
 		}

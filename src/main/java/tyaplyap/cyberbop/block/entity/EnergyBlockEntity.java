@@ -32,7 +32,7 @@ public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy {
 				}
 			}
 			if (!directions.isEmpty()) {
-				blockEntity.transferEnergy(blockEntity.findPriority(directions));
+				blockEntity.transferLogic(blockEntity.findPriority(directions));
 			}
 		}
 	}
@@ -75,29 +75,17 @@ public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy {
 			if (!sourceNeighbors.isEmpty()) {
 				int needEnergy = (wireBlock.capacity() - wireBlock.getEnergyStored()) / sourceNeighbors.size();
 				if (needEnergy == 0) {
-					receive(transferRate(), wireBlock);
+					if (transferEnergy(transferRate(), wireBlock)) markDirty();
 				} else {
 					for (var neighbor : sourceNeighbors) {
-						neighbor.receive(needEnergy, wireBlock);
+						if (neighbor.transferEnergy(transferRate(), wireBlock)) markDirty();
 					}
 				}
 			}
 		}
 	}
 
-	public void receive(int transferRate, EnergyBlockEntity energyBlock) {
-
-		int transfer = Math.min(Math.min(transferRate, this.energyStored), energyBlock.capacity() - energyBlock.getEnergyStored());
-		if (transfer > 0) {
-			energyBlock.receiveEnergy(transfer);
-				this.energyStored -= transfer;
-				markDirty();
-			}
-
-	}
-
-	@Override
-	public void transferEnergy(LinkedHashMap<Direction, EnergyBlockEntity> energyBlockEntities) {
+	public void transferLogic(LinkedHashMap<Direction, EnergyBlockEntity> energyBlockEntities) {
 		if (this.getEnergyStored() == 0 || energyBlockEntities.isEmpty()) {
 			return;
 		}
@@ -109,7 +97,7 @@ public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy {
 				this.balanceEnergy(wire);
 			} else {
 				if (!energyBlock.type().equals(Type.GENERATOR) && !energyBlock.type().equals(Type.BATTERY)) {
-					this.receive(transferRate(), energyBlock);
+					if (transferEnergy(transferRate(), energyBlock)) markDirty();
 				}
 			}
 			if (energyBlock instanceof EnergyWireBlockEntity wire && !(this instanceof EnergyTestReceiverBlockEntity)) {
@@ -121,10 +109,7 @@ public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy {
 		}
 	}
 
-	public void receiveEnergy(int energy) {
-		int energyReceived = Math.min(capacity() - this.energyStored, energy);
-			this.energyStored += energyReceived;
-	}
+
 
 	@Override
 	public int getEnergyStored() {

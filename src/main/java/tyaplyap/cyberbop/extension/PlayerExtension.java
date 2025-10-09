@@ -1,6 +1,8 @@
 package tyaplyap.cyberbop.extension;
 
-public interface PlayerExtension {
+import tyaplyap.cyberbop.block.entity.IEnergy;
+
+public interface PlayerExtension extends IEnergy {
 
 	boolean isCyborg();
 	void setCyborg(boolean isCyborg);
@@ -18,10 +20,6 @@ public interface PlayerExtension {
 	String getCyborgLeftArm();
 	String getCyborgRightLeg();
 	String getCyborgLeftLeg();
-
-	int getCyborgEnergy();
-	int getCyborgMaxEnergy();
-	void setCyborgEnergy(int cyborgEnergy);
 
 	String getModule1();
 	String getModule2();

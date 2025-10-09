@@ -1,6 +1,5 @@
 package tyaplyap.cyberbop.item;
 
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.LodestoneTrackerComponent;
 import net.minecraft.entity.Entity;
@@ -17,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.World;
 import tyaplyap.cyberbop.block.entity.IEnergy;
+
 
 import java.util.Optional;
 
