@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "cyberbop",
   "version": "${version}",
-  "name": "Cyberbopd",
+  "name": "Cyberbop",
   "description": "Build your custom cyber body and experience the world through a new, better form. ",
   "authors": [ "PinkGoosik", "Spusik", "VioletSomik" ],
   "contact": {

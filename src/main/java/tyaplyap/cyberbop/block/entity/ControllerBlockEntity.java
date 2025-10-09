@@ -11,7 +11,6 @@ public class ControllerBlockEntity extends BlockEntity {
 		super(CyberbopBlockEntities.CONTROLLER, pos, state);
 	}
 
-	public static void tick(World world, BlockPos pos, BlockState state, ControllerBlockEntity blockEntity) {
-
-	}
+//	public static void tick(World world, BlockPos pos, BlockState state, ControllerBlockEntity blockEntity) {
+//	}
 }

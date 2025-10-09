@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "cyberbop:block/controller",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cyberbop:block/controller"
+    },
+    "facing=south": {
+      "model": "cyberbop:block/controller",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "cyberbop:block/controller",
+      "y": 270
+    }
+  }
+}

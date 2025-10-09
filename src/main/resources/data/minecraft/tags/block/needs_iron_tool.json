@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "cyberbop:furnace_generator",
+    "cyberbop:controller",
+    "cyberbop:assembler",
+    "cyberbop:solar_panel",
+    "cyberbop:charging_pad"
+  ]
+}

@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
@@ -15,6 +16,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.screen.ScreenHandlerType;
@@ -63,10 +65,21 @@ public class CyberbopMod implements ModInitializer {
 		})
 		.icon(CyberbopItems.ADVANCED_HEAD::getDefaultStack).build();
 
+	public static final ItemGroup DEBUG_ITEM_GROUP = FabricItemGroup.builder()
+		.displayName(Text.translatable("itemGroup.cyberbop.debug_items"))
+		.entries((ctx, entries) -> {
+			debugItems.forEach(item -> entries.add(item.getDefaultStack()));
+		})
+		.icon(CyberbopItems.DEBUG_ENERGY_STICK::getDefaultStack).build();
+
 	@Override
 	public void onInitialize() {
 		PayloadTypeRegistry.playS2C().register(EnergyGuiUpdatePacket.ID, EnergyGuiUpdatePacket.PACKET_CODEC);
 		Registry.register(Registries.ITEM_GROUP, CyberbopMod.id("items"), CyberbopMod.ITEM_GROUP);
+
+		if(FabricLoader.getInstance().isDevelopmentEnvironment()) {
+			Registry.register(Registries.ITEM_GROUP, CyberbopMod.id("debug_items"), CyberbopMod.DEBUG_ITEM_GROUP);
+		}
 
 		CyberbopBlocks.init();
 		CyberbopItems.init();
