@@ -9,6 +9,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -54,17 +55,15 @@ public class AssemblerBlock extends BlockWithEntity {
 			ItemStack stack = player.getStackInHand(Hand.MAIN_HAND);
 
 			if(stack.getItem() instanceof CyborgModuleItem moduleItem) {
-				if(assembler.hasEmptyModuleSlot() && !assembler.containsModule(moduleItem.getModuleName())) {
-					assembler.addModule(moduleItem.getModuleName());
+				if(assembler.hasEmptyModuleSlot() && !assembler.containsModule(moduleItem)) {
+					assembler.addModule(moduleItem);
 					player.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
 					assembler.updateListeners();
 					return ActionResult.SUCCESS;
 				}
 			}
 
-
 			if(stack.getItem() instanceof CyborgPartItem part) {//Head
-
 				if(part.partName.contains("head") && assembler.getHead().isEmpty()) {
 					player.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
 					assembler.setStack(0, part.getDefaultStack());
@@ -109,103 +108,108 @@ public class AssemblerBlock extends BlockWithEntity {
 				}
 			}
 
-
 			if (player.isSneaking()) {
+				if (stack.isEmpty() && player instanceof PlayerExtension cyborg) {
+					if (!cyborg.isCyborg()) {
+						if (assembler.isComplete()) {
+							cyborg.setCyborg(true);
 
-			if(stack.isEmpty() && player instanceof PlayerExtension cyborg) {
-				if (!cyborg.isCyborg()) {
-					if (assembler.isComplete()) {
-						assembler.transferEnergy(cyborg.capacity(), cyborg);
-						cyborg.setCyborg(true);
-						//ex.setCyborgEnergy(10000);
-						cyborg.setCyborgHead(((CyborgPartItem) assembler.getHead().getItem()).partName);
-						cyborg.setCyborgBody(((CyborgPartItem) assembler.getBody().getItem()).partName);
-						cyborg.setCyborgRightArm(((CyborgArmPartItem) assembler.getRightArm().getItem()).right);
-						cyborg.setCyborgLeftArm(((CyborgArmPartItem) assembler.getLeftArm().getItem()).left);
-						cyborg.setCyborgRightLeg(((CyborgLegPartItem) assembler.getRightLeg().getItem()).right);
-						cyborg.setCyborgLeftLeg(((CyborgLegPartItem) assembler.getLeftLeg().getItem()).left);
+							cyborg.setCyborgHead(((CyborgPartItem) assembler.getHead().getItem()).partName);
+							cyborg.setCyborgBody(((CyborgPartItem) assembler.getBody().getItem()).partName);
+							cyborg.setCyborgRightArm(((CyborgArmPartItem) assembler.getRightArm().getItem()).right);
+							cyborg.setCyborgLeftArm(((CyborgArmPartItem) assembler.getLeftArm().getItem()).left);
+							cyborg.setCyborgRightLeg(((CyborgLegPartItem) assembler.getRightLeg().getItem()).right);
+							cyborg.setCyborgLeftLeg(((CyborgLegPartItem) assembler.getLeftLeg().getItem()).left);
 
-						assembler.clearParts();
+							if (!assembler.getModule(1).isEmpty())
+								if (assembler.getModule(1).getItem() instanceof CyborgModuleItem moduleItem)
+									cyborg.setModule1(moduleItem.moduleName);
+								else ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), assembler.getModule(1));
 
-						if (assembler.module1 != null) cyborg.setModule1(assembler.module1);
-						if (assembler.module2 != null) cyborg.setModule2(assembler.module2);
-						if (assembler.module3 != null) cyborg.setModule3(assembler.module3);
+							if (!assembler.getModule(2).isEmpty())
+								if (assembler.getModule(2).getItem() instanceof CyborgModuleItem moduleItem)
+									cyborg.setModule2(moduleItem.moduleName);
+								else ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), assembler.getModule(2));
 
-//						assembler.head = "";
-//						assembler.body = "";
-//						assembler.rightArm = "";
-//						assembler.leftArm = "";
-//						assembler.rightLeg = "";
-//						assembler.leftLeg = "";
-//
-//						assembler.module1 = "";
-//						assembler.module2 = "";
-//						assembler.module3 = "";
-						assembler.updateListeners();
+							if (!assembler.getModule(3).isEmpty())
+								if (assembler.getModule(3).getItem() instanceof CyborgModuleItem moduleItem)
+									cyborg.setModule3(moduleItem.moduleName);
+								else ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), assembler.getModule(3));
 
-						player.teleport((ServerWorld) world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, Set.of(), 180, 0);
-						return ActionResult.SUCCESS;
-					} else {
-						if (assembler.getHead().isEmpty()) player.sendMessage(Text.literal("Head part is missing!"));
-						if (assembler.getBody().isEmpty()) player.sendMessage(Text.literal("Body part is missing!"));
-						if (assembler.getRightArm().isEmpty()) player.sendMessage(Text.literal("Right arm part is missing!"));
-						if (assembler.getLeftArm().isEmpty()) player.sendMessage(Text.literal("Left arm part is missing!"));
-						if (assembler.getRightLeg().isEmpty()) player.sendMessage(Text.literal("Right leg part is missing!"));
-						if (assembler.getLeftLeg().isEmpty()) player.sendMessage(Text.literal("Left leg part is missing!"));
-						return ActionResult.SUCCESS;
-					}
+							assembler.getItems().clear();
 
-				} else {
-					if (!assembler.isComplete()) {
-						if (!assembler.isFull()) {
-							cyborg.transferEnergy(assembler.capacity(), assembler);
+							assembler.transferEnergy(cyborg.capacity(), cyborg);
+
+							assembler.updateListeners();
+
+							player.teleport((ServerWorld) world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, Set.of(), 180, 0);
+							return ActionResult.SUCCESS;
+						} else {
+							if (assembler.getHead().isEmpty())
+								player.sendMessage(Text.literal("Head part is missing!"));
+							if (assembler.getBody().isEmpty())
+								player.sendMessage(Text.literal("Body part is missing!"));
+							if (assembler.getRightArm().isEmpty())
+								player.sendMessage(Text.literal("Right arm part is missing!"));
+							if (assembler.getLeftArm().isEmpty())
+								player.sendMessage(Text.literal("Left arm part is missing!"));
+							if (assembler.getRightLeg().isEmpty())
+								player.sendMessage(Text.literal("Right leg part is missing!"));
+							if (assembler.getLeftLeg().isEmpty())
+								player.sendMessage(Text.literal("Left leg part is missing!"));
+							return ActionResult.SUCCESS;
 						}
-						cyborg.setEnergyStored(0);
-						cyborg.setCyborg(false);
-						assembler.setStack(0, new ItemStack(CyberbopItems.partToItem(cyborg.getCyborgHead())));
-						assembler.setStack(1, new ItemStack(CyberbopItems.partToItem(cyborg.getCyborgBody())));
-						assembler.setStack(2, new ItemStack(CyberbopItems.partToItem(cyborg.getCyborgRightArm())));
-						assembler.setStack(3, new ItemStack(CyberbopItems.partToItem(cyborg.getCyborgLeftArm())));
-						assembler.setStack(4, new ItemStack(CyberbopItems.partToItem(cyborg.getCyborgRightLeg())));
-						assembler.setStack(5, new ItemStack(CyberbopItems.partToItem(cyborg.getCyborgLeftLeg())));
-//						assembler.head = ex.getCyborgHead();
-//						assembler.body = ex.getCyborgBody();
-//						assembler.rightArm = ex.getCyborgRightArm();
-//						assembler.leftArm = ex.getCyborgLeftArm();
-//						assembler.rightLeg = ex.getCyborgRightLeg();
-//						assembler.leftLeg = ex.getCyborgLeftLeg();
+					} else {
+						if (assembler.isEmpty()) {
+							if (!assembler.isFull()) {
+								cyborg.transferEnergy(assembler.capacity(), assembler);
+							}
+							cyborg.setEnergyStored(0);
+							cyborg.setCyborg(false);
+							assembler.setStack(0, new ItemStack(CyberbopItems.partToItem(cyborg.getCyborgHead())));
+							assembler.setStack(1, new ItemStack(CyberbopItems.partToItem(cyborg.getCyborgBody())));
+							assembler.setStack(2, new ItemStack(CyberbopItems.partToItem(cyborg.getCyborgRightArm())));
+							assembler.setStack(3, new ItemStack(CyberbopItems.partToItem(cyborg.getCyborgLeftArm())));
+							assembler.setStack(4, new ItemStack(CyberbopItems.partToItem(cyborg.getCyborgRightLeg())));
+							assembler.setStack(5, new ItemStack(CyberbopItems.partToItem(cyborg.getCyborgLeftLeg())));
 
-						var moduleItem1 = CyberbopItems.getModule(cyborg.getModule1());
-						if (moduleItem1 != null) moduleItem1.onModuleRemoved((ServerWorld) world, player);
+							var moduleItem1 = CyberbopItems.getModule(cyborg.getModule1());
+							if (moduleItem1 != null) moduleItem1.onModuleRemoved((ServerWorld) world, player);
 
-						var moduleItem2 = CyberbopItems.getModule(cyborg.getModule2());
-						if (moduleItem2 != null) moduleItem2.onModuleRemoved((ServerWorld) world, player);
+							var moduleItem2 = CyberbopItems.getModule(cyborg.getModule2());
+							if (moduleItem2 != null) moduleItem2.onModuleRemoved((ServerWorld) world, player);
 
-						var moduleItem3 = CyberbopItems.getModule(cyborg.getModule3());
-						if (moduleItem3 != null) moduleItem3.onModuleRemoved((ServerWorld) world, player);
+							var moduleItem3 = CyberbopItems.getModule(cyborg.getModule3());
+							if (moduleItem3 != null) moduleItem3.onModuleRemoved((ServerWorld) world, player);
 
-						assembler.module1 = cyborg.getModule1();
-						assembler.module2 = cyborg.getModule2();
-						assembler.module3 = cyborg.getModule3();
-						assembler.updateListeners();
+							if (CyberbopItems.getModule(cyborg.getModule1()) != null) {
+								assembler.setModule(1, CyberbopItems.getModule(cyborg.getModule1()));
+							}
+							if (CyberbopItems.getModule(cyborg.getModule2()) != null) {
+								assembler.setModule(2, CyberbopItems.getModule(cyborg.getModule2()));
+							}
+							if (CyberbopItems.getModule(cyborg.getModule3()) != null) {
+								assembler.setModule(3, CyberbopItems.getModule(cyborg.getModule3()));
+							}
 
-						cyborg.setCyborgHead("");
-						cyborg.setCyborgBody("");
-						cyborg.setCyborgRightArm("");
-						cyborg.setCyborgLeftArm("");
-						cyborg.setCyborgRightLeg("");
-						cyborg.setCyborgLeftLeg("");
+							cyborg.setCyborgHead("");
+							cyborg.setCyborgBody("");
+							cyborg.setCyborgRightArm("");
+							cyborg.setCyborgLeftArm("");
+							cyborg.setCyborgRightLeg("");
+							cyborg.setCyborgLeftLeg("");
 
-						cyborg.setModule1("");
-						cyborg.setModule2("");
-						cyborg.setModule3("");
+							cyborg.setModule1("");
+							cyborg.setModule2("");
+							cyborg.setModule3("");
+							assembler.updateListeners();
 
+						} else {
+							((ServerPlayerEntity) player).sendMessageToClient(Text.of("Assembler have items!"), false);
+						}
 						return ActionResult.SUCCESS;
 					}
 				}
-
-			}
-
 			}
 			NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
 			if (screenHandlerFactory != null) {
@@ -215,7 +219,6 @@ public class AssemblerBlock extends BlockWithEntity {
 		}
 		return ActionResult.SUCCESS;
 	}
-
 
 	@Override
 	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {

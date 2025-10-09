@@ -1,5 +1,6 @@
 {
   "container.cyberbop.furnace_generator": "Furnace Generator",
+  "container.cyberbop.assembler": "Assembler",
 
   "itemGroup.cyberbop.items": "Cyberbop Items",
   "itemGroup.cyberbop.debug_items": "Debug Cyberbop Items",

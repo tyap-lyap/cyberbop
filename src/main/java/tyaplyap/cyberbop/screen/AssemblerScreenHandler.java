@@ -17,6 +17,7 @@ import tyaplyap.cyberbop.block.entity.AssemblerBlockEntity;
 import tyaplyap.cyberbop.block.entity.FurnaceGeneratorBlockEntity;
 import tyaplyap.cyberbop.packet.EnergyGuiUpdatePacket;
 import tyaplyap.cyberbop.screen.slot.BucketOutputSlot;
+import tyaplyap.cyberbop.screen.slot.CyborgModuleSlot;
 import tyaplyap.cyberbop.screen.slot.CyborgPartSlot;
 import tyaplyap.cyberbop.screen.slot.FurnaceFuelSlot;
 import tyaplyap.cyberbop.util.ImplInventory;
@@ -26,6 +27,7 @@ public class AssemblerScreenHandler extends ScreenHandler {
 	private final Inventory inventory;
 	private final ServerPlayerEntity serverPlayer;
 	private AssemblerBlockEntity assemblerBlockEntity;
+	public static final int[] MODULE_SLOTS = {6,7,8};
 
 	public AssemblerScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos) {
 		this(CyberbopMod.FURNACE_GENERATOR_SCREEN, syncId, playerInventory, ImplInventory.ofSize(9), pos, null);
@@ -45,9 +47,9 @@ public class AssemblerScreenHandler extends ScreenHandler {
 		this.addSlot(new CyborgPartSlot(inventory, 3, 58, 30,"left_arm"));
 		this.addSlot(new CyborgPartSlot(inventory, 4, 96, 57,"right_leg"));
 		this.addSlot(new CyborgPartSlot(inventory, 5, 64, 57,"left_leg"));
-		this.addSlot(new Slot(inventory,6,8, 12));
-		this.addSlot(new Slot(inventory,7,8, 30));
-		this.addSlot(new Slot(inventory,8,8, 48));
+		this.addSlot(new CyborgModuleSlot(inventory,6,8, 12, MODULE_SLOTS));
+		this.addSlot(new CyborgModuleSlot(inventory,7,8, 30, MODULE_SLOTS));
+		this.addSlot(new CyborgModuleSlot(inventory,8,8, 48, MODULE_SLOTS));
 
 
 		for (int y = 0; y < 3; y++) {
@@ -84,46 +86,28 @@ public class AssemblerScreenHandler extends ScreenHandler {
 	}
 
 	@Override
-	public ItemStack quickMove(PlayerEntity player, int slot) {
-		ItemStack itemStack = ItemStack.EMPTY;
-		Slot slot2 = this.slots.get(slot);
-		if (slot2.hasStack()) {
-			ItemStack itemStack2 = slot2.getStack();
-			itemStack = itemStack2.copy();
-			if (slot == 1) {
-				if (!this.insertItem(itemStack2, 3, 38, true)) {
+	public ItemStack quickMove(PlayerEntity player, int invSlot) {
+		ItemStack newStack = ItemStack.EMPTY;
+		Slot slot = this.slots.get(invSlot);
+		if (slot != null && slot.hasStack()) {
+			ItemStack originalStack = slot.getStack();
+			newStack = originalStack.copy();
+			if (invSlot < this.inventory.size()) {
+				if (!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-
-				slot2.onQuickTransfer(itemStack2, itemStack);
-			} else if (slot != 0) {
-				if (AbstractFurnaceBlockEntity.canUseAsFuel(itemStack2)) {
-					if (!this.insertItem(itemStack2, 0, 1, false)) {
-						return ItemStack.EMPTY;
-					}
-				} else if (slot >= 2 && slot < 29) {
-					if (!this.insertItem(itemStack2, 30, 38, false)) {
-						return ItemStack.EMPTY;
-					}
-				} else if (slot >= 29 && slot < 38 && !this.insertItem(itemStack2, 3, 30, false)) {
-					return ItemStack.EMPTY;
-				}
-			} else if (!this.insertItem(itemStack2, 2, 38, false)) {
+			} else if (!this.insertItem(originalStack, 0, this.inventory.size(), false)) {
 				return ItemStack.EMPTY;
 			}
 
-			if (itemStack2.isEmpty()) {
-				slot2.setStack(ItemStack.EMPTY);
+			if (originalStack.isEmpty()) {
+				slot.setStack(ItemStack.EMPTY);
 			} else {
-				slot2.markDirty();
+				slot.markDirty();
 			}
-
-			if (itemStack2.getCount() == itemStack.getCount()) {
-				return ItemStack.EMPTY;
-			}
-			slot2.onTakeItem(player, itemStack2);
 		}
-		return itemStack;
+
+		return newStack;
 	}
 
 	@Override

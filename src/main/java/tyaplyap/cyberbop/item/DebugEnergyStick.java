@@ -17,7 +17,6 @@ import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.World;
 import tyaplyap.cyberbop.block.entity.IEnergy;
 
-
 import java.util.Optional;
 
 public class DebugEnergyStick extends Item {

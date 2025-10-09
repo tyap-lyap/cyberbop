@@ -19,13 +19,12 @@ public class CyborgPartSlot extends Slot {
 
 	@Override
 	public boolean canInsert(ItemStack stack) {
-		return true;
-//		Item cyborgPart = stack.getItem();
-//		if (cyborgPart instanceof CyborgPartItem part && part.partName.contains(this.partName)) {
-//			return true;
-//		} else if (cyborgPart instanceof CyborgArmPartItem part && (part.right.contains(this.partName) || part.left.contains(this.partName))) {
-//			return true;
-//		} else return cyborgPart instanceof CyborgLegPartItem part && (part.right.contains(this.partName) || part.left.contains(this.partName));
+		Item cyborgPart = stack.getItem();
+		if (cyborgPart instanceof CyborgPartItem part && part.partName.contains(this.partName)) {
+			return true;
+		} else if (cyborgPart instanceof CyborgArmPartItem part && (part.right.contains(this.partName) || part.left.contains(this.partName))) {
+			return true;
+		} else return cyborgPart instanceof CyborgLegPartItem part && (part.right.contains(this.partName) || part.left.contains(this.partName));
 	}
 
 	@Override

@@ -13,7 +13,7 @@ import java.util.Map;
 public class CyberbopItems {
 	public static final Map<Identifier, Item> ITEMS = new LinkedHashMap<>();
 
-	public static final Item FLIGHT_MODULE = add("flight_module", new Item(new Item.Settings().maxCount(1)));
+	public static final Item FLIGHT_MODULE = add("flight_module", new CyborgModuleItem(new Item.Settings().maxCount(1),"flight_module"));
 	public static final Item EXTRA_BATTERY = add("extra_battery", new CyborgModuleItem(new Item.Settings().maxCount(1), "extra_battery"));
 	public static final Item JETPACK = add("jetpack", new Item(new Item.Settings().maxCount(1)));
 	public static final Item SOLAR_CELL_MODULE = add("solar_cell_module", new Item(new Item.Settings().maxCount(1)));
