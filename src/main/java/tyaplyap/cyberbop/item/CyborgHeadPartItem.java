@@ -4,8 +4,8 @@ import tyaplyap.cyberbop.util.CyborgPartType;
 
 public class CyborgHeadPartItem extends CyborgPartItem {
 
-	public CyborgHeadPartItem(String partName, int energyCapacity, Settings settings) {
-		super(partName, energyCapacity, settings);
+	public CyborgHeadPartItem(String partName, int energyCapacity, double health, Settings settings) {
+		super(partName, energyCapacity, health, settings);
 	}
 
 	@Override

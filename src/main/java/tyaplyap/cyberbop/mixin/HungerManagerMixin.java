@@ -29,7 +29,7 @@ public abstract class HungerManagerMixin {
 
 					if(player.getHealth() != player.getMaxHealth()) {
 						this.foodTickTimer++;
-						if (this.foodTickTimer >= 20) {
+						if (this.foodTickTimer >= 30) {
 							player.heal(1.0F);
 							ex.setEnergyStored(Math.max(ex.getEnergyStored() - 20, 0));
 

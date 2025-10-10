@@ -27,9 +27,7 @@ import tyaplyap.cyberbop.util.CyborgPartType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
-@SuppressWarnings("all")
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements PlayerExtension {
 
@@ -49,8 +47,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 	private static final TrackedData<ItemStack> MODULE_3 = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
 
 	private ArrayList<ItemStack> modules;
-
-
 
 	protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
 		super(entityType, world);
@@ -286,28 +282,28 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 	@Override
 	public void setModule1(ItemStack module) {
 		PlayerEntity.class.cast(this).getDataTracker().set(MODULE_1, module);
-		updateModule();
+		updateModulesList();
 	}
 
 	@Override
 	public void setModule2(ItemStack module) {
 		PlayerEntity.class.cast(this).getDataTracker().set(MODULE_2, module);
-		updateModule();
+		updateModulesList();
 	}
 
 	@Override
 	public void setModule3(ItemStack module) {
 		PlayerEntity.class.cast(this).getDataTracker().set(MODULE_3, module);
-		updateModule();
+		updateModulesList();
 	}
 
 	@Override
 	public ArrayList<ItemStack> getModules() {
-		if(modules == null) updateModule();
+		if(modules == null) updateModulesList();
 		return modules;
 	}
 
-	void updateModule() {
+	void updateModulesList() {
 		modules = new ArrayList<>(List.of(getModule1(), getModule2(), getModule3()));
 	}
 

@@ -14,15 +14,21 @@ public abstract class CyborgPartItem extends EnergyItem {
 
 	String partName;
 	int energyCapacity;
+	double health;
 
-	public CyborgPartItem(String partName, int energyCapacity, Settings settings) {
+	public CyborgPartItem(String partName, int energyCapacity, double health, Settings settings) {
 		super(settings);
 		this.partName = partName;
 		this.energyCapacity = energyCapacity;
+		this.health = health;
 	}
 
 	public String getPartName(CyborgPartType partType) {
 		return partName;
+	}
+
+	public double getHealth() {
+		return health;
 	}
 
 	@Override
@@ -33,6 +39,7 @@ public abstract class CyborgPartItem extends EnergyItem {
 	@Override
 	public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
 		tooltip.addAll(Text.literal("+" + capacity() + " Energy Capacity").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
+		tooltip.addAll(Text.literal("+" + getHealth() + " Max Health").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
 	}
 
 	@Override
