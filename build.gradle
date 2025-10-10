@@ -11,6 +11,10 @@ base {
 repositories {
 	maven { url 'https://maven.nucleoid.xyz' }
 	maven { url "https://maven.terraformersmc.com" } //modmenu
+
+	maven {
+		url "https://cursemaven.com" //techreborn
+	}
 }
 
 dependencies {
@@ -22,8 +26,12 @@ dependencies {
 
 	modImplementation include("eu.pb4:polymer-core:0.9.18+1.21.1")
 	modImplementation include("eu.pb4:polymer-virtual-entity:0.9.18+1.21.1")
-	include modApi("teamreborn:energy:4.1.0")
+	include(modApi("teamreborn:energy:4.1.0")) {
+		transitive = false
+	}
 
+	modImplementation "curse.maven:techreborn-233564:6664367"
+	modImplementation "curse.maven:reborncore-237903:6664366"
 	modRuntimeOnly "com.terraformersmc:modmenu:11.0.3"
 }
 
