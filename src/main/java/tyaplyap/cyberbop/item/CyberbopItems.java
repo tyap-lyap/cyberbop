@@ -12,11 +12,13 @@ import java.util.Map;
 public class CyberbopItems {
 	public static final Map<Identifier, Item> ITEMS = new LinkedHashMap<>();
 
-	public static final Item FLIGHT_MODULE = add("flight_module", new CyborgModuleItem(new Item.Settings().maxCount(1),"flight_module"));
-	public static final Item EXTRA_BATTERY = add("extra_battery", new CyborgModuleItem(new Item.Settings().maxCount(1), "extra_battery"));
-	public static final Item JETPACK = add("jetpack", new Item(new Item.Settings().maxCount(1)));
-	public static final Item SOLAR_CELL_MODULE = add("solar_cell_module", new Item(new Item.Settings().maxCount(1)));
-	public static final Item NIGHT_VISION_MODULE = add("night_vision_module", new NightVisionModule(new Item.Settings().maxCount(1), "night_vision_module"));
+	public static final Item FLIGHT_MODULE = add("flight_module", new CyborgModuleItem(new Item.Settings().maxCount(1)));
+	public static final Item EXTRA_BATTERY_MODULE = add("extra_battery_module", new ExtraBatteryModule(new Item.Settings().maxCount(1)));
+	public static final Item BATTERY = add("battery", new Item(new Item.Settings()));
+//	public static final Item JETPACK_MODULE = add("jetpack_module", new CyborgModuleItem(new Item.Settings().maxCount(1)));
+//	public static final Item SOLAR_CELL_MODULE = add("solar_cell_module", new CyborgModuleItem(new Item.Settings().maxCount(1)));
+	public static final Item SOLAR_CELL = add("solar_cell", new Item(new Item.Settings()));
+	public static final Item NIGHT_VISION_MODULE = add("night_vision_module", new NightVisionModule(new Item.Settings().maxCount(1)));
 
 	public static final Item BASIC_HEAD = add("basic_cyborg_head", new CyborgHeadPartItem("basic_head", 1650, 2, new Item.Settings().maxCount(1)));
 	public static final Item BASIC_BODY = add("basic_cyborg_body", new CyborgBodyPartItem("basic_body", 1650, 2, new Item.Settings().maxCount(1)));

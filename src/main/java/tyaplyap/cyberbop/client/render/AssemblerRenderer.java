@@ -22,6 +22,7 @@ import java.util.Map;
 public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockEntityRenderer<T> {
 	ModelPart model;
 	ModelPart overlayPart;
+	ModelPart basePart;
 
 	int light;
 
@@ -43,6 +44,7 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 		if(model == null) {
 			model = MinecraftClient.getInstance().getEntityModelLoader().getModelPart(CyberbopModClient.ASSEMBLER_LAYER);
 			overlayPart = model.getChild("overlay");
+			basePart = model.getChild("base");
 			errorModel = MinecraftClient.getInstance().getEntityModelLoader().getModelPart(CyberbopModClient.ERROR_LAYER);
 		}
 		var world = entity.getWorld();
@@ -54,6 +56,8 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 			matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
 
 			VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentCull(CyberbopMod.id("textures/entity/assembler.png")));
+
+			basePart.visible = false;
 			overlayPart.visible = false;
 			model.render(matrices, vertexConsumer, light, overlay);
 
@@ -94,6 +98,7 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
 
 		VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentEmissive(CyberbopMod.id("textures/entity/assembler_overlay.png")));
+		basePart.visible = false;
 		overlayPart.visible = true;
 		overlayPart.render(matrices, vertexConsumer, light, overlay);
 

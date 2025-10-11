@@ -4,8 +4,8 @@
 	"parent": "block/block",
 	"texture_size": [64, 64],
 	"textures": {
-    "0": "cyberbop:block/wires",
-    "particle": "cyberbop:block/energy_wire_particle"
+		"0": "cyberbop:block/wires",
+		"particle": "cyberbop:block/energy_wire_particle"
 	},
 	"elements": [
 		{
@@ -23,20 +23,6 @@
 			}
 		},
 		{
-			"name": "up",
-			"from": [5, 11, 5],
-			"to": [11, 16, 11],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
-			"faces": {
-				"north": {"uv": [1.5, 4.5, 3, 5.75], "texture": "#0"},
-				"east": {"uv": [0, 4.5, 1.5, 5.75], "texture": "#0"},
-				"south": {"uv": [4.5, 4.5, 6, 5.75], "texture": "#0"},
-				"west": {"uv": [3, 4.5, 4.5, 5.75], "texture": "#0"},
-				"up": {"uv": [3, 4.5, 1.5, 3], "texture": "#0"},
-				"down": {"uv": [4.5, 3, 3, 4.5], "texture": "#0"}
-			}
-		},
-		{
 			"name": "down",
 			"from": [5, 0, 5],
 			"to": [11, 5, 11],
@@ -51,7 +37,6 @@
 			}
 		}
 	],
-	"display": {},
 	"groups": [
 		{
 			"name": "mid",
@@ -60,16 +45,10 @@
 			"children": [0]
 		},
 		{
-			"name": "up",
-			"origin": [8, 0, 8],
-			"color": 0,
-			"children": [1]
-		},
-		{
 			"name": "down",
 			"origin": [8, 0, 8],
 			"color": 0,
-			"children": [2]
+			"children": [1]
 		}
 	]
 }

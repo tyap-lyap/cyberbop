@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "cyberbop:item/extra_battery"
+    "layer0": "cyberbop:item/solar_cell"
   }
 }

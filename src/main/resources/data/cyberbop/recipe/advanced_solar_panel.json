@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "minecraft:iron_block"
+    },
+    "B": {
+      "item": "cyberbop:battery"
+    },
+    "S": {
+      "item": "cyberbop:solar_panel"
+    }
+  },
+  "pattern": [
+    "SSS",
+    "ABA"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cyberbop:advanced_solar_panel"
+  }
+}

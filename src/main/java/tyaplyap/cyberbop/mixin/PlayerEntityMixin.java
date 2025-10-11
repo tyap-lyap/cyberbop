@@ -178,7 +178,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 	@Override
 	public int capacity() {
 		int capacity = 0;
-		if(containsModule(CyberbopItems.EXTRA_BATTERY)) capacity = capacity + 15000;
+		if(containsModule(CyberbopItems.EXTRA_BATTERY_MODULE)) capacity = capacity + 15000;
 
 		for(CyborgPartType partType : CyborgPartType.values()) {
 			if(getCyborgPart(partType).getItem() instanceof CyborgPartItem partItem) {

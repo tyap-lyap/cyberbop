@@ -30,7 +30,7 @@ public class CyberbopBlockEntities {
 
 	public static final BlockEntityType<SolarPanelBlockEntity> SOLAR_PANEL = register(
 		"solar_panel",
-		BlockEntityType.Builder.create(SolarPanelBlockEntity::new, CyberbopBlocks.SOLAR_PANEL).build()
+		BlockEntityType.Builder.create(SolarPanelBlockEntity::new, CyberbopBlocks.SOLAR_PANEL, CyberbopBlocks.ADVANCED_SOLAR_PANEL).build()
 	);
 
 	public static final BlockEntityType<ChargingPadBlockEntity> CHARGING_PAD = register(

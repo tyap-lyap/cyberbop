@@ -6,6 +6,7 @@
     "cyberbop:assembler",
     "cyberbop:energy_wire",
     "cyberbop:solar_panel",
+    "cyberbop:advanced_solar_panel",
     "cyberbop:charging_pad"
   ]
 }

@@ -7,8 +7,8 @@ import net.minecraft.server.world.ServerWorld;
 
 public class NightVisionModule extends CyborgModuleItem {
 
-	public NightVisionModule(Settings settings, String module) {
-		super(settings, module);
+	public NightVisionModule(Settings settings) {
+		super(settings);
 	}
 
 	@Override

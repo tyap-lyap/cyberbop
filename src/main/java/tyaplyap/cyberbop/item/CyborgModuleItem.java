@@ -5,15 +5,9 @@ import net.minecraft.item.Item;
 import net.minecraft.server.world.ServerWorld;
 
 public class CyborgModuleItem extends Item {
-	public String moduleName;
 
-	public CyborgModuleItem(Settings settings, String module) {
+	public CyborgModuleItem(Settings settings) {
 		super(settings);
-		moduleName = module;
-	}
-
-	public String getModuleName() {
-		return moduleName;
 	}
 
 	public void tick(ServerWorld world, PlayerEntity player) {

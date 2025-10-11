@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "minecraft:iron_block"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "B": {
+      "item": "cyberbop:battery"
+    }
+  },
+  "pattern": [
+    "AIA",
+    "BBB",
+    "AIA"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cyberbop:extra_battery_module"
+  }
+}

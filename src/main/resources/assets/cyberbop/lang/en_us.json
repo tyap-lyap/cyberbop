@@ -5,10 +5,12 @@
   "itemGroup.cyberbop.items": "Cyberbop Items",
   "itemGroup.cyberbop.debug_items": "Debug Cyberbop Items",
 
-  "item.cyberbop.jetpack": "Jetpack",
+  "item.cyberbop.jetpack_module": "Jetpack Module",
   "item.cyberbop.flight_module": "Flight Module",
-  "item.cyberbop.extra_battery": "Extra Battery",
+  "item.cyberbop.extra_battery_module": "Extra Battery Module",
+  "item.cyberbop.battery": "Battery",
   "item.cyberbop.solar_cell_module": "Solar Cell Module",
+  "item.cyberbop.solar_cell": "Solar Cell",
   "item.cyberbop.night_vision_module": "Night Vision Module",
 
   "item.cyberbop.basic_cyborg_head": "Basic Cyborg Head",
@@ -32,6 +34,7 @@
   "block.cyberbop.assembler": "Assembler",
   "block.cyberbop.energy_wire": "Energy Wire",
   "block.cyberbop.solar_panel": "Solar Panel",
+  "block.cyberbop.advanced_solar_panel": "Advanced Solar Panel",
   "block.cyberbop.charging_pad": "Charging Pad",
   "block.cyberbop.furnace_generator": "Furnace Generator",
 

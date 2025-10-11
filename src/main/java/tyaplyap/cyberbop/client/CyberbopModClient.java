@@ -25,6 +25,7 @@ import tyaplyap.cyberbop.client.screen.AssemblerClientScreen;
 import tyaplyap.cyberbop.client.screen.FurnaceGeneratorClientScreen;
 import tyaplyap.cyberbop.client.util.EnergySynchronization;
 import tyaplyap.cyberbop.extension.PlayerExtension;
+import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.packet.EnergyGuiUpdatePacket;
 
 public class CyberbopModClient implements ClientModInitializer {
@@ -85,7 +86,13 @@ public class CyberbopModClient implements ClientModInitializer {
 			context.drawTexture(ENERGY_BACKGROUND, x, y, 0, 0, 81, 8, 81, 8);
 
 			int width = (int)(80.0F * Math.clamp((float)ex.getEnergyStored() / (float)ex.capacity(), 0, 1));
-			context.drawTexture(BLUE_ENERGY_OVERLAY, x, y, 0, 0, 1 + width, 8, 81, 8);
+
+			if(ex.containsModule(CyberbopItems.EXTRA_BATTERY_MODULE)) {
+				context.drawTexture(GREEN_ENERGY_OVERLAY, x, y, 0, 0, width, 8, 81, 8);
+			}
+			else {
+				context.drawTexture(BLUE_ENERGY_OVERLAY, x, y, 0, 0, width, 8, 81, 8);
+			}
 		}
 	}
 }
