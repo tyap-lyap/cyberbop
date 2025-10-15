@@ -21,6 +21,8 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.screen.FurnaceGeneratorScreenHandler;
+import tyaplyap.cyberbop.util.transfer.EnergyStorage;
+import tyaplyap.cyberbop.util.transfer.IEnergyStorage;
 
 import static net.minecraft.block.entity.AbstractFurnaceBlockEntity.createFuelTimeMap;
 
@@ -77,28 +79,12 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 		return inventory;
 	}
 
-	@Override
-	public int capacity() {
-		return 2400000;
-	}
-
-	@Override
-	public int transferRate() {
-		return 1000;
-	}
-
-	@Override
-	public Type type() {
-		return Type.GENERATOR;
-	}
 
 	public static void tick (World world, BlockPos pos, BlockState state, FurnaceGeneratorBlockEntity blockEntity) {
-
-		EnergyBlockEntity.tick(world, pos, state, blockEntity);
 		if (blockEntity.isBurning()) {
 			blockEntity.burnTime--;
 			if (!blockEntity.isFull()) {
-				blockEntity.setEnergyStored(Math.min(blockEntity.capacity(), blockEntity.getEnergyStored() + 256));
+				blockEntity.setEnergyStored(Math.min(blockEntity.getCapacity(), blockEntity.getEnergyStored() + 256));
 			}
 		}
 
@@ -133,6 +119,7 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 
 		state = state.with(AbstractFurnaceBlock.LIT, blockEntity.isBurning());
 		world.setBlockState(pos, state, Block.NOTIFY_ALL);
+		EnergyBlockEntity.BatteryTick(world, pos, state, blockEntity);
 	}
 
 	@Override
@@ -166,6 +153,31 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 	@Override
 	protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
 		return new FurnaceGeneratorScreenHandler(CyberbopMod.FURNACE_GENERATOR_SCREEN, syncId, playerInventory, this, propertyDelegate, pos, (ServerPlayerEntity) playerInventory.player);
+	}
+
+	@Override
+	public IEnergyStorage.Type typeMachine() {
+		return IEnergyStorage.Type.GENERATOR;
+	}
+
+	@Override
+	public int getTransferRate() {
+		return 90;
+	}
+
+	@Override
+	public int getCapacity() {
+		return 2400000;
+	}
+
+	@Override
+	boolean canInsertEnergy(EnergyStorage source) {
+		return true;
+	}
+
+	@Override
+	boolean canExtractEnergy(EnergyStorage target) {
+		return false;
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.block.CyberbopBlocks;
+import tyaplyap.cyberbop.util.transfer.IEnergyStorage;
 
 public class CyberbopBlockEntities {
 
@@ -54,7 +55,7 @@ public class CyberbopBlockEntities {
 	);
 
 	public static void init() {
-
+		IEnergyStorage.SIDED.registerForBlockEntities((blockEntity, context) ->  ((EnergyBlockEntity) blockEntity).energyStorage, BATTERY_TEST, SOLAR_PANEL, ENERGY_RECEIVER, ASSEMBLER, FURNACE_GENERATOR, ENERGY_RECEIVER, CHARGING_PAD);
 	}
 
 	public static <T extends BlockEntityType<?>> T register(String path, T blockEntityType) {

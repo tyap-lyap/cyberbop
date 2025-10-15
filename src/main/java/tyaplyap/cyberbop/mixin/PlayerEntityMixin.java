@@ -23,6 +23,7 @@ import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.item.CyborgModuleItem;
 import tyaplyap.cyberbop.item.CyborgPartItem;
+import tyaplyap.cyberbop.util.transfer.EnergyStorage;
 import tyaplyap.cyberbop.util.CyborgPartType;
 
 import java.util.ArrayList;
@@ -30,6 +31,39 @@ import java.util.List;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements PlayerExtension {
+
+	public final EnergyStorage energyStorage = new EnergyStorage() {
+		@Override
+		public int getEnergy() {
+			return storedEnergy = getEnergyStored();
+		}
+
+		@Override
+		public boolean canInsert(EnergyStorage target) {
+			return true;
+		}
+
+		@Override
+		public boolean canExtract(EnergyStorage source) {
+			return true;
+		}
+
+		@Override
+		public void setEnergy(int energy) {
+			setEnergyStored(energy);
+
+		}
+
+		@Override
+		public Type type() {
+			return Type.CYBORG;
+		}
+
+		@Override
+		public int capacity() {
+			return getCapacity();
+		}
+	};
 
 	private static final TrackedData<Boolean> IS_CYBORG = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
@@ -175,14 +209,13 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 		}
 	}
 
-	@Override
-	public int capacity() {
+	public int getCapacity() {
 		int capacity = 0;
 		if(containsModule(CyberbopItems.EXTRA_BATTERY_MODULE)) capacity = capacity + 15000;
 
 		for(CyborgPartType partType : CyborgPartType.values()) {
 			if(getCyborgPart(partType).getItem() instanceof CyborgPartItem partItem) {
-				capacity = capacity + partItem.capacity();
+				capacity = capacity + partItem.getCapacity();
 			}
 		}
 
@@ -308,17 +341,18 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 	}
 
 	@Override
+	public int getEnergyStored() {
+		return PlayerEntity.class.cast(this).getDataTracker().get(CYBORG_ENERGY);
+	}
+
+	@Override
 	public void setEnergyStored(int cyborgEnergy) {
+		energyStorage.storedEnergy = cyborgEnergy;
 		PlayerEntity.class.cast(this).getDataTracker().set(CYBORG_ENERGY, cyborgEnergy);
 	}
 
 	@Override
-	public Type type() {
-		return Type.BATTERY;
-	}
-
-	@Override
-	public int getEnergyStored() {
-		return PlayerEntity.class.cast(this).getDataTracker().get(CYBORG_ENERGY);
+	public EnergyStorage getEnergyStorage() {
+		return energyStorage;
 	}
 }

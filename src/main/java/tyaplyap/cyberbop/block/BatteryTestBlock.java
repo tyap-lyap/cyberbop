@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import tyaplyap.cyberbop.block.entity.BatteryTestBlockEntity;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
+import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
 
 public class BatteryTestBlock extends BlockWithEntity {
 
@@ -36,6 +37,6 @@ public class BatteryTestBlock extends BlockWithEntity {
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-		return world.isClient ? null : validateTicker(type, CyberbopBlockEntities.BATTERY_TEST, BatteryTestBlockEntity::tick);
+		return world.isClient ? null : validateTicker(type, CyberbopBlockEntities.BATTERY_TEST, EnergyBlockEntity::BatteryTick);
 	}
 }

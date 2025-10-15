@@ -2,13 +2,12 @@ package tyaplyap.cyberbop.extension;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import tyaplyap.cyberbop.block.entity.IEnergy;
+import tyaplyap.cyberbop.util.transfer.EnergyStorage;
 import tyaplyap.cyberbop.util.CyborgPartType;
 
 import java.util.ArrayList;
 
-public interface PlayerExtension extends IEnergy {
-
+public interface PlayerExtension {
 	boolean isCyborg();
 	void setCyborg(boolean isCyborg);
 
@@ -70,4 +69,12 @@ public interface PlayerExtension extends IEnergy {
 	ArrayList<ItemStack> getModules();
 
 	boolean containsModule(Item module);
+
+	void setEnergyStored(int cyborgEnergy);
+
+	int getEnergyStored();
+
+	int getCapacity();
+
+	EnergyStorage getEnergyStorage();
 }

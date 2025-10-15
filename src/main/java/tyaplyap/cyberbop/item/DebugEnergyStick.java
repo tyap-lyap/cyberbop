@@ -15,8 +15,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.World;
-import tyaplyap.cyberbop.block.entity.IEnergy;
-
+import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
 import java.util.Optional;
 
 public class DebugEnergyStick extends Item {
@@ -33,7 +32,7 @@ public class DebugEnergyStick extends Item {
 	public ActionResult useOnBlock(ItemUsageContext context) {
 		BlockPos blockPos = context.getBlockPos();
 		World world = context.getWorld();
-		if (context.getWorld().getBlockEntity(context.getBlockPos()) instanceof IEnergy) {
+		if (context.getWorld().getBlockEntity(context.getBlockPos()) instanceof EnergyBlockEntity) {
 			world.playSound(null, blockPos, SoundEvents.BLOCK_AMETHYST_CLUSTER_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
 			ItemStack itemStack = context.getStack();
 
@@ -51,8 +50,10 @@ public class DebugEnergyStick extends Item {
 	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
 		if (!world.isClient) {
 			LodestoneTrackerComponent lodestoneTrackerComponent = stack.get(DataComponentTypes.LODESTONE_TRACKER);
-			if (lodestoneTrackerComponent != null && world.getBlockEntity(lodestoneTrackerComponent.target().get().pos()) instanceof IEnergy energy && entity instanceof ServerPlayerEntity player) {
-				sendMessage(player, Text.of(energy.type().toString() + "§a Stored:" + energy.getEnergyStored()));
+			if (lodestoneTrackerComponent != null && entity instanceof ServerPlayerEntity player) {
+				if (world.getBlockEntity(lodestoneTrackerComponent.target().get().pos()) instanceof EnergyBlockEntity energy) {
+					sendMessage(player, Text.of(energy.typeMachine().toString() + "§a Stored:" + energy.getEnergyStored()));
+				}
 			}
 		}
 	}

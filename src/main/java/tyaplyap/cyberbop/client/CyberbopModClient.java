@@ -11,10 +11,12 @@ import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
 import tyaplyap.cyberbop.CyberbopMod;
+import tyaplyap.cyberbop.block.CyberbopBlocks;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.client.model.AssemblerModel;
 import tyaplyap.cyberbop.client.model.debug.ErrorModel;
@@ -26,7 +28,10 @@ import tyaplyap.cyberbop.client.screen.FurnaceGeneratorClientScreen;
 import tyaplyap.cyberbop.client.util.EnergySynchronization;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.item.CyberbopItems;
+import tyaplyap.cyberbop.packet.DebugCablePacket;
 import tyaplyap.cyberbop.packet.EnergyGuiUpdatePacket;
+
+import tyaplyap.cyberbop.client.render.debug.DebugEnergyRenderer;
 
 public class CyberbopModClient implements ClientModInitializer {
 
@@ -41,9 +46,23 @@ public class CyberbopModClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		//TEST//
+		BlockEntityRendererFactories.register(CyberbopBlockEntities.ENERGY_GENERATOR, (BlockEntityRendererFactory.Context ctx) -> new DebugEnergyRenderer(CyberbopBlocks.ENERGY_GENERATOR, ctx));
+		BlockEntityRendererFactories.register(CyberbopBlockEntities.ENERGY_RECEIVER, (BlockEntityRendererFactory.Context ctx) -> new DebugEnergyRenderer(CyberbopBlocks.ENERGY_RECEIVER, ctx));
+		BlockEntityRendererFactories.register(CyberbopBlockEntities.SOLAR_PANEL, (BlockEntityRendererFactory.Context ctx) -> new DebugEnergyRenderer(CyberbopBlocks.SOLAR_PANEL, ctx));
+		BlockEntityRendererFactories.register(CyberbopBlockEntities.BATTERY_TEST, (BlockEntityRendererFactory.Context ctx) -> new DebugEnergyRenderer(CyberbopBlocks.BATTERY_TEST, ctx));
+		BlockEntityRendererFactories.register(CyberbopBlockEntities.CHARGING_PAD, (BlockEntityRendererFactory.Context ctx) -> new DebugEnergyRenderer(CyberbopBlocks.CHARGING_PAD, ctx));
+		BlockEntityRendererFactories.register(CyberbopBlockEntities.FURNACE_GENERATOR, (BlockEntityRendererFactory.Context ctx) -> new DebugEnergyRenderer(CyberbopBlocks.FURNACE_GENERATOR, ctx));
+		//TEST//
 		ClientPlayNetworking.registerGlobalReceiver(EnergyGuiUpdatePacket.ID, (payload, context) -> {
 			context.client().execute(() -> {
 				EnergySynchronization.updateEnergyInGui(payload.storedEnergy(), payload.capacity());
+			});
+		});
+
+		ClientPlayNetworking.registerGlobalReceiver(DebugCablePacket.ID, (payload, context) -> {
+			context.client().execute(() -> {
+				DebugCablePacket.getCables(payload.blockPos(), payload.clean(), payload.isOwner());
 			});
 		});
 
@@ -85,7 +104,7 @@ public class CyberbopModClient implements ClientModInitializer {
 		if(player instanceof PlayerExtension ex && ex.isCyborg() && interactionManager != null && interactionManager.hasStatusBars()) {
 			context.drawTexture(ENERGY_BACKGROUND, x, y, 0, 0, 81, 8, 81, 8);
 
-			int width = (int)(80.0F * Math.clamp((float)ex.getEnergyStored() / (float)ex.capacity(), 0, 1));
+			int width = (int)(80.0F * Math.clamp((float)ex.getEnergyStored() / (float)ex.getCapacity(), 0, 1));
 
 			if(ex.containsModule(CyberbopItems.EXTRA_BATTERY_MODULE)) {
 				context.drawTexture(GREEN_ENERGY_OVERLAY, x, y, 0, 0, width, 8, 81, 8);

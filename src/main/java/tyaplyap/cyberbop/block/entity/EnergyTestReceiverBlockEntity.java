@@ -6,6 +6,9 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import tyaplyap.cyberbop.block.EnergyReceiverBlock;
+import tyaplyap.cyberbop.util.transfer.EnergyStorage;
+import tyaplyap.cyberbop.util.transfer.IEnergyStorage;
+import tyaplyap.cyberbop.util.DebugUtil;
 
 public class EnergyTestReceiverBlockEntity extends EnergyBlockEntity {
 
@@ -16,20 +19,10 @@ public class EnergyTestReceiverBlockEntity extends EnergyBlockEntity {
 	}
 
 	public static void tick(World world, BlockPos pos, BlockState state, EnergyTestReceiverBlockEntity blockEntity) {
-			blockEntity.updateReceiver();
+		DebugUtil.updateEnergyDebug(world, pos, state, blockEntity);
+		blockEntity.updateReceiver();
 	}
 
-	@Override
-	public int capacity() {
-		return 15000;
-	}
-
-	@Override
-	public Type type() {
-		return Type.RECEIVER;
-	}
-
-	@Override
 	public int energyConsumption() {
 		return 300;
 	}
@@ -62,6 +55,31 @@ public class EnergyTestReceiverBlockEntity extends EnergyBlockEntity {
 
 	public boolean isActive() {
 		return isActive;
+	}
+
+	@Override
+	public IEnergyStorage.Type typeMachine() {
+		return IEnergyStorage.Type.RECEIVER;
+	}
+
+	@Override
+	public int getTransferRate() {
+		return 90;
+	}
+
+	@Override
+	public int getCapacity() {
+		return 15000;
+	}
+
+	@Override
+	boolean canInsertEnergy(EnergyStorage source) {
+		return true;
+	}
+
+	@Override
+	boolean canExtractEnergy(EnergyStorage target) {
+		return false;
 	}
 
 	@Override

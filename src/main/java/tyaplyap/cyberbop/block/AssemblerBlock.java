@@ -21,6 +21,7 @@ import tyaplyap.cyberbop.block.entity.AssemblerBlockEntity;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.item.*;
 import tyaplyap.cyberbop.util.CyborgPartType;
+import tyaplyap.cyberbop.util.DebugUtil;
 
 public class AssemblerBlock extends BlockWithEntity {
 
@@ -41,7 +42,7 @@ public class AssemblerBlock extends BlockWithEntity {
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
 		// Make sure to check world.isClient if you only want to tick only on serverside.
-		return world.isClient ? validateTicker(type, CyberbopBlockEntities.ASSEMBLER, AssemblerBlockEntity::clientTick) : null;
+		return !world.isClient ? validateTicker(type, CyberbopBlockEntities.ASSEMBLER, DebugUtil::updateEnergyDebug) : null;
 	}
 
 	@Override

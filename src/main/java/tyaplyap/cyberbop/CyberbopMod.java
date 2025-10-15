@@ -32,6 +32,7 @@ import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
 import tyaplyap.cyberbop.entity.FakePlayerEntity;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.item.CyberbopItems;
+import tyaplyap.cyberbop.packet.DebugCablePacket;
 import tyaplyap.cyberbop.screen.AssemblerScreenHandler;
 import tyaplyap.cyberbop.screen.FurnaceGeneratorScreenHandler;
 import tyaplyap.cyberbop.packet.EnergyGuiUpdatePacket;
@@ -74,6 +75,7 @@ public class CyberbopMod implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		PayloadTypeRegistry.playS2C().register(EnergyGuiUpdatePacket.ID, EnergyGuiUpdatePacket.PACKET_CODEC);
+		PayloadTypeRegistry.playS2C().register(DebugCablePacket.ID, DebugCablePacket.PACKET_CODEC);
 		Registry.register(Registries.ITEM_GROUP, CyberbopMod.id("items"), CyberbopMod.ITEM_GROUP);
 
 		if(FabricLoader.getInstance().isDevelopmentEnvironment()) {

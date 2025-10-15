@@ -1,20 +1,26 @@
 package tyaplyap.cyberbop.client.render;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.math.random.Random;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.block.EnergyWireBlock;
 import tyaplyap.cyberbop.block.entity.EnergyWireBlockEntity;
 import tyaplyap.cyberbop.client.CyberbopModClient;
+import tyaplyap.cyberbop.client.render.debug.DebugRender;
+import tyaplyap.cyberbop.packet.DebugCablePacket;
 
 import java.util.Map;
 
@@ -74,10 +80,13 @@ public class WiresRenderer<T extends EnergyWireBlockEntity> implements BlockEnti
 
 			mid.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
 			directions.forEach((property, part) -> {
-				if(state.get(property)) part.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
+				if (state.get(property)) part.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
 			});
 
 			matrices.pop();
+			if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+				DebugRender.DebugRenderWires(entity, state, matrices, vertexConsumers, light, overlay);
+			}
 		}
 	}
 }

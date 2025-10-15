@@ -1,133 +1,119 @@
 package tyaplyap.cyberbop.block.entity;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import tyaplyap.cyberbop.util.transfer.EnergyStorage;
+import tyaplyap.cyberbop.util.transfer.IEnergyStorage;
+import tyaplyap.cyberbop.util.DebugUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 
-public abstract class EnergyBlockEntity extends BlockEntity implements IEnergy {
+public abstract class EnergyBlockEntity extends BlockEntity  {
+//todo СДЕЛАТЬ СОХРАНЕНИЕ ЭНЕРГИИ ПРИ ЛОМАНИИИ!!!!!!!!!!!!!!!!!!!ё
+public final EnergyStorage energyStorage = new EnergyStorage() {
+	@Override
+	public boolean canInsert(EnergyStorage source) {
+		return canInsertEnergy(source);
+	}
 
-	private int energyStored;
+	@Override
+	public boolean canExtract(EnergyStorage target) {
+		return canExtractEnergy(target);
+	}
+
+	@Override
+	public Type type() {
+		return typeMachine();
+	}
+
+	@Override
+	public int transferRate() {
+		return getTransferRate();
+	}
+
+	@Override
+	public int capacity() {
+		return getCapacity();
+	}
+};
 
 	public EnergyBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 	}
 
-	public static void tick (World world, BlockPos pos, BlockState state, EnergyBlockEntity blockEntity) {
-		if (!blockEntity.type().equals(Type.RECEIVER) && blockEntity.getEnergyStored() != 0) {
+	abstract public IEnergyStorage.Type typeMachine();
 
-			List<Direction> directionsFind = blockEntity.getRandomDirections();
+	abstract public int getTransferRate();
 
-			List<Direction> directions = new ArrayList<>();
-			for (var directionNeighbor : directionsFind) {
-				if (!(blockEntity instanceof EnergyWireBlockEntity wireBlock && wireBlock.directionOutput.get(directionNeighbor).getTimer() > 0)) {
-					directions.add(directionNeighbor.getOpposite());
-				}
-			}
-			if (!directions.isEmpty()) {
-				blockEntity.transferLogic(blockEntity.findPriority(directions));
-			}
-		}
+	abstract public int getCapacity();
+
+	abstract boolean canInsertEnergy(EnergyStorage source);
+
+	abstract boolean canExtractEnergy(EnergyStorage target);
+
+	public boolean isFull() {
+		return getEnergyStored() >= getCapacity();
 	}
 
-	public List<Direction> getRandomDirections() {
-		List<Direction> directions = new ArrayList<>(Arrays.stream(Direction.values()).toList());
-		Collections.shuffle(directions);
-		return directions;
+	public void setEnergyStored(int energy) {
+		energyStorage.storedEnergy = energy;
 	}
 
-	private LinkedHashMap<Direction,EnergyBlockEntity> findPriority(List<Direction> directions) {
-		LinkedHashMap<Direction, EnergyBlockEntity> energyBlockEntities = new LinkedHashMap<>();
-		for (var direction : directions) {
-			BlockEntity blockEntity = this.getWorld().getBlockEntity(this.getPos().offset(direction));
-			if (blockEntity instanceof EnergyBlockEntity energyBlock && !(energyBlock instanceof BatteryTestBlockEntity)) {//Потом сделать зарядку аккумулятору
-				if (energyBlock instanceof EnergyTestReceiverBlockEntity) {
-					energyBlockEntities.putFirst(direction, energyBlock);
-				} else {
-					energyBlockEntities.putLast(direction, energyBlock);
-				}
-			}
-		}
-		return energyBlockEntities;
-	}
-
-	public boolean isFull(){
-		return this.capacity() == this.getEnergyStored() || this.capacity() < this.getEnergyStored();
-	}
-
-//НЕ ЗАБЫТЬ ПЕРЕПИСАТЬ!!!!!!!!!!!!!!!!!!
-	public void balanceEnergy(EnergyWireBlockEntity wireBlock) {
-		if (!wireBlock.isFull() && (this.type().equals(Type.GENERATOR) || this.type().equals(Type.BATTERY))) {
-			List<EnergyBlockEntity> sourceNeighbors = new ArrayList<>();
-			for (var direction : Direction.values()) {
-				BlockEntity neighbor = this.getWorld().getBlockEntity(wireBlock.getPos().offset(direction));
-				if (neighbor instanceof EnergyBlockEntity energyBlockEntity && energyBlockEntity.getEnergyStored() != 0 && (energyBlockEntity.type().equals(Type.BATTERY) || energyBlockEntity.type().equals(Type.GENERATOR))) {
-					sourceNeighbors.add(energyBlockEntity);
-				}
-			}
-			if (!sourceNeighbors.isEmpty()) {
-				int needEnergy = (wireBlock.capacity() - wireBlock.getEnergyStored()) / sourceNeighbors.size();
-				if (needEnergy == 0) {
-					if (transferEnergy(transferRate(), wireBlock)) markDirty();
-				} else {
-					for (var neighbor : sourceNeighbors) {
-						if (neighbor.transferEnergy(transferRate(), wireBlock)) markDirty();
-					}
-				}
-			}
-		}
-	}
-
-	public void transferLogic(LinkedHashMap<Direction, EnergyBlockEntity> energyBlockEntities) {
-		if (this.getEnergyStored() == 0 || energyBlockEntities.isEmpty()) {
-			return;
-		}
-		for (var direction : energyBlockEntities.keySet()) {
-
-			EnergyBlockEntity energyBlock = energyBlockEntities.get(direction);
-
-			if (energyBlock instanceof EnergyWireBlockEntity wire && (this.type().equals(Type.GENERATOR) || this.type().equals(Type.BATTERY))) {
-				this.balanceEnergy(wire);
-			} else {
-				if (!energyBlock.type().equals(Type.GENERATOR) && !energyBlock.type().equals(Type.BATTERY)) {
-					if (transferEnergy(transferRate(), energyBlock)) markDirty();
-				}
-			}
-			if (energyBlock instanceof EnergyWireBlockEntity wire && !(this instanceof EnergyTestReceiverBlockEntity)) {
-				wire.directionOutput.get(direction).setTimer(15);
-				if (this.type().equals(Type.GENERATOR)) {
-					wire.directionOutput.get(direction).setSource("test");
-				}
-			}
-		}
-	}
-
-
-
-	@Override
 	public int getEnergyStored() {
-		return energyStored;
+		return energyStorage.getEnergy();
 	}
 
 	@Override
-	public void setEnergyStored(int storedEnergy) {
-		this.energyStored = storedEnergy;
+	public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
+		NbtCompound nbtCompound = super.toInitialChunkDataNbt(registryLookup);
+		this.writeNbt(nbtCompound, registryLookup);
+		return nbtCompound;
+	}
+
+	@Override
+	public Packet<ClientPlayPacketListener> toUpdatePacket() {
+		return BlockEntityUpdateS2CPacket.create(this);
+	}
+
+	public void updateListeners() {
+		this.markDirty();
+		this.getWorld().updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), Block.NOTIFY_ALL);
+	}
+
+	public static void BatteryTick (World world, BlockPos pos, BlockState state, EnergyBlockEntity blockEntity) {
+		DebugUtil.updateEnergyDebug(world, pos, state, blockEntity);
+		if (blockEntity.typeMachine().equals(IEnergyStorage.Type.BATTERY) || blockEntity.typeMachine().equals(IEnergyStorage.Type.GENERATOR)) {
+			EnergyStorage energyStorageTEST;
+			List<Direction> directions = new ArrayList<>(Arrays.stream(Direction.values()).toList());
+			Collections.shuffle(directions);
+			for (var direction : directions) {
+				energyStorageTEST = IEnergyStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite());
+				EnergyStorage.transfer(blockEntity.energyStorage, energyStorageTEST, blockEntity.getTransferRate());
+			}
+		}
 	}
 
 	@Override
 	protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-		nbt.putInt("EnergyStored", this.getEnergyStored());
+		nbt.putInt("EnergyStored", energyStorage.getEnergy());
 	}
 
 	@Override
 	protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-		this.setEnergyStored(nbt.getInt("EnergyStored"));
+		energyStorage.storedEnergy=  nbt.getInt("EnergyStored");
 	}
 }

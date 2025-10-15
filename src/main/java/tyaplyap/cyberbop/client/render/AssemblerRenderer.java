@@ -1,5 +1,6 @@
 package tyaplyap.cyberbop.client.render;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.RenderLayer;
@@ -15,18 +16,16 @@ import tyaplyap.cyberbop.block.entity.AssemblerBlockEntity;
 import tyaplyap.cyberbop.client.CyberbopModClient;
 import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderer;
 import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderers;
+import tyaplyap.cyberbop.client.render.debug.DebugRender;
 import tyaplyap.cyberbop.util.CyborgPartType;
 
 import java.util.Map;
 
 public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockEntityRenderer<T> {
+
 	ModelPart model;
 	ModelPart overlayPart;
 	ModelPart basePart;
-
-	int light;
-
-	boolean reverse;
 
 	ModelPart errorModel;
 
@@ -38,6 +37,19 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 		CyborgPartType.RIGHT_LEG, new Vec3d(0.7, 3.1, 0.5),
 		CyborgPartType.LEFT_LEG, new Vec3d(0.3, 3.1, 0.5)
 	);
+
+	public void animateError(AssemblerBlockEntity blockEntity) {
+		if (blockEntity.tickError <= 255 && !blockEntity.reverse) {
+			blockEntity.tickError += 16;
+		} else {
+			blockEntity.reverse = true;
+		}
+		if (blockEntity.tickError > 60 && blockEntity.reverse) {
+			blockEntity.tickError -= 16;
+		} else {
+			blockEntity.reverse = false;
+		}
+	}
 
 	@Override
 	public void render(T entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
@@ -69,11 +81,16 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 					renderer.renderAssembler(tickDelta, matrices, vertexConsumers, light, overlay);
 				}
 				else {
-					if(!entity.getPartStack(partType).isEmpty()) renderError(matrices, tickDelta, vertexConsumers, entity.tickError, overlay, errorPosForPart.get(partType));
+					if(!entity.getPartStack(partType).isEmpty()) {
+						renderError(matrices, tickDelta, vertexConsumers, entity.tickError, overlay, errorPosForPart.get(partType));
+					}
 				}
 			});
-
+			animateError(entity);
 			renderOverlay(entity, tickDelta, matrices, vertexConsumers, light, overlay);
+			if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+				DebugRender.DebugRender(entity, tickDelta, matrices, vertexConsumers,  light,  overlay);
+			}
 		}
 	}
 

@@ -16,11 +16,12 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.item.CyborgModuleItem;
 import tyaplyap.cyberbop.item.CyborgPartItem;
 import tyaplyap.cyberbop.screen.AssemblerScreenHandler;
+import tyaplyap.cyberbop.util.transfer.EnergyStorage;
+import tyaplyap.cyberbop.util.transfer.IEnergyStorage;
 import tyaplyap.cyberbop.util.CyborgPartType;
 
 import java.util.Map;
@@ -49,14 +50,28 @@ public class AssemblerBlockEntity extends EnergyContainer {
 	}
 
 	@Override
-	public int capacity() {
+	public IEnergyStorage.Type typeMachine() {
+		return IEnergyStorage.Type.RECEIVER;
+	}
+
+	@Override
+	public int getTransferRate() {
+		return 100;
+	}
+
+	@Override
+	public int getCapacity() {
 		return 6900000;
 	}
 
+	@Override
+	boolean canInsertEnergy(EnergyStorage source) {
+		return true;
+	}
 
 	@Override
-	public int energyConsumption() {
-		return 100;
+	boolean canExtractEnergy(EnergyStorage target) {
+		return target.type().equals(IEnergyStorage.Type.CYBORG);
 	}
 
 	@Override
@@ -68,26 +83,8 @@ public class AssemblerBlockEntity extends EnergyContainer {
 		return null;
 	}
 
-	@Override
-	public Type type() {
-		return Type.RECEIVER;
-	}
-
 	public AssemblerBlockEntity(BlockPos pos, BlockState state) {
 		super(CyberbopBlockEntities.ASSEMBLER, pos, state);
-	}
-
-	public static void clientTick(World world, BlockPos pos, BlockState state, AssemblerBlockEntity blockEntity) {
-		if (blockEntity.tickError <= 255 && !blockEntity.reverse) {
-			blockEntity.tickError += 32;
-		} else {
-			blockEntity.reverse = true;
-		}
-		if (blockEntity.tickError > 60 && blockEntity.reverse) {
-			blockEntity.tickError -= 32;
-		} else {
-			blockEntity.reverse = false;
-		}
 	}
 
 	@Override

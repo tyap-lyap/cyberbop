@@ -66,7 +66,7 @@ public class FurnaceGeneratorScreenHandler extends ScreenHandler {
 
 	@Override
 	public void sendContentUpdates() {
-		ServerPlayNetworking.send(serverPlayer, new EnergyGuiUpdatePacket(furnaceGeneratorBlock.getEnergyStored(), furnaceGeneratorBlock.capacity()));
+		ServerPlayNetworking.send(serverPlayer, new EnergyGuiUpdatePacket(furnaceGeneratorBlock.getEnergyStored(), furnaceGeneratorBlock.getCapacity()));
 		super.sendContentUpdates();
 	}
 

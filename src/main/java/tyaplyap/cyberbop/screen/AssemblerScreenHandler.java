@@ -69,7 +69,7 @@ public class AssemblerScreenHandler extends ScreenHandler {
 	}
 	@Override
 	public void sendContentUpdates() {
-		ServerPlayNetworking.send(serverPlayer, new EnergyGuiUpdatePacket(assemblerBlockEntity.getEnergyStored(), assemblerBlockEntity.capacity()));
+		ServerPlayNetworking.send(serverPlayer, new EnergyGuiUpdatePacket(assemblerBlockEntity.getEnergyStored(), assemblerBlockEntity.getCapacity()));
 		super.sendContentUpdates();
 	}
 

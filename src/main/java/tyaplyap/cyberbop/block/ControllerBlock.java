@@ -30,6 +30,7 @@ import tyaplyap.cyberbop.block.entity.ControllerBlockEntity;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.item.CyborgModuleItem;
 import tyaplyap.cyberbop.item.CyborgPartItem;
+import tyaplyap.cyberbop.util.transfer.EnergyStorage;
 import tyaplyap.cyberbop.util.CyborgPartType;
 
 import java.util.Set;
@@ -171,7 +172,7 @@ public class ControllerBlock extends BlockWithEntity {
 							else ItemScatterer.spawn(world, assemblerPos.getX(), assemblerPos.getY(), assemblerPos.getZ(), assembler.getModule(3));
 
 						assembler.getItems().clear();
-						assembler.transferEnergy(cyborg.capacity(), cyborg);
+						EnergyStorage.transfer(assembler.energyStorage, cyborg.getEnergyStorage(), cyborg.getCapacity());
 						assembler.updateListeners();
 
 						double maxHealth = 0;
@@ -187,7 +188,7 @@ public class ControllerBlock extends BlockWithEntity {
 					}
 					else if (cyborg.isCyborg() && assembler.isEmpty()) {
 						if (!assembler.isFull()) {
-							cyborg.transferEnergy(assembler.capacity(), assembler);
+							EnergyStorage.transfer(cyborg.getEnergyStorage(), assembler.energyStorage, assembler.getCapacity());
 						}
 						cyborg.setEnergyStored(0);
 						cyborg.setCyborg(false);

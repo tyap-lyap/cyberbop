@@ -32,22 +32,13 @@ public abstract class CyborgPartItem extends EnergyItem {
 	}
 
 	@Override
-	public int capacity() {
+	public int getCapacity() {
 		return energyCapacity;
 	}
 
 	@Override
 	public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-		tooltip.addAll(Text.literal("+" + capacity() + " Energy Capacity").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
+		tooltip.addAll(Text.literal("+" + getCapacity() + " Energy Capacity").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
 		tooltip.addAll(Text.literal("+" + getHealth() + " Max Health").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
-	}
-
-	@Override
-	public void setEnergyStored(int energy) {
-	}
-
-	@Override
-	public int getEnergyStored() {
-		return 0;
 	}
 }

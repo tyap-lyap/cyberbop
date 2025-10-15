@@ -3,6 +3,8 @@ package tyaplyap.cyberbop.block;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -13,7 +15,9 @@ import org.jetbrains.annotations.Nullable;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.block.entity.ChargingPadBlockEntity;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
+import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
 import tyaplyap.cyberbop.extension.PlayerExtension;
+import tyaplyap.cyberbop.util.transfer.EnergyStorage;
 
 public class ChargingPadBlock extends BlockWithEntity {
 
@@ -35,8 +39,8 @@ public class ChargingPadBlock extends BlockWithEntity {
 			if (chargingPadBlock == null) {
 				CyberbopMod.LOGGER.warn("Ignoring receive energy attempt for Charging Pad without matching block entity at {}", pos);
 			} else {
-				if (0 < chargingPadBlock.getEnergyStored() && entity instanceof ServerPlayerEntity player && player instanceof PlayerExtension cyborg && cyborg.isCyborg() && cyborg.getEnergyStored() != cyborg.capacity()) {
-					if (chargingPadBlock.transferEnergy(chargingPadBlock.transferRate(), cyborg)) chargingPadBlock.markDirty();
+				if (0 < chargingPadBlock.getEnergyStored() && entity instanceof ServerPlayerEntity player && player instanceof PlayerExtension cyborg && cyborg.isCyborg() && cyborg.getEnergyStored() != cyborg.getCapacity()) {
+					 if (EnergyStorage.transfer(chargingPadBlock.energyStorage, cyborg.getEnergyStorage(), chargingPadBlock.getTransferRate()) > 0) chargingPadBlock.markDirty();
 				}
 			}
 		}
@@ -57,5 +61,10 @@ public class ChargingPadBlock extends BlockWithEntity {
 	@Override
 	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
 		return new ChargingPadBlockEntity(pos, state);
+	}
+
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+		return world.isClient ? null : validateTicker(type, CyberbopBlockEntities.BATTERY_TEST, EnergyBlockEntity::BatteryTick);
 	}
 }
