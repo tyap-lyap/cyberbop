@@ -6,6 +6,7 @@ import net.minecraft.registry.Registry;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.block.CyberbopBlocks;
 import tyaplyap.cyberbop.util.transfer.IEnergyStorage;
+import tyaplyap.cyberbop.block.SolarPanelBlock;
 
 public class CyberbopBlockEntities {
 
@@ -31,7 +32,7 @@ public class CyberbopBlockEntities {
 
 	public static final BlockEntityType<SolarPanelBlockEntity> SOLAR_PANEL = register(
 		"solar_panel",
-		BlockEntityType.Builder.create(SolarPanelBlockEntity::new, CyberbopBlocks.SOLAR_PANEL, CyberbopBlocks.ADVANCED_SOLAR_PANEL).build()
+		BlockEntityType.Builder.create((pos, state) -> ((SolarPanelBlock)state.getBlock()).createBlockEntity(pos, state), CyberbopBlocks.SOLAR_PANEL, CyberbopBlocks.ADVANCED_SOLAR_PANEL).build()
 	);
 
 	public static final BlockEntityType<ChargingPadBlockEntity> CHARGING_PAD = register(

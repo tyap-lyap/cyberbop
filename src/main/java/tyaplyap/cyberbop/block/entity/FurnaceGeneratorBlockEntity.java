@@ -84,7 +84,7 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 		if (blockEntity.isBurning()) {
 			blockEntity.burnTime--;
 			if (!blockEntity.isFull()) {
-				blockEntity.setEnergyStored(Math.min(blockEntity.getCapacity(), blockEntity.getEnergyStored() + 256));
+				blockEntity.setEnergyStored(Math.min(blockEntity.getCapacity(), blockEntity.getEnergyStored() + 32));
 			}
 		}
 
@@ -162,12 +162,12 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 
 	@Override
 	public int getTransferRate() {
-		return 90;
+		return 64;
 	}
 
 	@Override
 	public int getCapacity() {
-		return 2400000;
+		return 64000;
 	}
 
 	@Override

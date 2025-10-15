@@ -9,9 +9,19 @@ import tyaplyap.cyberbop.util.transfer.IEnergyStorage;
 
 public class SolarPanelBlockEntity extends EnergyBlockEntity{
 	private int minY;
+	public final int energyCapacity;
+	public final int generationRate;
+
+	public SolarPanelBlockEntity(int energyCapacity, int generationRate, BlockPos pos, BlockState state) {
+		super(CyberbopBlockEntities.SOLAR_PANEL, pos, state);
+		this.energyCapacity = energyCapacity;
+		this.generationRate = generationRate;
+	}
 
 	public SolarPanelBlockEntity(BlockPos pos, BlockState state) {
 		super(CyberbopBlockEntities.SOLAR_PANEL, pos, state);
+		this.energyCapacity = 0;
+		this.generationRate = 0;
 	}
 
 	public static void tick (World world, BlockPos pos, BlockState state, SolarPanelBlockEntity blockEntity) {
@@ -29,7 +39,7 @@ public class SolarPanelBlockEntity extends EnergyBlockEntity{
 				blockPos = blockPos.up();
 			}
 
-			int generationRate = world.isRaining() ? 128 : 256;
+			int generationRate = world.isRaining() ? blockEntity.generationRate / 2 : blockEntity.generationRate;
 
 			if (blockEntity.getEnergyStored() < blockEntity.getCapacity()) {
 				blockEntity.setEnergyStored(Math.min(blockEntity.getCapacity(), blockEntity.getEnergyStored() + generationRate));
@@ -53,12 +63,12 @@ public class SolarPanelBlockEntity extends EnergyBlockEntity{
 
 	@Override
 	public int getTransferRate() {
-		return 20;
+		return 16;
 	}
 
 	@Override
 	public int getCapacity() {
-		return Integer.MAX_VALUE;
+		return this.energyCapacity;
 	}
 
 	@Override

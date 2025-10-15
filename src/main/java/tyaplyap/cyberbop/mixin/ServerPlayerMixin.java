@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tyaplyap.cyberbop.extension.PlayerExtension;
+import tyaplyap.cyberbop.item.CyborgModuleItem;
 import tyaplyap.cyberbop.util.CyborgPartType;
 
 @Mixin(ServerPlayerEntity.class)
@@ -29,6 +30,9 @@ public abstract class ServerPlayerMixin extends PlayerEntity implements PlayerEx
 				this.dropStack(getCyborgPart(partType));
 			});
 
+			getModules().forEach(stack -> {
+				if(stack.getItem() instanceof CyborgModuleItem moduleItem) moduleItem.onModuleRemoved(serverWorld, this);
+			});
 			getModules().forEach(this::dropStack);
 		}
 	}

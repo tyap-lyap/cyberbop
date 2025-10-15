@@ -1,5 +1,19 @@
 {
   "variants": {
-    "": { "model": "cyberbop:block/assembler" }
+    "facing=east": {
+      "model": "cyberbop:block/assembler",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cyberbop:block/assembler"
+    },
+    "facing=south": {
+      "model": "cyberbop:block/assembler",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "cyberbop:block/assembler",
+      "y": 270
+    }
   }
 }

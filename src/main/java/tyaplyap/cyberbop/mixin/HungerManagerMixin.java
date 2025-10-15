@@ -29,9 +29,12 @@ public abstract class HungerManagerMixin {
 
 					if(player.getHealth() != player.getMaxHealth()) {
 						this.foodTickTimer++;
-						if (this.foodTickTimer >= 30) {
+						if (this.foodTickTimer >= 40) {
 							player.heal(1.0F);
-							ex.setEnergyStored(Math.max(ex.getEnergyStored() - 20, 0));
+
+							if(!player.isCreative() && !player.isSpectator()) {
+								ex.setEnergyStored(Math.max(ex.getEnergyStored() - 20, 0));
+							}
 
 							this.foodTickTimer = 0;
 						}

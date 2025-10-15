@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,7 +27,6 @@ import tyaplyap.cyberbop.item.CyborgPartItem;
 import tyaplyap.cyberbop.util.transfer.EnergyStorage;
 import tyaplyap.cyberbop.util.CyborgPartType;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(PlayerEntity.class)
@@ -80,7 +80,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 	private static final TrackedData<ItemStack> MODULE_2 = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
 	private static final TrackedData<ItemStack> MODULE_3 = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
 
-	private ArrayList<ItemStack> modules;
+//	private Vec3d assemblePos = null;
 
 	protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
 		super(entityType, world);
@@ -117,8 +117,14 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 		nbt.putInt("cyborgEnergy", getEnergyStored());
 
 		if (!getModule1().isEmpty()) nbt.put("module1", getModule1().encode(registry));
-		if (!getModule2().isEmpty()) nbt.put("module2", getModule1().encode(registry));
-		if (!getModule3().isEmpty()) nbt.put("module3", getModule1().encode(registry));
+		if (!getModule2().isEmpty()) nbt.put("module2", getModule2().encode(registry));
+		if (!getModule3().isEmpty()) nbt.put("module3", getModule3().encode(registry));
+
+//		if (getAssemblePos() != null) {
+//			nbt.putDouble("assemblePosX", getAssemblePos().x);
+//			nbt.putDouble("assemblePosY", getAssemblePos().y);
+//			nbt.putDouble("assemblePosZ", getAssemblePos().z);
+//		}
 	}
 
 	@Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
@@ -184,6 +190,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 		}
 		else setModule3(ItemStack.EMPTY);
 
+
+//		if(nbt.contains("assemblePosX") && nbt.contains("assemblePosY") && nbt.contains("assemblePosZ")) {
+//			setAssemblePos(new Vec3d(nbt.getDouble("assemblePosX"), nbt.getDouble("assemblePosY"), nbt.getDouble("assemblePosZ")));
+//		}
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"))
@@ -191,8 +201,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 		if((Object)this instanceof ServerPlayerEntity player) {
 			if(isCyborg()) {
 				if(player.interactionManager.getGameMode().equals(GameMode.SURVIVAL)) {
-					if(getEnergyStored() != 0) {
-						setEnergyStored(getEnergyStored() - 1);
+					if (getEnergyStored() > 0) {
+						setEnergyStored(Math.max(getEnergyStored() - 1, 0));
 					}
 					else {
 						if (player.getWorld().getTime() % 20L == 0L) {
@@ -202,16 +212,16 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 					}
 				}
 
-				if(getModule1().getItem() instanceof CyborgModuleItem moduleItem) moduleItem.tick(player.getServerWorld(), player);
-				if(getModule2().getItem() instanceof CyborgModuleItem moduleItem) moduleItem.tick(player.getServerWorld(), player);
-				if(getModule3().getItem() instanceof CyborgModuleItem moduleItem) moduleItem.tick(player.getServerWorld(), player);
+				getModules().forEach(stack -> {
+					if(stack.getItem() instanceof CyborgModuleItem moduleItem) moduleItem.tick(player.getServerWorld(), player, this);
+				});
 			}
 		}
 	}
 
 	public int getCapacity() {
 		int capacity = 0;
-		if(containsModule(CyberbopItems.EXTRA_BATTERY_MODULE)) capacity = capacity + 15000;
+		if(containsModule(CyberbopItems.EXTRA_BATTERY_MODULE)) capacity = capacity + 32000;
 
 		for(CyborgPartType partType : CyborgPartType.values()) {
 			if(getCyborgPart(partType).getItem() instanceof CyborgPartItem partItem) {
@@ -315,29 +325,21 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 	@Override
 	public void setModule1(ItemStack module) {
 		PlayerEntity.class.cast(this).getDataTracker().set(MODULE_1, module);
-		updateModulesList();
 	}
 
 	@Override
 	public void setModule2(ItemStack module) {
 		PlayerEntity.class.cast(this).getDataTracker().set(MODULE_2, module);
-		updateModulesList();
 	}
 
 	@Override
 	public void setModule3(ItemStack module) {
 		PlayerEntity.class.cast(this).getDataTracker().set(MODULE_3, module);
-		updateModulesList();
 	}
 
 	@Override
-	public ArrayList<ItemStack> getModules() {
-		if(modules == null) updateModulesList();
-		return modules;
-	}
-
-	void updateModulesList() {
-		modules = new ArrayList<>(List.of(getModule1(), getModule2(), getModule3()));
+	public List<ItemStack> getModules() {
+		return List.of(getModule1(), getModule2(), getModule3());
 	}
 
 	@Override
@@ -355,4 +357,14 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 	public EnergyStorage getEnergyStorage() {
 		return energyStorage;
 	}
+
+//	@Override
+//	public Vec3d getAssemblePos() {
+//		return assemblePos;
+//	}
+//
+//	@Override
+//	public void setAssemblePos(Vec3d assemblePos) {
+//		this.assemblePos = assemblePos;
+//	}
 }

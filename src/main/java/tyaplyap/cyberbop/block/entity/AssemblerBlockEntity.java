@@ -24,8 +24,6 @@ import tyaplyap.cyberbop.util.transfer.EnergyStorage;
 import tyaplyap.cyberbop.util.transfer.IEnergyStorage;
 import tyaplyap.cyberbop.util.CyborgPartType;
 
-import java.util.Map;
-
 public class AssemblerBlockEntity extends EnergyContainer {
 
 	public int tickError;
@@ -56,12 +54,12 @@ public class AssemblerBlockEntity extends EnergyContainer {
 
 	@Override
 	public int getTransferRate() {
-		return 100;
+		return 64;
 	}
 
 	@Override
 	public int getCapacity() {
-		return 6900000;
+		return 128000;
 	}
 
 	@Override
@@ -77,10 +75,6 @@ public class AssemblerBlockEntity extends EnergyContainer {
 	@Override
 	public DefaultedList<ItemStack> getItems() {
 		return inventory;
-	}
-
-	public Map<String,ItemStack> getParts () {
-		return null;
 	}
 
 	public AssemblerBlockEntity(BlockPos pos, BlockState state) {

@@ -7,15 +7,15 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import tyaplyap.cyberbop.CyberbopMod;
+import tyaplyap.cyberbop.block.AssemblerBlock;
 import tyaplyap.cyberbop.block.entity.AssemblerBlockEntity;
 import tyaplyap.cyberbop.client.CyberbopModClient;
-import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderer;
-import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderers;
 import tyaplyap.cyberbop.client.render.debug.DebugRender;
 import tyaplyap.cyberbop.util.CyborgPartType;
 
@@ -26,7 +26,6 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 	ModelPart model;
 	ModelPart overlayPart;
 	ModelPart basePart;
-
 	ModelPart errorModel;
 
 	final Map<CyborgPartType, Vec3d> errorPosForPart = Map.of(
@@ -37,6 +36,13 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 		CyborgPartType.RIGHT_LEG, new Vec3d(0.7, 3.1, 0.5),
 		CyborgPartType.LEFT_LEG, new Vec3d(0.3, 3.1, 0.5)
 	);
+
+	public AssemblerRenderer(BlockEntityRendererFactory.Context ctx) {
+		model = ctx.getLayerModelPart(CyberbopModClient.ASSEMBLER_LAYER);
+		overlayPart = model.getChild("overlay");
+		basePart = model.getChild("base");
+		errorModel = ctx.getLayerModelPart(CyberbopModClient.ERROR_LAYER);
+	}
 
 	public void animateError(AssemblerBlockEntity blockEntity) {
 		if (blockEntity.tickError <= 255 && !blockEntity.reverse) {
@@ -53,19 +59,13 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 
 	@Override
 	public void render(T entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-		if(model == null) {
-			model = MinecraftClient.getInstance().getEntityModelLoader().getModelPart(CyberbopModClient.ASSEMBLER_LAYER);
-			overlayPart = model.getChild("overlay");
-			basePart = model.getChild("base");
-			errorModel = MinecraftClient.getInstance().getEntityModelLoader().getModelPart(CyberbopModClient.ERROR_LAYER);
-		}
 		var world = entity.getWorld();
 
 		if(world != null && !entity.isRemoved()) {
 			matrices.push();
 			matrices.translate(0.5, 1.5, 0.5);
 			matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
-			matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+			matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((entity.getCachedState().get(AssemblerBlock.FACING).asRotation())));
 
 			VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentCull(CyberbopMod.id("textures/entity/assembler.png")));
 
@@ -78,7 +78,7 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 			CyborgPartType.forEach(partType -> {
 				CyborgPartRenderer renderer = CyborgPartRenderers.get(entity.getPartStack(partType), partType);
 				if(renderer != null) {
-					renderer.renderAssembler(tickDelta, matrices, vertexConsumers, light, overlay);
+					renderer.renderAssembler(entity, entity.getCachedState(), tickDelta, matrices, vertexConsumers, light, overlay);
 				}
 				else {
 					if(!entity.getPartStack(partType).isEmpty()) {
@@ -112,7 +112,7 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 		matrices.push();
 		matrices.translate(0.5, 1.5, 0.5);
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
-		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((entity.getCachedState().get(AssemblerBlock.FACING).asRotation())));
 
 		VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentEmissive(CyberbopMod.id("textures/entity/assembler_overlay.png")));
 		basePart.visible = false;

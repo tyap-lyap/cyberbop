@@ -6,15 +6,17 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.ItemScatterer;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
+import net.minecraft.util.*;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -33,6 +35,7 @@ import tyaplyap.cyberbop.item.CyborgPartItem;
 import tyaplyap.cyberbop.util.transfer.EnergyStorage;
 import tyaplyap.cyberbop.util.CyborgPartType;
 
+import java.util.List;
 import java.util.Set;
 
 public class ControllerBlock extends BlockWithEntity {
@@ -139,88 +142,105 @@ public class ControllerBlock extends BlockWithEntity {
 
 	@Override
 	protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-		if(!world.isClient()) {
-			Direction[] directions = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
-			for(Direction direction : directions) {
-				var assemblerPos = pos.add(direction.getOffsetX(), direction.getOffsetY(), direction.getOffsetZ());
-				var blockEntity = world.getBlockEntity(assemblerPos);
+		Direction[] directions = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+		for(Direction direction : directions) {
+			var assemblerPos = pos.add(direction.getOffsetX(), direction.getOffsetY(), direction.getOffsetZ());
+			var blockEntity = world.getBlockEntity(assemblerPos);
 
-				if(blockEntity instanceof AssemblerBlockEntity assembler && player instanceof PlayerExtension cyborg) {
-					if (!cyborg.isCyborg() && assembler.isComplete()) {
-						cyborg.setCyborg(true);
-
-						cyborg.setCyborgHead(assembler.getHead());
-						cyborg.setCyborgBody(assembler.getBody());
-						cyborg.setCyborgRightArm(assembler.getRightArm());
-						cyborg.setCyborgLeftArm(assembler.getLeftArm());
-						cyborg.setCyborgRightLeg(assembler.getRightLeg());
-						cyborg.setCyborgLeftLeg(assembler.getLeftLeg());
-
-						if (!assembler.getModule(1).isEmpty())
-							if (assembler.getModule(1).getItem() instanceof CyborgModuleItem)
-								cyborg.setModule1(assembler.getModule(1));
-							else ItemScatterer.spawn(world, assemblerPos.getX(), assemblerPos.getY(), assemblerPos.getZ(), assembler.getModule(1));
-
-						if (!assembler.getModule(2).isEmpty())
-							if (assembler.getModule(2).getItem() instanceof CyborgModuleItem)
-								cyborg.setModule2(assembler.getModule(2));
-							else ItemScatterer.spawn(world, assemblerPos.getX(), assemblerPos.getY(), assemblerPos.getZ(), assembler.getModule(2));
-
-						if (!assembler.getModule(3).isEmpty())
-							if (assembler.getModule(3).getItem() instanceof CyborgModuleItem)
-								cyborg.setModule3(assembler.getModule(3));
-							else ItemScatterer.spawn(world, assemblerPos.getX(), assemblerPos.getY(), assemblerPos.getZ(), assembler.getModule(3));
-
-						assembler.getItems().clear();
-						EnergyStorage.transfer(assembler.energyStorage, cyborg.getEnergyStorage(), cyborg.getCapacity());
-						assembler.updateListeners();
-
-						double maxHealth = 0;
-
-						for(CyborgPartType partType : CyborgPartType.values()) {
-							maxHealth = maxHealth + ((CyborgPartItem)cyborg.getCyborgPart(partType).getItem()).getHealth();
-						}
-						maxHealth = maxHealth - player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).getBaseValue();
-
-						player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).addPersistentModifier(new EntityAttributeModifier(CyberbopMod.id("cyborg_health"), maxHealth, EntityAttributeModifier.Operation.ADD_VALUE));
-						player.teleport((ServerWorld) world, assemblerPos.getX() + 0.5, assemblerPos.getY() + 1, assemblerPos.getZ() + 0.5, Set.of(), 180, 0);
-						return ActionResult.SUCCESS;
+			if(blockEntity instanceof AssemblerBlockEntity assembler && player instanceof PlayerExtension cyborg) {
+				if (!cyborg.isCyborg() && assembler.isComplete()) {
+					if(!world.isClient) {
+						becomeCyborg(world, player, assemblerPos, assembler);
+						player.teleport((ServerWorld) world, assemblerPos.getX() + 0.5, assemblerPos.getY() + 1, assemblerPos.getZ() + 0.5, Set.of(), assembler.getCachedState().get(AssemblerBlock.FACING).asRotation(), 0);
 					}
-					else if (cyborg.isCyborg() && assembler.isEmpty()) {
-						if (!assembler.isFull()) {
-							EnergyStorage.transfer(cyborg.getEnergyStorage(), assembler.energyStorage, assembler.getCapacity());
-						}
-						cyborg.setEnergyStored(0);
-						cyborg.setCyborg(false);
-						assembler.setStack(0, cyborg.getCyborgHead());
-						assembler.setStack(1, cyborg.getCyborgBody());
-						assembler.setStack(2, cyborg.getCyborgRightArm());
-						assembler.setStack(3, cyborg.getCyborgLeftArm());
-						assembler.setStack(4, cyborg.getCyborgRightLeg());
-						assembler.setStack(5, cyborg.getCyborgLeftLeg());
-
-						if (cyborg.getModule1().getItem() instanceof CyborgModuleItem moduleItem) moduleItem.onModuleRemoved((ServerWorld) world, player);
-						if (cyborg.getModule2().getItem() instanceof CyborgModuleItem moduleItem) moduleItem.onModuleRemoved((ServerWorld) world, player);
-						if (cyborg.getModule3().getItem() instanceof CyborgModuleItem moduleItem) moduleItem.onModuleRemoved((ServerWorld) world, player);
-
-						assembler.setModule(1, cyborg.getModule1());
-						assembler.setModule(2, cyborg.getModule2());
-						assembler.setModule(3, cyborg.getModule3());
-
-						cyborg.clearAllParts();
-						player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).removeModifier(CyberbopMod.id("cyborg_health"));
-
-						cyborg.setModule1(ItemStack.EMPTY);
-						cyborg.setModule2(ItemStack.EMPTY);
-						cyborg.setModule3(ItemStack.EMPTY);
-						assembler.updateListeners();
-						return ActionResult.SUCCESS;
+					return ActionResult.SUCCESS;
+				}
+				else if (cyborg.isCyborg() && assembler.isEmpty()) {
+					cyborg.getModules().forEach(stack -> {
+						if(stack.getItem() instanceof CyborgModuleItem moduleItem) moduleItem.onModuleRemoved(world, player);
+					});
+					if(!world.isClient) {
+						becomeFlesh(player, assembler);
 					}
+					return ActionResult.SUCCESS;
 				}
 			}
-			return ActionResult.PASS;
 		}
 		return ActionResult.PASS;
+	}
+
+	private void becomeFlesh(PlayerEntity player, AssemblerBlockEntity assembler) {
+		PlayerExtension cyborg = (PlayerExtension)player;
+
+		if (!assembler.isFull()) {
+			EnergyStorage.transfer(cyborg.getEnergyStorage(), assembler.energyStorage, assembler.getCapacity());
+		}
+		cyborg.setEnergyStored(0);
+		cyborg.setCyborg(false);
+		assembler.setStack(0, cyborg.getCyborgHead());
+		assembler.setStack(1, cyborg.getCyborgBody());
+		assembler.setStack(2, cyborg.getCyborgRightArm());
+		assembler.setStack(3, cyborg.getCyborgLeftArm());
+		assembler.setStack(4, cyborg.getCyborgRightLeg());
+		assembler.setStack(5, cyborg.getCyborgLeftLeg());
+
+		assembler.setModule(1, cyborg.getModule1());
+		assembler.setModule(2, cyborg.getModule2());
+		assembler.setModule(3, cyborg.getModule3());
+
+		cyborg.clearAllParts();
+		player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).removeModifier(CyberbopMod.id("cyborg_health"));
+
+		cyborg.setModule1(ItemStack.EMPTY);
+		cyborg.setModule2(ItemStack.EMPTY);
+		cyborg.setModule3(ItemStack.EMPTY);
+		assembler.updateListeners();
+	}
+
+	private void becomeCyborg(World world, PlayerEntity player, BlockPos assemblerPos, AssemblerBlockEntity assembler) {
+		PlayerExtension cyborg = (PlayerExtension)player;
+		cyborg.setCyborg(true);
+
+		cyborg.setCyborgHead(assembler.getHead());
+		cyborg.setCyborgBody(assembler.getBody());
+		cyborg.setCyborgRightArm(assembler.getRightArm());
+		cyborg.setCyborgLeftArm(assembler.getLeftArm());
+		cyborg.setCyborgRightLeg(assembler.getRightLeg());
+		cyborg.setCyborgLeftLeg(assembler.getLeftLeg());
+
+		if (!assembler.getModule(1).isEmpty())
+			if (assembler.getModule(1).getItem() instanceof CyborgModuleItem)
+				cyborg.setModule1(assembler.getModule(1));
+			else ItemScatterer.spawn(world, assemblerPos.getX(), assemblerPos.getY(), assemblerPos.getZ(), assembler.getModule(1));
+
+		if (!assembler.getModule(2).isEmpty())
+			if (assembler.getModule(2).getItem() instanceof CyborgModuleItem)
+				cyborg.setModule2(assembler.getModule(2));
+			else ItemScatterer.spawn(world, assemblerPos.getX(), assemblerPos.getY(), assemblerPos.getZ(), assembler.getModule(2));
+
+		if (!assembler.getModule(3).isEmpty())
+			if (assembler.getModule(3).getItem() instanceof CyborgModuleItem)
+				cyborg.setModule3(assembler.getModule(3));
+			else ItemScatterer.spawn(world, assemblerPos.getX(), assemblerPos.getY(), assemblerPos.getZ(), assembler.getModule(3));
+
+		assembler.getItems().clear();
+		EnergyStorage.transfer(assembler.energyStorage, cyborg.getEnergyStorage(), cyborg.getCapacity());
+		assembler.updateListeners();
+
+		double maxHealth = 0;
+
+		for(CyborgPartType partType : CyborgPartType.values()) {
+			maxHealth = maxHealth + ((CyborgPartItem)cyborg.getCyborgPart(partType).getItem()).getHealth();
+		}
+		maxHealth = maxHealth - player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).getBaseValue();
+
+		player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).addPersistentModifier(new EntityAttributeModifier(CyberbopMod.id("cyborg_health"), maxHealth, EntityAttributeModifier.Operation.ADD_VALUE));
+	}
+
+	@Override
+	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+		tooltip.addAll(Text.literal("Use controller to take control of the cyborg.").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
+		tooltip.addAll(Text.literal("Place nearby assembler to connect.").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
 	}
 
 

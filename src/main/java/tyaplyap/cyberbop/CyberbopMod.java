@@ -32,6 +32,7 @@ import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
 import tyaplyap.cyberbop.entity.FakePlayerEntity;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.item.CyberbopItems;
+import tyaplyap.cyberbop.packet.UseJetpackPacket;
 import tyaplyap.cyberbop.packet.DebugCablePacket;
 import tyaplyap.cyberbop.screen.AssemblerScreenHandler;
 import tyaplyap.cyberbop.screen.FurnaceGeneratorScreenHandler;
@@ -86,17 +87,14 @@ public class CyberbopMod implements ModInitializer {
 		CyberbopItems.init();
 		CyberbopBlockEntities.init();
 
+		UseJetpackPacket.registerC2SPackets();
+		UseJetpackPacket.registerS2CPackets();
+		UseJetpackPacket.registerServerReceivers();
+
 		FabricDefaultAttributeRegistry.register(FAKE_PLAYER_ENTITY, LivingEntity.createLivingAttributes());
 
-		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("cyberbop").then(literal("spawncyborg").executes(commandContext -> {
-			var player = commandContext.getSource().getPlayer();
-			var cyborg = new FakePlayerEntity(FAKE_PLAYER_ENTITY, commandContext.getSource().getWorld(), player);
-			cyborg.setPosition(commandContext.getSource().getPlayer().getPos());
-			commandContext.getSource().getWorld().spawnEntity(cyborg);
-
-			return 1;
-			}))
-			.then(literal("setstore").then(argument("energy", IntegerArgumentType.integer(0, Integer.MAX_VALUE)).executes(commandContext -> {
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
+			dispatcher.register(literal("cyberbop").requires(source -> source.hasPermissionLevel(4)).then(literal("setstore").then(argument("energy", IntegerArgumentType.integer(0, Integer.MAX_VALUE)).executes(commandContext -> {
 				if (commandContext.getSource().isExecutedByPlayer()) {
 					HitResult hitResult = commandContext.getSource().getPlayer().raycast(commandContext.getSource().getPlayer().getBlockInteractionRange(), 0.0F, false);
 					if (hitResult.getType() == HitResult.Type.BLOCK) {
@@ -125,11 +123,7 @@ public class CyberbopMod implements ModInitializer {
 					return 0;
 				}
 				return 0;
-			}))).executes(context -> {
-				context.getSource().sendFeedback(() -> Text.literal("Called /cyberbop with no arguments"), false);
-
-				return 1;
-			})));
+			})))));
 	}
 
 	public static Identifier id(String path) {

@@ -7,9 +7,11 @@
     "HungerManagerMixin",
     "PiglinBrainMixin",
     "PlayerEntityMixin",
-    "ServerPlayerMixin"
+    "ServerPlayerMixin",
+    "ServerPlayNetworkHandlerMixin"
   ],
   "client": [
+    "ClientPlayerMixin",
     "InGameHudMixin",
     "LivingEntityRenderMixin",
     "PlayerRendererMixin"

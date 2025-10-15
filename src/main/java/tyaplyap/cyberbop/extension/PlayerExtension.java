@@ -6,6 +6,7 @@ import tyaplyap.cyberbop.util.transfer.EnergyStorage;
 import tyaplyap.cyberbop.util.CyborgPartType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface PlayerExtension {
 	boolean isCyborg();
@@ -58,6 +59,13 @@ public interface PlayerExtension {
 		this.setCyborgLeftLeg(ItemStack.EMPTY);
 	}
 
+	default ItemStack getModule(Item module) {
+		for(ItemStack stack : getModules()) {
+			if(stack.isOf(module)) return stack;
+		}
+		return null;
+	}
+
 	ItemStack getModule1();
 	ItemStack getModule2();
 	ItemStack getModule3();
@@ -66,7 +74,7 @@ public interface PlayerExtension {
 	void setModule2(ItemStack module);
 	void setModule3(ItemStack module);
 
-	ArrayList<ItemStack> getModules();
+	List<ItemStack> getModules();
 
 	boolean containsModule(Item module);
 
@@ -77,4 +85,7 @@ public interface PlayerExtension {
 	int getCapacity();
 
 	EnergyStorage getEnergyStorage();
+
+//	Vec3d getAssemblePos();
+//	void setAssemblePos(Vec3d pos);
 }

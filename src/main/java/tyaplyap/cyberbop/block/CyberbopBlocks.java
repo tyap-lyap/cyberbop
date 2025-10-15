@@ -22,8 +22,8 @@ public class CyberbopBlocks {
 	public static final Block ASSEMBLER = add("assembler", new AssemblerBlock(AbstractBlock.Settings.create().requiresTool().strength(2.0f, 4.0f).nonOpaque()));
 
 	public static final Block ENERGY_WIRE = add("energy_wire", new EnergyWireBlock(AbstractBlock.Settings.create().strength(1.0f, 3.0f).sounds(BlockSoundGroup.METAL).nonOpaque()));
-	public static final Block SOLAR_PANEL = add("solar_panel", new SolarPanelBlock(AbstractBlock.Settings.create().requiresTool().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL)));
-	public static final Block ADVANCED_SOLAR_PANEL = add("advanced_solar_panel", new SolarPanelBlock(AbstractBlock.Settings.create().requiresTool().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL)));
+	public static final Block SOLAR_PANEL = add("solar_panel", new SolarPanelBlock(16000, 8, AbstractBlock.Settings.create().requiresTool().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL)));
+	public static final Block ADVANCED_SOLAR_PANEL = add("advanced_solar_panel", new SolarPanelBlock(32000, 24, AbstractBlock.Settings.create().requiresTool().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL)));
 	public static final Block CHARGING_PAD = add("charging_pad", new ChargingPadBlock(AbstractBlock.Settings.create().requiresTool().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL)));
 	public static final Block FURNACE_GENERATOR = add("furnace_generator", new FurnaceGeneratorBlock(AbstractBlock.Settings.create().requiresTool().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL)));
 

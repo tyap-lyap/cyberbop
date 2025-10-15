@@ -7,7 +7,7 @@
 
 Build your custom cyber body and experience the world through a new, better form.
 
-This mod introduces a simple cybernetics system, allowing you to craft and assemble a robotic body from individual parts like heads and legs, plus modules that will give you powers. Once you complete your build, you can seamlessly take control of your new mechanical body and gain new abilities, but make sure to keep your real body in a safe place, because it can still take damage.
+This mod introduces a simple cybernetics system, allowing you to craft and assemble a robotic body from individual parts like heads and legs, plus modules that will give you powers. Once you complete your build, you can seamlessly take control of your new mechanical body and gain new abilities.
 #### [Discord Server](https://discord.gg/DcemWeskeZ) | [CurseForge Page](https://curseforge.com/minecraft/mc-mods/cyberbop)
 
-![Image](https://media.forgecdn.net/attachments/1351/369/2025-10-09_01-11-45-png.png)
+![Image](https://media.forgecdn.net/attachments/1357/127/2025-10-14_15-18-26-png.png)

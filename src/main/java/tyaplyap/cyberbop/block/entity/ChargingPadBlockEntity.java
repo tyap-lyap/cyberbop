@@ -33,6 +33,6 @@ public class ChargingPadBlockEntity extends EnergyBlockEntity{
 
 	@Override
 	public int getCapacity() {
-		return 2400000;
+		return 16000;
 	}
 }

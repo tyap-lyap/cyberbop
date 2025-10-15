@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tyaplyap.cyberbop.client.render.parts.CyborgPartRenderers;
+import tyaplyap.cyberbop.client.render.CyborgPartRenderers;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.util.CyborgPartType;
 
