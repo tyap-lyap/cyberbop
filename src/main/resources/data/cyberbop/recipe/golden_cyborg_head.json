@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "I": {
+      "item": "minecraft:gold_ingot"
+    },
+    "H": {
+      "item": "cyberbop:basic_cyborg_head"
+    },
+    "B": {
+      "item": "cyberbop:battery"
+    }
+  },
+  "pattern": [
+    "IBI",
+    "IHI",
+    "IBI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cyberbop:golden_cyborg_head"
+  }
+}

@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cyberbop:furnace_generator"
+          "name": "cyberbop:battery_block"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "cyberbop:blocks/furnace_generator"
+  "random_sequence": "cyberbop:blocks/battery_block"
 }

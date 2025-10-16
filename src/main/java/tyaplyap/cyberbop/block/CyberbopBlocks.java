@@ -18,6 +18,7 @@ public class CyberbopBlocks {
 	public static final Map<Identifier, BlockItem> ITEMS = new LinkedHashMap<>();
 	public static final Map<Identifier, Block> BLOCKS = new LinkedHashMap<>();
 
+	public static final Block CHRONOSTEEL_BLOCK = add("chronosteel_block", new Block(AbstractBlock.Settings.create().requiresTool().strength(2.0f, 4.0f)));
 	public static final Block CONTROLLER = add("controller", new ControllerBlock(AbstractBlock.Settings.create().requiresTool().strength(2.0f, 4.0f)));
 	public static final Block ASSEMBLER = add("assembler", new AssemblerBlock(AbstractBlock.Settings.create().requiresTool().strength(2.0f, 4.0f).nonOpaque()));
 
@@ -25,7 +26,8 @@ public class CyberbopBlocks {
 	public static final Block SOLAR_PANEL = add("solar_panel", new SolarPanelBlock(16000, 8, AbstractBlock.Settings.create().requiresTool().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL)));
 	public static final Block ADVANCED_SOLAR_PANEL = add("advanced_solar_panel", new SolarPanelBlock(32000, 24, AbstractBlock.Settings.create().requiresTool().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL)));
 	public static final Block CHARGING_PAD = add("charging_pad", new ChargingPadBlock(AbstractBlock.Settings.create().requiresTool().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL)));
-	public static final Block FURNACE_GENERATOR = add("furnace_generator", new FurnaceGeneratorBlock(AbstractBlock.Settings.create().requiresTool().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL)));
+	public static final Block SOLID_FUEL_GENERATOR = add("solid_fuel_generator", new FurnaceGeneratorBlock(AbstractBlock.Settings.create().requiresTool().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL)));
+	public static final Block BATTERY_BLOCK = add("battery_block", new EnergyBatteryBlock(AbstractBlock.Settings.create().requiresTool().strength(1.0f, 3.0f).sounds(BlockSoundGroup.METAL)));
 
 	//Debug
 	public static final Block ENERGY_RECEIVER = add("energy_receiver", new EnergyReceiverBlock(AbstractBlock.Settings.create().strength(2.0f, 4.0f).sounds(BlockSoundGroup.METAL)));

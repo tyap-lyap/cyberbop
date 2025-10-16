@@ -63,7 +63,7 @@ public class SolarPanelBlockEntity extends EnergyBlockEntity{
 
 	@Override
 	public int getTransferRate() {
-		return 16;
+		return this.generationRate;
 	}
 
 	@Override

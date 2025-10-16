@@ -64,14 +64,14 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 	};
 
 	public FurnaceGeneratorBlockEntity(BlockPos blockPos, BlockState blockState) {
-		super(CyberbopBlockEntities.FURNACE_GENERATOR, blockPos, blockState);
+		super(CyberbopBlockEntities.SOLID_FUEL_GENERATOR, blockPos, blockState);
 	}
 
 	protected DefaultedList<ItemStack> inventory = DefaultedList.ofSize(2, ItemStack.EMPTY);
 
 	@Override
 	protected Text getContainerName() {
-		return Text.translatable("container.cyberbop.furnace_generator");
+		return Text.translatable("container.cyberbop.solid_fuel_generator");
 	}
 
 	@Override

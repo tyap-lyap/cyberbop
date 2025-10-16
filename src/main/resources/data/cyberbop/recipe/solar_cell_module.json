@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "cyberbop:chronosteel_ingot"
+    },
+    "H": {
+      "item": "minecraft:iron_helmet"
+    },
+    "B": {
+      "item": "cyberbop:battery"
+    },
+    "S": {
+      "item": "cyberbop:solar_cell"
+    },
+    "P": {
+      "item": "cyberbop:solar_panel"
+    }
+  },
+  "pattern": [
+    "SPS",
+    "BHB",
+    "AAA"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cyberbop:solar_cell_module"
+  }
+}

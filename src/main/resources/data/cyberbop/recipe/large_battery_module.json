@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "E": {
+      "item": "cyberbop:extra_battery_module"
+    },
+    "S": {
+      "item": "cyberbop:chronosteel_block"
+    },
+    "B": {
+      "item": "cyberbop:battery_block"
+    }
+  },
+  "pattern": [
+    "SES",
+    "EBE",
+    "SES"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cyberbop:large_battery_module"
+  }
+}

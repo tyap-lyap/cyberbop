@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_block"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "H": {
+      "item": "cyberbop:basic_cyborg_leg"
+    },
+    "B": {
+      "item": "cyberbop:battery"
+    }
+  },
+  "pattern": [
+    "IBI",
+    "DHD",
+    "IBI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cyberbop:advanced_cyborg_leg"
+  }
+}

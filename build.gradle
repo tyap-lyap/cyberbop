@@ -11,6 +11,18 @@ base {
 repositories {
 	maven { url 'https://maven.nucleoid.xyz' }
 	maven { url "https://maven.terraformersmc.com" } //modmenu
+
+	exclusiveContent {
+		forRepository {
+			maven {
+				name = "Modrinth"
+				url = "https://api.modrinth.com/maven"
+			}
+		}
+		filter {
+			includeGroup "maven.modrinth"
+		}
+	}
 }
 
 dependencies {
@@ -24,6 +36,8 @@ dependencies {
 	modImplementation include("eu.pb4:polymer-virtual-entity:0.9.18+1.21.1")
 
 	modRuntimeOnly "com.terraformersmc:modmenu:11.0.3"
+	modImplementation "maven.modrinth:emi:1.1.22+1.21.1+fabric"
+
 }
 
 loom {

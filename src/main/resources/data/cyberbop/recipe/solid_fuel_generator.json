@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_block"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "S": {
+      "item": "cyberbop:chronosteel_ingot"
+    },
+    "B": {
+      "item": "cyberbop:battery"
+    },
+    "F": {
+      "item": "minecraft:blast_furnace"
+    }
+  },
+  "pattern": [
+    "SSS",
+    "BFB",
+    "IRI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cyberbop:solid_fuel_generator"
+  }
+}

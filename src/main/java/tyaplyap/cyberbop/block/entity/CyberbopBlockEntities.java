@@ -30,6 +30,11 @@ public class CyberbopBlockEntities {
 		BlockEntityType.Builder.create(BatteryTestBlockEntity::new, CyberbopBlocks.BATTERY_TEST).build()
 	);
 
+	public static final BlockEntityType<EnergyBatteryBlockEntity> BATTERY_BLOCK = register(
+		"battery_block",
+		BlockEntityType.Builder.create(EnergyBatteryBlockEntity::new, CyberbopBlocks.BATTERY_BLOCK).build()
+	);
+
 	public static final BlockEntityType<SolarPanelBlockEntity> SOLAR_PANEL = register(
 		"solar_panel",
 		BlockEntityType.Builder.create((pos, state) -> ((SolarPanelBlock)state.getBlock()).createBlockEntity(pos, state), CyberbopBlocks.SOLAR_PANEL, CyberbopBlocks.ADVANCED_SOLAR_PANEL).build()
@@ -40,9 +45,9 @@ public class CyberbopBlockEntities {
 		BlockEntityType.Builder.create(ChargingPadBlockEntity::new, CyberbopBlocks.CHARGING_PAD).build()
 	);
 
-	public static final BlockEntityType<FurnaceGeneratorBlockEntity> FURNACE_GENERATOR = register(
-		"furnace_generator",
-		BlockEntityType.Builder.create(FurnaceGeneratorBlockEntity::new, CyberbopBlocks.FURNACE_GENERATOR).build()
+	public static final BlockEntityType<FurnaceGeneratorBlockEntity> SOLID_FUEL_GENERATOR = register(
+		"solid_fuel_generator",
+		BlockEntityType.Builder.create(FurnaceGeneratorBlockEntity::new, CyberbopBlocks.SOLID_FUEL_GENERATOR).build()
 	);
 
 	public static final BlockEntityType<ControllerBlockEntity> CONTROLLER = register(
@@ -56,7 +61,7 @@ public class CyberbopBlockEntities {
 	);
 
 	public static void init() {
-		IEnergyStorage.SIDED.registerForBlockEntities((blockEntity, context) ->  ((EnergyBlockEntity) blockEntity).energyStorage, BATTERY_TEST, SOLAR_PANEL, ENERGY_RECEIVER, ASSEMBLER, FURNACE_GENERATOR, ENERGY_RECEIVER, CHARGING_PAD);
+		IEnergyStorage.SIDED.registerForBlockEntities((blockEntity, context) ->  ((EnergyBlockEntity) blockEntity).energyStorage, BATTERY_TEST, SOLAR_PANEL, ENERGY_RECEIVER, ASSEMBLER, SOLID_FUEL_GENERATOR, ENERGY_RECEIVER, CHARGING_PAD);
 	}
 
 	public static <T extends BlockEntityType<?>> T register(String path, T blockEntityType) {

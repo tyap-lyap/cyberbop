@@ -1,19 +1,23 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "A": {
-      "item": "minecraft:iron_block"
+    "S": {
+      "item": "cyberbop:chronosteel_block"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
     },
     "B": {
-      "item": "cyberbop:battery"
+      "item": "cyberbop:extra_battery_module"
     },
-    "S": {
+    "P": {
       "item": "cyberbop:solar_panel"
     }
   },
   "pattern": [
-    "SSS",
-    "ABA"
+    "PPP",
+    "SBS",
+    "SRS"
   ],
   "result": {
     "count": 1,

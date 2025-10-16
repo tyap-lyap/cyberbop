@@ -1,11 +1,11 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "C": {
-      "item": "minecraft:copper_ingot"
-    },
     "I": {
       "item": "minecraft:iron_ingot"
+    },
+    "C": {
+      "item": "minecraft:copper_block"
     },
     "B": {
       "item": "cyberbop:battery"
@@ -13,7 +13,8 @@
   },
   "pattern": [
     "CCC",
-    "IBI"
+    "IBI",
+    "III"
   ],
   "result": {
     "count": 1,

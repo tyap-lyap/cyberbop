@@ -2,19 +2,19 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "R": {
-      "item": "minecraft:redstone"
+      "item": "minecraft:redstone_block"
     },
     "I": {
-      "item": "minecraft:heavy_weighted_pressure_plate"
+      "item": "minecraft:iron_ingot"
     }
   },
   "pattern": [
-    "IR ",
-    "RRR",
-    " RI"
+    " I ",
+    "IRI",
+    " I "
   ],
   "result": {
-    "count": 1,
+    "count": 3,
     "id": "cyberbop:battery"
   }
 }

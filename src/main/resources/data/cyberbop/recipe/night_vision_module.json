@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": {
+      "item": "cyberbop:chronosteel_ingot"
+    },
+    "C": {
+      "item": "minecraft:golden_carrot"
+    },
+    "B": {
+      "item": "cyberbop:battery"
+    },
+    "L": {
+      "item": "minecraft:redstone_lamp"
+    }
+  },
+  "pattern": [
+    "SLS",
+    "CBC",
+    "SLS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cyberbop:night_vision_module"
+  }
+}

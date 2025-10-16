@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "cyberbop:block/battery_block_empty"
+    },
+    "lit=true": {
+      "model": "cyberbop:block/battery_block"
+    }
+  }
+}
+

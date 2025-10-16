@@ -1,5 +1,5 @@
 {
-  "container.cyberbop.furnace_generator": "Furnace Generator",
+  "container.cyberbop.solid_fuel_generator": "Solid Fuel Generator",
   "container.cyberbop.assembler": "Assembler",
 
   "itemGroup.cyberbop.items": "Cyberbop Items",
@@ -8,11 +8,14 @@
   "item.cyberbop.jetpack_module": "Jetpack Module",
   "item.cyberbop.flight_module": "Flight Module",
   "item.cyberbop.extra_battery_module": "Extra Battery Module",
+  "item.cyberbop.large_battery_module": "Large Battery Module",
+  "item.cyberbop.creative_battery_module": "Creative Battery Module",
   "item.cyberbop.battery": "Battery",
   "item.cyberbop.solar_cell_module": "Solar Cell Module",
   "item.cyberbop.solar_cell": "Solar Cell",
   "item.cyberbop.night_vision_module": "Night Vision Module",
   "item.cyberbop.xray_vision_module": "X-Ray Vision Module",
+  "item.cyberbop.chronosteel_ingot": "Chronosteel Ingot",
 
   "item.cyberbop.basic_cyborg_head": "Basic Cyborg Head",
   "item.cyberbop.basic_cyborg_body": "Basic Cyborg Body",
@@ -37,7 +40,9 @@
   "block.cyberbop.solar_panel": "Solar Panel",
   "block.cyberbop.advanced_solar_panel": "Advanced Solar Panel",
   "block.cyberbop.charging_pad": "Charging Pad",
-  "block.cyberbop.furnace_generator": "Furnace Generator",
+  "block.cyberbop.solid_fuel_generator": "Solid Fuel Generator",
+  "block.cyberbop.battery_block": "Battery Block",
+  "block.cyberbop.chronosteel_block": "Chronosteel Block",
 
   "block.cyberbop.energy_generator": "Debug Energy Generator",
   "block.cyberbop.energy_receiver": "Debug Energy Receiver",

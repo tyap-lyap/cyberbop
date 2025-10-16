@@ -1,11 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "A": {
+    "I": {
       "item": "minecraft:iron_block"
     },
-    "I": {
-      "item": "minecraft:iron_ingot"
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "S": {
+      "item": "cyberbop:chronosteel_ingot"
     },
     "B": {
       "item": "cyberbop:battery"
@@ -15,9 +18,9 @@
     }
   },
   "pattern": [
-    "III",
+    "SSS",
     "BFB",
-    "AIA"
+    "IRI"
   ],
   "result": {
     "count": 1,

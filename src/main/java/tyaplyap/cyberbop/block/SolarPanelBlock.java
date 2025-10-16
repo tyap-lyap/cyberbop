@@ -13,6 +13,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -22,7 +23,7 @@ import tyaplyap.cyberbop.block.entity.SolarPanelBlockEntity;
 
 import java.util.List;
 
-public class SolarPanelBlock extends BlockWithEntity {
+public class SolarPanelBlock extends BlockWithEntity implements WireConnectable {
 
 	protected static final VoxelShape SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0);
 
@@ -58,6 +59,12 @@ public class SolarPanelBlock extends BlockWithEntity {
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
 		return world.isClient ? null : validateTicker(type, CyberbopBlockEntities.SOLAR_PANEL, SolarPanelBlockEntity::tick);
+	}
+
+	//TODO: не передавать энергию если false
+	@Override
+	public boolean canConnect(BlockState state, BlockPos pos, BlockState wireState, BlockPos wirePos, Direction direction) {
+		return !direction.equals(Direction.DOWN);
 	}
 
 	@Override

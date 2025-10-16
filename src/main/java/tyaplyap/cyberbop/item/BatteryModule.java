@@ -7,14 +7,20 @@ import net.minecraft.util.Formatting;
 
 import java.util.List;
 
-public class ExtraBatteryModule extends CyborgModuleItem {
+public class BatteryModule extends CyborgModuleItem {
+	int energyCapacity;
 
-	public ExtraBatteryModule(Settings settings) {
+	public BatteryModule(int energyCapacity, Settings settings) {
 		super(settings);
+		this.energyCapacity = energyCapacity;
+	}
+
+	public int getEnergyCapacity() {
+		return energyCapacity;
 	}
 
 	@Override
 	public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-		tooltip.add(Text.literal("+32000 Energy Capacity").formatted(Formatting.GRAY));
+		tooltip.add(Text.literal("+" + getEnergyCapacity() + " Energy Capacity").formatted(Formatting.GRAY));
 	}
 }

@@ -13,6 +13,7 @@
   "client": [
     "ClientPlayerMixin",
     "InGameHudMixin",
+    "LightmapTextureManagerMixin",
     "LivingEntityRenderMixin",
     "PlayerRendererMixin"
   ],

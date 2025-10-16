@@ -109,7 +109,7 @@ public class FurnaceGeneratorBlock extends BlockWithEntity {
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-		return world.isClient ? null : validateTicker(type, CyberbopBlockEntities.FURNACE_GENERATOR, FurnaceGeneratorBlockEntity::tick);
+		return world.isClient ? null : validateTicker(type, CyberbopBlockEntities.SOLID_FUEL_GENERATOR, FurnaceGeneratorBlockEntity::tick);
 	}
 
 	@Nullable

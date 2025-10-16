@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tyaplyap.cyberbop.extension.PlayerExtension;
+import tyaplyap.cyberbop.item.BatteryModule;
 import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.item.CyborgModuleItem;
 import tyaplyap.cyberbop.item.CyborgPartItem;
@@ -221,7 +222,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 
 	public int getCapacity() {
 		int capacity = 0;
-		if(containsModule(CyberbopItems.EXTRA_BATTERY_MODULE)) capacity = capacity + 32000;
+
+		for(ItemStack stack : getModules()) {
+			if(stack.getItem() instanceof BatteryModule batteryModule) {
+				capacity = capacity + batteryModule.getEnergyCapacity();
+			}
+		}
 
 		for(CyborgPartType partType : CyborgPartType.values()) {
 			if(getCyborgPart(partType).getItem() instanceof CyborgPartItem partItem) {

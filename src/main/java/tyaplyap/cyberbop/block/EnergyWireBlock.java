@@ -25,15 +25,18 @@ import tyaplyap.cyberbop.block.entity.EnergyWireBlockEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class EnergyWireBlock extends BlockWithEntity {
+	public static final TagKey<Block> WIRE_CONNECTABLE = TagKey.of(RegistryKeys.BLOCK, CyberbopMod.id("wire_connectable"));
+
 	public static final BooleanProperty UP = Properties.UP;
 	public static final BooleanProperty DOWN = Properties.DOWN;
 	public static final BooleanProperty NORTH = Properties.NORTH;
 	public static final BooleanProperty EAST = Properties.EAST;
 	public static final BooleanProperty SOUTH = Properties.SOUTH;
 	public static final BooleanProperty WEST = Properties.WEST;
-	public static final BooleanProperty[] WIRE_DIRECTIONS = {UP, DOWN, NORTH, EAST, SOUTH, WEST};
+	public static final Map<Direction, BooleanProperty> WIRE_DIRECTIONS = Map.of(Direction.UP, UP, Direction.DOWN, DOWN, Direction.NORTH, NORTH, Direction.EAST, EAST, Direction.SOUTH, SOUTH, Direction.WEST, WEST);
 
 	protected static final VoxelShape SHAPE = Block.createCuboidShape(4.0, 4.0, 4.0, 12.0, 12.0, 12.0);
 	protected static final VoxelShape SHAPE_Z = Block.createCuboidShape(4.0, 4.0, 12.0, 12.0, 12.0, 16.0);
@@ -79,7 +82,7 @@ public class EnergyWireBlock extends BlockWithEntity {
 	private List<VoxelShape> getSideOutline(BlockState state) {
 		List<VoxelShape> shapes = new ArrayList<>();
 
-		for(var wireDirection : WIRE_DIRECTIONS) {
+		for(var wireDirection : WIRE_DIRECTIONS.values()) {
 			if (state.get(wireDirection)) {
 				if (wireDirection.equals(UP)) {
 					shapes.add(SHAPE_Y);
@@ -114,55 +117,39 @@ public class EnergyWireBlock extends BlockWithEntity {
 		return world.isClient ? null : validateTicker(type, CyberbopBlockEntities.ENERGY_WIRE, EnergyWireBlockEntity::tick);
 	}
 
-	public boolean canConnect(BlockState state) {
-		return state.isIn(TagKey.of(RegistryKeys.BLOCK, CyberbopMod.id("wire_connectable")));
-	}
-
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		BlockState state = getDefaultState();
-		BlockState down = ctx.getWorld().getBlockState(ctx.getBlockPos().down());
-		state = state.with(DOWN, canConnect(down));
+		BlockState wireState = getDefaultState();
+		BlockPos wirePos = ctx.getBlockPos();
 
-		BlockState up = ctx.getWorld().getBlockState(ctx.getBlockPos().up());
-		state = state.with(UP, canConnect(up));
+		for (Direction direction : Direction.values()) {
+			var directionPos = wirePos.offset(direction);
+			var directionState = ctx.getWorld().getBlockState(wirePos.offset(direction));
+			var property = WIRE_DIRECTIONS.get(direction);
 
-		BlockState west = ctx.getWorld().getBlockState(ctx.getBlockPos().add(-1, 0, 0));
-		state = state.with(WEST, canConnect(west));
-
-		BlockState east = ctx.getWorld().getBlockState(ctx.getBlockPos().add(1, 0, 0));
-		state = state.with(EAST, canConnect(east));
-
-		BlockState north = ctx.getWorld().getBlockState(ctx.getBlockPos().add(0, 0, -1));
-		state = state.with(NORTH, canConnect(north));
-
-		BlockState south = ctx.getWorld().getBlockState(ctx.getBlockPos().add(0, 0, 1));
-		state = state.with(SOUTH, canConnect(south));
-
-		return state;
+			if(directionState.getBlock() instanceof WireConnectable wc) {
+				wireState = wireState.with(property, wc.canConnect(directionState, directionPos, wireState, wirePos, direction));
+			}
+			else wireState = wireState.with(property, directionState.isIn(WIRE_CONNECTABLE));
+		}
+		return wireState;
 	}
 
 	@Override
-	protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-		BlockState down = world.getBlockState(pos.down());
-		state = state.with(DOWN, canConnect(down));
+	protected BlockState getStateForNeighborUpdate(BlockState state, Direction dir, BlockState neighborState, WorldAccess world, BlockPos wirePos, BlockPos neighborPos) {
+		BlockState wireState = getDefaultState();
 
-		BlockState up = world.getBlockState(pos.up());
-		state = state.with(UP, canConnect(up));
+		for (Direction direction : Direction.values()) {
+			var directionPos = wirePos.offset(direction);
+			var directionState = world.getBlockState(wirePos.offset(direction));
+			var property = WIRE_DIRECTIONS.get(direction);
 
-		BlockState west = world.getBlockState(pos.add(-1, 0, 0));
-		state = state.with(WEST, canConnect(west));
+			if(directionState.getBlock() instanceof WireConnectable wc) {
+				wireState = wireState.with(property, wc.canConnect(directionState, directionPos, wireState, wirePos, direction));
+			}
+			else wireState = wireState.with(property, directionState.isIn(WIRE_CONNECTABLE));
+		}
 
-		BlockState east = world.getBlockState(pos.add(1, 0, 0));
-		state = state.with(EAST, canConnect(east));
-
-		BlockState north = world.getBlockState(pos.add(0, 0, -1));
-		state = state.with(NORTH, canConnect(north));
-
-		BlockState south = world.getBlockState(pos.add(0, 0, 1));
-		state = state.with(SOUTH, canConnect(south));
-
-
-		return state;
+		return wireState;
 	}
 }

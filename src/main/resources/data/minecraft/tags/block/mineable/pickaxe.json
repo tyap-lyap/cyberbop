@@ -1,12 +1,14 @@
 {
   "replace": false,
   "values": [
-    "cyberbop:furnace_generator",
+    "cyberbop:solid_fuel_generator",
     "cyberbop:controller",
     "cyberbop:assembler",
     "cyberbop:energy_wire",
     "cyberbop:solar_panel",
     "cyberbop:advanced_solar_panel",
-    "cyberbop:charging_pad"
+    "cyberbop:charging_pad",
+    "cyberbop:chronosteel_block",
+    "cyberbop:battery_block"
   ]
 }

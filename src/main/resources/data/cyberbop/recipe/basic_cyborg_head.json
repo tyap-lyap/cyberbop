@@ -1,26 +1,26 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "A": {
-      "item": "minecraft:iron_block"
-    },
     "I": {
       "item": "minecraft:iron_ingot"
     },
+    "C": {
+      "item": "minecraft:copper_block"
+    },
+    "H": {
+      "item": "minecraft:iron_helmet"
+    },
     "B": {
       "item": "cyberbop:battery"
-    },
-    "F": {
-      "item": "minecraft:furnace"
     }
   },
   "pattern": [
-    "III",
-    "BFB",
-    "AIA"
+    "ICI",
+    "BHB",
+    "ICI"
   ],
   "result": {
     "count": 1,
-    "id": "cyberbop:furnace_generator"
+    "id": "cyberbop:basic_cyborg_head"
   }
 }

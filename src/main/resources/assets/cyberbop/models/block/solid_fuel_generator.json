@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "cyberbop:block/solid_fuel_generator_front",
+    "side": "cyberbop:block/solid_fuel_generator_side",
+    "top": "cyberbop:block/solid_fuel_generator_top"
+  }
+}

@@ -1,7 +1,6 @@
 package tyaplyap.cyberbop.item;
 
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
@@ -14,6 +13,7 @@ import tyaplyap.cyberbop.extension.PlayerExtension;
 import java.util.List;
 
 public class NightVisionModule extends CyborgModuleItem {
+	static float nightVisionStrength = 0.0F;
 
 	public NightVisionModule(Settings settings) {
 		super(settings);
@@ -22,20 +22,26 @@ public class NightVisionModule extends CyborgModuleItem {
 	@Override
 	public void tick(ServerWorld world, PlayerEntity player, PlayerExtension ex) {
 		if(ex.getEnergyStored() > 0) {
-			if (!player.hasStatusEffect(StatusEffects.NIGHT_VISION) || player.getWorld().getTime() % 40L == 0L) {
-				player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 250, 0, false, false));
-			}
+			if(world.getTime() % 4 == 0) ex.setEnergyStored(Math.max(ex.getEnergyStored() - 1, 0));
 		}
-		else {
-			if(player.hasStatusEffect(StatusEffects.NIGHT_VISION)) player.removeStatusEffect(StatusEffects.NIGHT_VISION);
+	}
+
+	@Override
+	public void clientTick(ClientWorld world, PlayerEntity player, PlayerExtension extension) {
+		if(extension.getEnergyStored() > 0) {
+			if(nightVisionStrength < 1.0F) {
+				nightVisionStrength = nightVisionStrength + 0.01F;
+			}
 		}
 	}
 
 	@Override
 	public void onModuleRemoved(World world, PlayerEntity player) {
-		if(!world.isClient()) {
-			player.removeStatusEffect(StatusEffects.NIGHT_VISION);
-		}
+		if(world.isClient()) nightVisionStrength = 0.0F;
+	}
+
+	public static float getNightVisionStrength() {
+		return nightVisionStrength;
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "I": {
-      "item": "minecraft:iron_ingot"
+    "C": {
+      "item": "minecraft:copper_ingot"
     },
     "R": {
       "item": "minecraft:redstone"
@@ -11,13 +11,13 @@
       "item": "minecraft:quartz"
     },
     "G": {
-      "item": "minecraft:glass_pane"
+      "item": "minecraft:glass"
     }
   },
   "pattern": [
     "GGG",
     "QQQ",
-    "IRI"
+    "CRC"
   ],
   "result": {
     "count": 1,
