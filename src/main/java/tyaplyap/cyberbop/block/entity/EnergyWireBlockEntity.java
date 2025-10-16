@@ -105,6 +105,7 @@ public class EnergyWireBlockEntity extends BlockEntity {
 					}
 				}
 			}
+			}
 				if (!GENERATOR.isEmpty()) {
 					if (!RECEIVER.isEmpty()) {
 						blockEntity.transferEnergy(GENERATOR, RECEIVER);
@@ -122,7 +123,6 @@ public class EnergyWireBlockEntity extends BlockEntity {
 			storages.clear();
 			QueueWires.clear();
 			blockEntity.ownerCable = null;
-		}
 	}
 
 	private boolean isStoragesFull(List<EnergyStorage> storages) {
