@@ -81,7 +81,6 @@ public class EnergyBatteryBlock extends BlockWithEntity implements WireConnectab
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
 		return world.isClient ? null : validateTicker(type, CyberbopBlockEntities.BATTERY_BLOCK, (world1, pos, state1, blockEntity) -> {
 			EnergyBlockEntity.BatteryTick(world, pos, state, blockEntity);
-			DebugUtil.updateEnergyDebug(world, pos, state, blockEntity);
 			if (world.getTime() % 20 == 0) {
 				float p = ((float) blockEntity.getEnergyStored() / (float) blockEntity.getCapacity());
 				int level = 0;

@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -41,12 +42,14 @@ public class CyberbopModClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		//TEST//
-		BlockEntityRendererFactories.register(CyberbopBlockEntities.ENERGY_GENERATOR, (BlockEntityRendererFactory.Context ctx) -> new DebugEnergyRenderer(CyberbopBlocks.ENERGY_GENERATOR, ctx));
-		BlockEntityRendererFactories.register(CyberbopBlockEntities.ENERGY_RECEIVER, (BlockEntityRendererFactory.Context ctx) -> new DebugEnergyRenderer(CyberbopBlocks.ENERGY_RECEIVER, ctx));
-		BlockEntityRendererFactories.register(CyberbopBlockEntities.SOLAR_PANEL, (BlockEntityRendererFactory.Context ctx) -> new DebugEnergyRenderer(CyberbopBlocks.SOLAR_PANEL, ctx));
-		BlockEntityRendererFactories.register(CyberbopBlockEntities.BATTERY_TEST, (BlockEntityRendererFactory.Context ctx) -> new DebugEnergyRenderer(CyberbopBlocks.BATTERY_TEST, ctx));
-		BlockEntityRendererFactories.register(CyberbopBlockEntities.CHARGING_PAD, (BlockEntityRendererFactory.Context ctx) -> new DebugEnergyRenderer(CyberbopBlocks.CHARGING_PAD, ctx));
-		BlockEntityRendererFactories.register(CyberbopBlockEntities.SOLID_FUEL_GENERATOR, (BlockEntityRendererFactory.Context ctx) -> new DebugEnergyRenderer(CyberbopBlocks.SOLID_FUEL_GENERATOR, ctx));
+		if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+			BlockEntityRendererFactories.register(CyberbopBlockEntities.ENERGY_GENERATOR, (BlockEntityRendererFactory.Context ctx) -> new DebugEnergyRenderer(CyberbopBlocks.ENERGY_GENERATOR, ctx));
+			BlockEntityRendererFactories.register(CyberbopBlockEntities.ENERGY_RECEIVER, (BlockEntityRendererFactory.Context ctx) -> new DebugEnergyRenderer(CyberbopBlocks.ENERGY_RECEIVER, ctx));
+			BlockEntityRendererFactories.register(CyberbopBlockEntities.SOLAR_PANEL, (BlockEntityRendererFactory.Context ctx) -> new DebugEnergyRenderer(CyberbopBlocks.SOLAR_PANEL, ctx));
+			BlockEntityRendererFactories.register(CyberbopBlockEntities.BATTERY_TEST, (BlockEntityRendererFactory.Context ctx) -> new DebugEnergyRenderer(CyberbopBlocks.BATTERY_TEST, ctx));
+			BlockEntityRendererFactories.register(CyberbopBlockEntities.CHARGING_PAD, (BlockEntityRendererFactory.Context ctx) -> new DebugEnergyRenderer(CyberbopBlocks.CHARGING_PAD, ctx));
+			BlockEntityRendererFactories.register(CyberbopBlockEntities.SOLID_FUEL_GENERATOR, (BlockEntityRendererFactory.Context ctx) -> new DebugEnergyRenderer(CyberbopBlocks.SOLID_FUEL_GENERATOR, ctx));
+		}
 		//TEST//
 		ClientPlayNetworking.registerGlobalReceiver(EnergyGuiUpdatePacket.ID, (payload, context) -> {
 			context.client().execute(() -> {
