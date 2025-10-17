@@ -203,11 +203,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	void tick(CallbackInfo ci) {
-		if (PlayerEntity.class.cast(this).age % 100L == 0L) {
-			PlayerEntity.class.cast(this).damage(getWorld().getDamageSources().hotFloor(), 1.0F);
-		}
 		if((Object)this instanceof ServerPlayerEntity player) {
-
 			if(isCyborg()) {
 				if(player.interactionManager.getGameMode().equals(GameMode.SURVIVAL)) {
 					if (getEnergyStored() > 0) {
