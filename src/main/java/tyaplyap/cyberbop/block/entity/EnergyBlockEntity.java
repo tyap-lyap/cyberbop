@@ -12,29 +12,31 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import tyaplyap.cyberbop.util.transfer.BlockEnergyStorage;
 import tyaplyap.cyberbop.util.transfer.EnergyStorage;
 import tyaplyap.cyberbop.util.transfer.IEnergyStorage;
 import tyaplyap.cyberbop.util.DebugUtil;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 public abstract class EnergyBlockEntity extends BlockEntity  {
 //todo СДЕЛАТЬ СОХРАНЕНИЕ ЭНЕРГИИ ПРИ ЛОМАНИИИ!!!!!!!!!!!!!!!!!!!ё
-public final EnergyStorage energyStorage = new EnergyStorage() {
+public final BlockEnergyStorage energyStorage = new BlockEnergyStorage() {
 	@Override
-	public boolean canInsert(EnergyStorage source) {
-		return canInsertEnergy(source);
+	public void getDirectionIO(Map<Direction, TypeIO> direction) {
+		getDirectionsIO(direction);
 	}
 
 	@Override
-	public boolean canExtract(EnergyStorage target) {
-		return canExtractEnergy(target);
+	public boolean canInsert(EnergyStorage source, Type sourceType) {
+		return canInsertEnergy(source, sourceType);
 	}
 
+	@Override
+	public boolean canExtract(EnergyStorage target, Type sourceType) {
+		return canExtractEnergy(target, sourceType);
+	}
 	@Override
 	public Type type() {
 		return typeMachine();
@@ -61,9 +63,9 @@ public final EnergyStorage energyStorage = new EnergyStorage() {
 
 	abstract public int getCapacity();
 
-	abstract boolean canInsertEnergy(EnergyStorage source);
+	abstract boolean canInsertEnergy(EnergyStorage source, IEnergyStorage.Type sourceType);
 
-	abstract boolean canExtractEnergy(EnergyStorage target);
+	abstract boolean canExtractEnergy(EnergyStorage target, IEnergyStorage.Type sourceType);
 
 	public boolean isFull() {
 		return getEnergyStored() >= getCapacity();
@@ -76,6 +78,8 @@ public final EnergyStorage energyStorage = new EnergyStorage() {
 	public int getEnergyStored() {
 		return energyStorage.getEnergy();
 	}
+
+	abstract void getDirectionsIO(Map<Direction, BlockEnergyStorage.TypeIO> direction);
 
 	@Override
 	public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
@@ -97,14 +101,29 @@ public final EnergyStorage energyStorage = new EnergyStorage() {
 	public static void BatteryTick (World world, BlockPos pos, BlockState state, EnergyBlockEntity blockEntity) {
 		DebugUtil.updateEnergyDebug(world, pos, state, blockEntity);
 		if (blockEntity.typeMachine().equals(IEnergyStorage.Type.BATTERY) || blockEntity.typeMachine().equals(IEnergyStorage.Type.GENERATOR)) {
-			EnergyStorage energyStorageTEST;
+			BlockEnergyStorage blockEnergyStorage;
 			List<Direction> directions = new ArrayList<>(Arrays.stream(Direction.values()).toList());
 			Collections.shuffle(directions);
 			for (var direction : directions) {
-				energyStorageTEST = IEnergyStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite());
-				EnergyStorage.transfer(blockEntity.energyStorage, energyStorageTEST, blockEntity.getTransferRate());
+				blockEnergyStorage = BlockEnergyStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite());
+				if (blockEnergyStorage != null && blockEntity.canIO(blockEntity.energyStorage, direction, false) && blockEntity.canIO(blockEnergyStorage, direction.getOpposite(), true)) {
+						EnergyStorage.transfer(blockEntity.energyStorage, blockEnergyStorage, blockEntity.getTransferRate(), blockEntity.typeMachine());
+				}
+
 			}
 		}
+	}
+
+	public boolean canIO(BlockEnergyStorage energyStorage, Direction direction, boolean input) {
+		BlockEnergyStorage.TypeIO type = energyStorage.directionIO.get(direction);
+
+		if (type.equals(BlockEnergyStorage.TypeIO.IO)) return true;
+
+		if (input && type.equals(BlockEnergyStorage.TypeIO.INPUT)) return true;
+
+		if (!input && type.equals(BlockEnergyStorage.TypeIO.OUTPUT)) return true;
+
+		return false;
 	}
 
 	@Override

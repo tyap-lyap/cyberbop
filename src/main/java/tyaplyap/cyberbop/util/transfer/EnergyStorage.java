@@ -2,15 +2,20 @@ package tyaplyap.cyberbop.util.transfer;
 
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
+import net.minecraft.util.math.Direction;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class EnergyStorage extends SnapshotParticipant<Integer> implements IEnergyStorage{
 	public int storedEnergy;
 
-	public EnergyStorage() {
-	}
+	public EnergyStorage() {}
 
-	public static int transfer(EnergyStorage source, EnergyStorage target, int transferRate) {
-		if (source != null && target != null && source.canExtract(target) && target.canInsert(source)) {
+
+	public static int transfer(EnergyStorage source, EnergyStorage target, int transferRate, Type sourceType) {
+		if (source != null && target != null && source.canExtract(target, sourceType) && target.canInsert(source, sourceType)) {
 			try (Transaction transaction = Transaction.openOuter()) {
 				int a = target.insert(Math.min(source.storedEnergy, transferRate), transaction);
 				if (a == source.extract(a, transaction)) {

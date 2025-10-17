@@ -61,7 +61,7 @@ public class CyberbopBlockEntities {
 	);
 
 	public static void init() {
-		IEnergyStorage.SIDED.registerForBlockEntities((blockEntity, context) ->  ((EnergyBlockEntity) blockEntity).energyStorage, BATTERY_TEST, SOLAR_PANEL, ENERGY_RECEIVER, ASSEMBLER, SOLID_FUEL_GENERATOR, ENERGY_RECEIVER, CHARGING_PAD);
+		IEnergyStorage.SIDED.registerForBlockEntities((blockEntity, context) ->  ((EnergyBlockEntity) blockEntity).energyStorage, BATTERY_TEST, SOLAR_PANEL, ENERGY_RECEIVER, ASSEMBLER, SOLID_FUEL_GENERATOR, ENERGY_RECEIVER, CHARGING_PAD, BATTERY_BLOCK, ENERGY_GENERATOR);
 	}
 
 	public static <T extends BlockEntityType<?>> T register(String path, T blockEntityType) {

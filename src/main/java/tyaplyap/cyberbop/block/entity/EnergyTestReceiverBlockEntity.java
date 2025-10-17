@@ -4,11 +4,15 @@ import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import tyaplyap.cyberbop.block.EnergyReceiverBlock;
+import tyaplyap.cyberbop.util.transfer.BlockEnergyStorage;
 import tyaplyap.cyberbop.util.transfer.EnergyStorage;
 import tyaplyap.cyberbop.util.transfer.IEnergyStorage;
 import tyaplyap.cyberbop.util.DebugUtil;
+
+import java.util.Map;
 
 public class EnergyTestReceiverBlockEntity extends EnergyBlockEntity {
 
@@ -39,6 +43,13 @@ public class EnergyTestReceiverBlockEntity extends EnergyBlockEntity {
 			}
 		if (wasActive != isActive) {
 			updateBlockState();
+		}
+	}
+
+	@Override
+	public void getDirectionsIO(Map<Direction, BlockEnergyStorage.TypeIO> directionMap) {
+		for (var direction : Direction.values()) {
+			directionMap.put(direction, BlockEnergyStorage.TypeIO.INPUT);
 		}
 	}
 
@@ -73,12 +84,12 @@ public class EnergyTestReceiverBlockEntity extends EnergyBlockEntity {
 	}
 
 	@Override
-	boolean canInsertEnergy(EnergyStorage source) {
+	boolean canInsertEnergy(EnergyStorage source, IEnergyStorage.Type sourceType) {
 		return true;
 	}
 
 	@Override
-	boolean canExtractEnergy(EnergyStorage target) {
+	boolean canExtractEnergy(EnergyStorage target, IEnergyStorage.Type sourceType) {
 		return false;
 	}
 

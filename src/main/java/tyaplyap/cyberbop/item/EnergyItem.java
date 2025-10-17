@@ -16,12 +16,12 @@ public abstract class EnergyItem extends Item {
 		}
 
 		@Override
-		public boolean canInsert(EnergyStorage target) {
+		public boolean canInsert(EnergyStorage target, Type sourceType) {
 			return true;
 		}
 
 		@Override
-		public boolean canExtract(EnergyStorage source) {
+		public boolean canExtract(EnergyStorage source, Type sourceType) {
 			return true;
 		}
 

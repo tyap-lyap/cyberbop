@@ -21,8 +21,11 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.screen.FurnaceGeneratorScreenHandler;
+import tyaplyap.cyberbop.util.transfer.BlockEnergyStorage;
 import tyaplyap.cyberbop.util.transfer.EnergyStorage;
 import tyaplyap.cyberbop.util.transfer.IEnergyStorage;
+
+import java.util.Map;
 
 import static net.minecraft.block.entity.AbstractFurnaceBlockEntity.createFuelTimeMap;
 
@@ -123,6 +126,13 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 	}
 
 	@Override
+	public void getDirectionsIO(Map<Direction, BlockEnergyStorage.TypeIO> directionMap) {
+		for (var direction : Direction.values()) {
+			directionMap.put(direction, BlockEnergyStorage.TypeIO.OUTPUT);
+		}
+	}
+
+	@Override
 	public int[] getAvailableSlots(Direction side) {
 		return new int[]{0,1};
 	}
@@ -171,12 +181,12 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 	}
 
 	@Override
-	boolean canInsertEnergy(EnergyStorage source) {
+	boolean canInsertEnergy(EnergyStorage source, IEnergyStorage.Type sourceType) {
 		return true;
 	}
 
 	@Override
-	boolean canExtractEnergy(EnergyStorage target) {
+	boolean canExtractEnergy(EnergyStorage target, IEnergyStorage.Type sourceType) {
 		return false;
 	}
 
@@ -194,20 +204,6 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 		Inventories.readNbt(nbt, this.inventory, registryLookup);
 		this.burnTime = nbt.getShort("BurnTime");
 	}
-
-//	@Override
-//	public Packet<ClientPlayPacketListener> toUpdatePacket() {
-//		return BlockEntityUpdateS2CPacket.create(this);
-//	}
-
-//	@Override
-//	public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
-//		NbtCompound nbtCompound = super.toInitialChunkDataNbt(registryLookup);
-//		this.writeNbt(nbtCompound, registryLookup);
-//		nbtCompound.putShort("BurnTime", (short) this.burnTime);
-//		nbtCompound.putInt("EnergyStored", this.getFreakEnergyStored());
-//		return nbtCompound;
-//	}
 
 	@Override
 	public BlockPos getScreenOpeningData(ServerPlayerEntity serverPlayerEntity) {

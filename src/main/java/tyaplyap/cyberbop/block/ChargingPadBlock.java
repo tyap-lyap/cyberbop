@@ -47,7 +47,7 @@ public class ChargingPadBlock extends BlockWithEntity {
 				CyberbopMod.LOGGER.warn("Ignoring receive energy attempt for Charging Pad without matching block entity at {}", pos);
 			} else {
 				if (0 < chargingPadBlock.getEnergyStored() && entity instanceof ServerPlayerEntity player && player instanceof PlayerExtension cyborg && cyborg.isCyborg() && cyborg.getEnergyStored() != cyborg.getCapacity()) {
-					 if (EnergyStorage.transfer(chargingPadBlock.energyStorage, cyborg.getEnergyStorage(), chargingPadBlock.getTransferRate()) > 0) chargingPadBlock.markDirty();
+					 if (EnergyStorage.transfer(chargingPadBlock.energyStorage, cyborg.getEnergyStorage(), chargingPadBlock.getTransferRate(), chargingPadBlock.typeMachine()) > 0) chargingPadBlock.markDirty();
 				}
 			}
 		}
@@ -72,7 +72,7 @@ public class ChargingPadBlock extends BlockWithEntity {
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-		return world.isClient ? null : validateTicker(type, CyberbopBlockEntities.BATTERY_TEST, EnergyBlockEntity::BatteryTick);
+		return !world.isClient ? validateTicker(type, CyberbopBlockEntities.BATTERY_TEST, EnergyBlockEntity::BatteryTick) : null;
 	}
 
 	@Override

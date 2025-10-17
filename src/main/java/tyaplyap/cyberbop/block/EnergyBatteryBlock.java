@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.block.entity.EnergyBatteryBlockEntity;
+import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
 import tyaplyap.cyberbop.util.DebugUtil;
 
 public class EnergyBatteryBlock extends BlockWithEntity implements WireConnectable {
@@ -70,8 +71,8 @@ public class EnergyBatteryBlock extends BlockWithEntity implements WireConnectab
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
 		return world.isClient ? null : validateTicker(type, CyberbopBlockEntities.BATTERY_BLOCK, (world1, pos, state1, blockEntity) -> {
+			EnergyBlockEntity.BatteryTick(world, pos, state, blockEntity);
 			DebugUtil.updateEnergyDebug(world, pos, state, blockEntity);
-
 			if(world.getTime() % 20 == 0) {
 				float p = ((float)blockEntity.getEnergyStored() / (float)blockEntity.getCapacity());
 				int level = 0;

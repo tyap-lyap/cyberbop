@@ -14,14 +14,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import tyaplyap.cyberbop.packet.DebugCablePacket;
-import tyaplyap.cyberbop.util.transfer.EnergyStorage;
+import tyaplyap.cyberbop.util.transfer.BlockEnergyStorage;
 import tyaplyap.cyberbop.util.transfer.IEnergyStorage;
 
 import java.util.*;
 
 public class EnergyWireBlockEntity extends BlockEntity {
 	public static final List<EnergyWireBlockEntity> wires = new ArrayList<>();
-	public static final List<EnergyStorage> storages = new ArrayList<>();
+	public static final Map<BlockEnergyStorage, List<Direction>> storages = new HashMap<>();
+	public static final Map<BlockEnergyStorage, List<Direction>> receivers = new HashMap<>();
 	private static final Deque<EnergyWireBlockEntity> QueueWires = new ArrayDeque<>();
 	public static int age = 0;
 	public int lastage = 0;
@@ -31,18 +32,36 @@ public class EnergyWireBlockEntity extends BlockEntity {
 		super(CyberbopBlockEntities.ENERGY_WIRE, pos, state);
 	}
 
-	public void addNeighborsStorages(EnergyWireBlockEntity wire, List<EnergyStorage> storages) {
+	public void addNeighborsStorages(EnergyWireBlockEntity wire) {
 		for (var directionNeighbor : Direction.values()) {
-			EnergyStorage energyStorage = EnergyStorage.SIDED.find(wire.getWorld(), wire.getPos().offset(directionNeighbor), directionNeighbor.getOpposite());
+			BlockEnergyStorage energyStorage = BlockEnergyStorage.SIDED.find(wire.getWorld(), wire.getPos().offset(directionNeighbor), directionNeighbor.getOpposite());
 			if (energyStorage != null && energyStorage.type() != null) {
-				storages.add(energyStorage);
+				if (energyStorage.type().equals(IEnergyStorage.Type.RECEIVER)) {
+					addStorages(receivers, energyStorage, directionNeighbor);
+				}
+				if (energyStorage.type().equals(IEnergyStorage.Type.BATTERY) || energyStorage.type().equals(IEnergyStorage.Type.GENERATOR)) {
+					addStorages(storages, energyStorage, directionNeighbor);
+				}
 			}
 		}
 	}
 
+	 private void addStorages(Map<BlockEnergyStorage, List<Direction>> blockEnergyMap, BlockEnergyStorage storage, Direction direction) {
+		 if (blockEnergyMap.containsKey(storage)) {
+			 if (!blockEnergyMap.get(storage).isEmpty()) {
+				 List<Direction> directions = blockEnergyMap.get(storage);
+				 directions.add(direction.getOpposite());
+				 blockEnergyMap.put(storage, directions);
+			 }
+		 } else {
+			 List<Direction> directions = new ArrayList<>();
+			 directions.add(direction.getOpposite());
+			 blockEnergyMap.put(storage, directions);
+		 }
+
+	 }
+
 	public static void tick(World world, BlockPos pos, BlockState state, EnergyWireBlockEntity blockEntity) {
-		List<Direction> directions = new ArrayList<>(Arrays.stream(Direction.values()).toList());
-		Collections.shuffle(directions);
 			if ((blockEntity.lastage == age)) return;
 			QueueWires.add(blockEntity);
 			blockEntity.lastage = age;
@@ -67,23 +86,8 @@ public class EnergyWireBlockEntity extends BlockEntity {
 			}
 			if (wires.isEmpty()) return;
 
-			List<EnergyStorage> BATTERY = new ArrayList<>();
-			List<EnergyStorage> GENERATOR = new ArrayList<>();
-			List<EnergyStorage> RECEIVER = new ArrayList<>();
-
 			for (EnergyWireBlockEntity wire : wires) {
-
-
-				wire.addNeighborsStorages(wire, storages);
-				for (var storage : storages) {
-					if (storage.type().equals(IEnergyStorage.Type.GENERATOR) && !GENERATOR.contains(storage)) {
-						GENERATOR.add(storage);
-					} else if (storage.type().equals(IEnergyStorage.Type.BATTERY) && !BATTERY.contains(storage)) {
-						BATTERY.add(storage);
-					} else if (storage.type().equals(IEnergyStorage.Type.RECEIVER) && !RECEIVER.contains(storage)) {
-						RECEIVER.add(storage);
-					}
-				}
+				wire.addNeighborsStorages(wire);
 			}
 
 			for (ServerPlayerEntity player : PlayerLookup.tracking((ServerWorld) world, blockEntity.getPos())) {
@@ -92,53 +96,49 @@ public class EnergyWireBlockEntity extends BlockEntity {
 					BlockPos blockPos = ((BlockHitResult) hitResult).getBlockPos();
 
 					if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-					for (EnergyWireBlockEntity wire : wires) {
-						if (world.getBlockEntity(blockPos) instanceof EnergyWireBlockEntity cableSearch) {
-							if (cableSearch.ownerCable != null && cableSearch.ownerCable.equals(wire.ownerCable)) {
-								ServerPlayNetworking.send(player, new DebugCablePacket(wire.getPos(), false, false));
-								if (wires.getFirst().ownerCable == null) {
-									ServerPlayNetworking.send(player, new DebugCablePacket(wires.getFirst().getPos(), false, true));
-								}
+						for (EnergyWireBlockEntity wire : wires) {
+							if (world.getBlockEntity(blockPos) instanceof EnergyWireBlockEntity cableSearch) {
+								if (cableSearch.ownerCable != null && cableSearch.ownerCable.equals(wire.ownerCable)) {
+									ServerPlayNetworking.send(player, new DebugCablePacket(wire.getPos(), false, false));
+									if (wires.getFirst().ownerCable == null) {
+										ServerPlayNetworking.send(player, new DebugCablePacket(wires.getFirst().getPos(), false, true));
+									}
 
+								}
 							}
 						}
 					}
 				}
 			}
-			}
-				if (!GENERATOR.isEmpty()) {
-					if (!RECEIVER.isEmpty()) {
-						blockEntity.transferEnergy(GENERATOR, RECEIVER);
-					} else if (!BATTERY.isEmpty()) {
-						blockEntity.transferEnergy(GENERATOR, BATTERY);
-					}
-				}
-				 if (!BATTERY.isEmpty()) {
-					if (!RECEIVER.isEmpty()) {
-						blockEntity.transferEnergy(BATTERY, RECEIVER);
-
-					}
-				}
+			blockEntity.transferEnergy(storages, receivers);
+			blockEntity.transferEnergy(storages, storages);
 			wires.clear();
 			storages.clear();
+			receivers.clear();
 			QueueWires.clear();
 			blockEntity.ownerCable = null;
 	}
 
-	private boolean isStoragesFull(List<EnergyStorage> storages) {
-		for (var rec : storages) {
-			if (!rec.isFull()) {
-				return false;
+	public boolean canIO (BlockEnergyStorage storage ,List<Direction> directions, boolean input) {
+		for (var direction : directions) {
+			if (storage.directionIO.containsKey(direction) && input && (storage.directionIO.get(direction).equals(BlockEnergyStorage.TypeIO.INPUT) || storage.directionIO.get(direction).equals(BlockEnergyStorage.TypeIO.IO))) {
+				return true;
+			}
+			if (storage.directionIO.containsKey(direction) && !input && (storage.directionIO.get(direction).equals(BlockEnergyStorage.TypeIO.OUTPUT) || storage.directionIO.get(direction).equals(BlockEnergyStorage.TypeIO.IO))) {
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 
-	private void transferEnergy(List<EnergyStorage> sources, List<EnergyStorage> targets) {
-		for (var source : sources) {
-				for (var target : targets) {
-					EnergyStorage.transfer(source, target, source.transferRate());
+	private void transferEnergy(Map<BlockEnergyStorage, List<Direction>> sources, Map<BlockEnergyStorage, List<Direction>> targets) {
+		for (var source : sources.keySet()) {
+			for (var target : targets.keySet()) {
+
+				if (canIO(source, sources.get(source), false) && canIO(target, targets.get(target), true)) {
+					BlockEnergyStorage.transfer(source, target, source.transferRate(), IEnergyStorage.Type.WIRE);
 				}
+			}
 		}
 	}
 

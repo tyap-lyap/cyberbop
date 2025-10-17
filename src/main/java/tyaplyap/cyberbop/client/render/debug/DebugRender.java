@@ -46,9 +46,6 @@ public class DebugRender {
 				}
 				matrixStack.pop();
 			}
-		} else {
-
-
 		}
 		if (MinecraftClient.getInstance().player.age % 21 == 20) {
 			DebugCablePacket.debugCables.clear();

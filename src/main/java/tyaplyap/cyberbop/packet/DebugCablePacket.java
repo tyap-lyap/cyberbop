@@ -32,7 +32,9 @@ public record DebugCablePacket(BlockPos blockPos, boolean clean, boolean isOwner
 	};
 
 	public static void getCables(BlockPos blockPos, boolean clean, boolean isOwner) {
-		debugCables.add(blockPos);
+		if (!debugCables.contains(blockPos)) {
+			debugCables.add(blockPos);
+		}
 		if (clean){ debugCables.clear(); return;}
 		if (isOwner) {
 			ownerCable = blockPos;

@@ -1,5 +1,6 @@
 package tyaplyap.cyberbop.mixin;
 
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
@@ -13,16 +14,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.item.BatteryModule;
-import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.item.CyborgModuleItem;
 import tyaplyap.cyberbop.item.CyborgPartItem;
 import tyaplyap.cyberbop.util.transfer.EnergyStorage;
@@ -33,6 +34,9 @@ import java.util.List;
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements PlayerExtension {
 
+	@Shadow
+	public abstract void playSound(SoundEvent sound, float volume, float pitch);
+
 	public final EnergyStorage energyStorage = new EnergyStorage() {
 		@Override
 		public int getEnergy() {
@@ -40,12 +44,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 		}
 
 		@Override
-		public boolean canInsert(EnergyStorage target) {
+		public boolean canInsert(EnergyStorage target, Type sourceType) {
 			return true;
 		}
 
 		@Override
-		public boolean canExtract(EnergyStorage source) {
+		public boolean canExtract(EnergyStorage source, Type sourceType) {
 			return true;
 		}
 
@@ -199,7 +203,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	void tick(CallbackInfo ci) {
+		if (PlayerEntity.class.cast(this).age % 100L == 0L) {
+			PlayerEntity.class.cast(this).damage(getWorld().getDamageSources().hotFloor(), 1.0F);
+		}
 		if((Object)this instanceof ServerPlayerEntity player) {
+
 			if(isCyborg()) {
 				if(player.interactionManager.getGameMode().equals(GameMode.SURVIVAL)) {
 					if (getEnergyStored() > 0) {

@@ -84,9 +84,9 @@ public class WiresRenderer<T extends EnergyWireBlockEntity> implements BlockEnti
 			});
 
 			matrices.pop();
-			//if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-				//DebugRender.DebugRenderWires(entity, state, matrices, vertexConsumers, light, overlay);
-			//}
+			if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+				DebugRender.DebugRenderWires(entity, state, matrices, vertexConsumers, light, overlay);
+			}
 		}
 	}
 }

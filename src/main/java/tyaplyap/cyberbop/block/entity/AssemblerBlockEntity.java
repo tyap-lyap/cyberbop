@@ -16,13 +16,17 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.item.CyborgModuleItem;
 import tyaplyap.cyberbop.item.CyborgPartItem;
 import tyaplyap.cyberbop.screen.AssemblerScreenHandler;
+import tyaplyap.cyberbop.util.transfer.BlockEnergyStorage;
 import tyaplyap.cyberbop.util.transfer.EnergyStorage;
 import tyaplyap.cyberbop.util.transfer.IEnergyStorage;
 import tyaplyap.cyberbop.util.CyborgPartType;
+
+import java.util.Map;
 
 public class AssemblerBlockEntity extends EnergyContainer {
 
@@ -63,13 +67,22 @@ public class AssemblerBlockEntity extends EnergyContainer {
 	}
 
 	@Override
-	boolean canInsertEnergy(EnergyStorage source) {
+	boolean canInsertEnergy(EnergyStorage source, IEnergyStorage.Type sourceType) {
 		return true;
 	}
 
 	@Override
-	boolean canExtractEnergy(EnergyStorage target) {
+	boolean canExtractEnergy(EnergyStorage target, IEnergyStorage.Type sourceType) {
 		return target.type().equals(IEnergyStorage.Type.CYBORG);
+	}
+
+	@Override
+	public void getDirectionsIO(Map<Direction, BlockEnergyStorage.TypeIO> directionMap) {
+		for (var direction : Direction.values()) {
+			if (!direction.equals(Direction.UP)) {
+				directionMap.put(direction, BlockEnergyStorage.TypeIO.INPUT);
+			}
+		}
 	}
 
 	@Override
