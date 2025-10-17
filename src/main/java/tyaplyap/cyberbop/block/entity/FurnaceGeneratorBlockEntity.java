@@ -182,12 +182,12 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 
 	@Override
 	boolean canInsertEnergy(EnergyStorage source, IEnergyStorage.Type sourceType) {
-		return true;
+		return false;
 	}
 
 	@Override
 	boolean canExtractEnergy(EnergyStorage target, IEnergyStorage.Type sourceType) {
-		return false;
+		return true;
 	}
 
 	@Override
