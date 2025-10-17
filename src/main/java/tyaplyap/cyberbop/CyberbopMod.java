@@ -3,19 +3,10 @@ package tyaplyap.cyberbop;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnGroup;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.screen.ScreenHandlerType;
@@ -29,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import tyaplyap.cyberbop.block.CyberbopBlocks;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
-import tyaplyap.cyberbop.entity.FakePlayerEntity;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.packet.UseJetpackPacket;
@@ -37,9 +27,6 @@ import tyaplyap.cyberbop.packet.DebugCablePacket;
 import tyaplyap.cyberbop.screen.AssemblerScreenHandler;
 import tyaplyap.cyberbop.screen.FurnaceGeneratorScreenHandler;
 import tyaplyap.cyberbop.packet.EnergyGuiUpdatePacket;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static net.minecraft.server.command.CommandManager.*;
 
@@ -50,38 +37,12 @@ public class CyberbopMod implements ModInitializer {
 	public static final ScreenHandlerType<FurnaceGeneratorScreenHandler> FURNACE_GENERATOR_SCREEN = Registry.register(Registries.SCREEN_HANDLER, id("furnace_generator"), new ExtendedScreenHandlerType<>(FurnaceGeneratorScreenHandler::new, BlockPos.PACKET_CODEC));
 	public static final ScreenHandlerType<AssemblerScreenHandler> ASSEMBLER_SCREEN = Registry.register(Registries.SCREEN_HANDLER, id("assembler"), new ExtendedScreenHandlerType<>(AssemblerScreenHandler::new, BlockPos.PACKET_CODEC));
 
-	public static final EntityType<FakePlayerEntity> FAKE_PLAYER_ENTITY = Registry.register(Registries.ENTITY_TYPE, Identifier.of(MOD_ID, "fake_player"), FabricEntityTypeBuilder.<FakePlayerEntity>create(SpawnGroup.MISC,FakePlayerEntity::new).dimensions(EntityDimensions.changing(0.6F, 1.99F)).trackedUpdateRate(2).build());
-
-	static ArrayList<Item> debugItems = new ArrayList<>(List.of(CyberbopItems.DEBUG_ENERGY_STICK, CyberbopBlocks.BATTERY_TEST.asItem(), CyberbopBlocks.ENERGY_RECEIVER.asItem(), CyberbopBlocks.ENERGY_GENERATOR.asItem()));
-
-	public static final ItemGroup ITEM_GROUP = FabricItemGroup.builder()
-		.displayName(Text.translatable("itemGroup.cyberbop.items"))
-		.entries((ctx, entries) -> {
-			CyberbopItems.ITEMS.forEach((id, item) -> {
-				if(!debugItems.contains(item)) entries.add(item.getDefaultStack());
-			});
-			CyberbopBlocks.ITEMS.forEach((id, item) -> {
-				if(!debugItems.contains(item)) entries.add(item.getDefaultStack());
-			});
-		})
-		.icon(CyberbopItems.ADVANCED_HEAD::getDefaultStack).build();
-
-	public static final ItemGroup DEBUG_ITEM_GROUP = FabricItemGroup.builder()
-		.displayName(Text.translatable("itemGroup.cyberbop.debug_items"))
-		.entries((ctx, entries) -> {
-			debugItems.forEach(item -> entries.add(item.getDefaultStack()));
-		})
-		.icon(CyberbopItems.DEBUG_ENERGY_STICK::getDefaultStack).build();
+//	public static final EntityType<FakePlayerEntity> FAKE_PLAYER_ENTITY = Registry.register(Registries.ENTITY_TYPE, Identifier.of(MOD_ID, "fake_player"), FabricEntityTypeBuilder.<FakePlayerEntity>create(SpawnGroup.MISC,FakePlayerEntity::new).dimensions(EntityDimensions.changing(0.6F, 1.99F)).trackedUpdateRate(2).build());
 
 	@Override
 	public void onInitialize() {
 		PayloadTypeRegistry.playS2C().register(EnergyGuiUpdatePacket.ID, EnergyGuiUpdatePacket.PACKET_CODEC);
 		PayloadTypeRegistry.playS2C().register(DebugCablePacket.ID, DebugCablePacket.PACKET_CODEC);
-		Registry.register(Registries.ITEM_GROUP, CyberbopMod.id("items"), CyberbopMod.ITEM_GROUP);
-
-		if(FabricLoader.getInstance().isDevelopmentEnvironment()) {
-			Registry.register(Registries.ITEM_GROUP, CyberbopMod.id("debug_items"), CyberbopMod.DEBUG_ITEM_GROUP);
-		}
 
 		CyberbopBlocks.init();
 		CyberbopItems.init();
@@ -91,7 +52,14 @@ public class CyberbopMod implements ModInitializer {
 		UseJetpackPacket.registerS2CPackets();
 		UseJetpackPacket.registerServerReceivers();
 
-		FabricDefaultAttributeRegistry.register(FAKE_PLAYER_ENTITY, LivingEntity.createLivingAttributes());
+//		FabricDefaultAttributeRegistry.register(FAKE_PLAYER_ENTITY, LivingEntity.createLivingAttributes());
+
+		ServerPlayerEvents.COPY_FROM.register((oldPlayer, newPlayer, alive) -> {
+			if(alive) {
+				((PlayerExtension)newPlayer).copyFrom((PlayerExtension) oldPlayer);
+				((PlayerExtension)newPlayer).setupAttributes(newPlayer);
+			}
+		});
 
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
 			dispatcher.register(literal("cyberbop").requires(source -> source.hasPermissionLevel(4)).then(literal("setstore").then(argument("energy", IntegerArgumentType.integer(0, Integer.MAX_VALUE)).executes(commandContext -> {
@@ -105,7 +73,6 @@ public class CyberbopMod implements ModInitializer {
 						}
 					} else {
 						commandContext.getSource().sendFeedback(() -> Text.literal("No Block"), false);
-
 					}
 					return 1;
 				} else {

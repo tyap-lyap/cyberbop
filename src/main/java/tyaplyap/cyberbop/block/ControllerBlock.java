@@ -227,15 +227,7 @@ public class ControllerBlock extends BlockWithEntity {
 		assembler.getItems().clear();
 		EnergyStorage.transfer(assembler.energyStorage, cyborg.getEnergyStorage(), cyborg.getCapacity(), IEnergyStorage.Type.RECEIVER);
 		assembler.updateListeners();
-
-		double maxHealth = 0;
-
-		for(CyborgPartType partType : CyborgPartType.values()) {
-			maxHealth = maxHealth + ((CyborgPartItem)cyborg.getCyborgPart(partType).getItem()).getHealth();
-		}
-		maxHealth = maxHealth - player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).getBaseValue();
-
-		player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).addPersistentModifier(new EntityAttributeModifier(CyberbopMod.id("cyborg_health"), maxHealth, EntityAttributeModifier.Operation.ADD_VALUE));
+		cyborg.setupAttributes(player);
 	}
 
 	@Override

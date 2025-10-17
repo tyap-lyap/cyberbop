@@ -77,6 +77,6 @@ public class ChargingPadBlock extends BlockWithEntity {
 
 	@Override
 	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-		tooltip.add(Text.literal("16000 Energy Capacity").formatted(Formatting.GRAY));
+		tooltip.add(Text.literal("64000 Energy Capacity").formatted(Formatting.GRAY));
 	}
 }

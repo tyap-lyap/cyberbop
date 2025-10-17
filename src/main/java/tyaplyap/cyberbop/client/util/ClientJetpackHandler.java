@@ -5,12 +5,13 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Items;
+import net.minecraft.item.ElytraItem;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.item.CyberbopItems;
+import tyaplyap.cyberbop.item.JetpackModule;
 import tyaplyap.cyberbop.packet.UseJetpackPacket;
 
 public class ClientJetpackHandler {
@@ -28,23 +29,20 @@ public class ClientJetpackHandler {
 
 		if (player instanceof PlayerExtension ex && ex.isCyborg() && ex.containsModule(CyberbopItems.JETPACK_MODULE) && !ex.containsModule(CyberbopItems.FLIGHT_MODULE) && !player.isCreative() && !player.isSpectator()) {
 			boolean isHoldingJump = MinecraftClient.getInstance().options.jumpKey.isPressed();
-			boolean isOnGround = player.isOnGround();
-			boolean isInAir = !isOnGround && !player.isTouchingWater() && !player.isClimbing();
-			boolean hasElytra = player.getEquippedStack(EquipmentSlot.CHEST).getItem().equals(Items.ELYTRA) && player.isFallFlying();
 
-			if (isOnGround) {
+			if (player.isOnGround()) {
 				hasActivatedThisFlight = false;
 				jetpackActive = false;
 			}
 
 			if (isHoldingJump && !jumped) {
-				handleJumpPress(player, isInAir, hasElytra);
+				handleJumpPress(player);
 			}
 
-			if (jetpackActive && isInAir && isHoldingJump) {
+			if (jetpackActive && isInAir(player) && isHoldingJump) {
 				if(ex.getEnergyStored() > 0) {
-					spawnJetpackEffects(player, hasElytra);
-					useJetpack(player, hasElytra);
+					spawnJetpackEffects(player);
+					JetpackModule.useJetpack(player);
 					player.fallDistance = 0;
 
 					if(!usingJetpack) {
@@ -67,12 +65,20 @@ public class ClientJetpackHandler {
 		}
 	}
 
-	private static void handleJumpPress(ClientPlayerEntity player, boolean isInAir, boolean hasElytra) {
+	private static boolean isUsingElytra(ClientPlayerEntity player) {
+		return player.getEquippedStack(EquipmentSlot.CHEST).getItem() instanceof ElytraItem && player.isFallFlying();
+	}
+
+	private static boolean isInAir(ClientPlayerEntity player) {
+		return !player.isOnGround() && !player.isTouchingWater() && !player.isClimbing();
+	}
+
+	private static void handleJumpPress(ClientPlayerEntity player) {
 		long currentTime = System.currentTimeMillis();
 
-		if (isInAir) {
+		if (isInAir(player)) {
 			if (currentTime - lastJumpTime < DOUBLE_JUMP_THRESHOLD) {
-				if (!hasActivatedThisFlight && activateJetpack(player, hasElytra)) {
+				if (!hasActivatedThisFlight && activateJetpack(player)) {
 					hasActivatedThisFlight = true;
 					jetpackActive = true;
 				}
@@ -85,14 +91,14 @@ public class ClientJetpackHandler {
 		lastJumpTime = currentTime;
 	}
 
-	private static boolean activateJetpack(ClientPlayerEntity player, boolean hasElytra) {
+	private static boolean activateJetpack(ClientPlayerEntity player) {
 		if (((PlayerExtension)player).getEnergyStored() <= 0) {
-			player.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 0.5F, 1.0F);
+			player.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 0.3F, 1.0F);
 			return false;
 		}
-		if (hasElytra) {
+		if (isUsingElytra(player)) {
 			elytraHeadStart(player);
-			player.playSound(SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, 0.4F, 1.2F);
+			player.playSound(SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, 0.3F, 1.2F);
 		}
 		else {
 			Vec3d velocity = player.getVelocity();
@@ -102,10 +108,10 @@ public class ClientJetpackHandler {
 				double newVerticalVelocity = Math.max(velocity.y + boostVelocity, boostVelocity);
 				player.setVelocity(velocity.x, newVerticalVelocity, velocity.z);
 			}
-			player.playSound(SoundEvents.ENTITY_GHAST_SHOOT, 0.4F, 1.5F);
+			player.playSound(SoundEvents.ENTITY_GHAST_SHOOT, 0.3F, 1.5F);
 		}
 
-		spawnActivationParticles(player, hasElytra);
+		spawnActivationParticles(player);
 		return true;
 	}
 
@@ -117,41 +123,6 @@ public class ClientJetpackHandler {
 			lookVector.x * 0.5,
 			0.2 + (lookVector.y * 0.3),
 			lookVector.z * 0.5
-		);
-
-		Vec3d newVelocity = velocity.add(boostVector);
-
-		double speedLimit = 2.0;
-		if (newVelocity.length() > speedLimit) {
-			newVelocity = newVelocity.normalize().multiply(speedLimit);
-		}
-
-		player.setVelocity(newVelocity);
-	}
-
-	private static void useJetpack(ClientPlayerEntity player, boolean hasElytra) {
-		if (hasElytra) {
-			updateElytraVelocity(player);
-		} else {
-			updateVelocity(player);
-		}
-	}
-
-	private static void updateVelocity(PlayerEntity player) {
-		double newVerticalVelocity = player.getVelocity().y + 0.1;
-
-		if (newVerticalVelocity < 0.5) {
-			player.addVelocity(0, 0.1, 0);
-		}
-	}
-
-	private static void updateElytraVelocity(PlayerEntity player) {
-		Vec3d velocity = player.getVelocity();
-		Vec3d lookVector = player.getRotationVec(1.0F);
-		Vec3d boostVector = new Vec3d(
-			lookVector.x * 0.1,
-			0.05 + (lookVector.y * 0.05),
-			lookVector.z * 0.1
 		);
 
 		Vec3d newVelocity = velocity.add(boostVector);
@@ -169,8 +140,8 @@ public class ClientJetpackHandler {
 		player.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 0.3F, 1.2F);
 	}
 
-	private static void spawnActivationParticles(ClientPlayerEntity player, boolean hasElytra) {
-		if (hasElytra) {
+	private static void spawnActivationParticles(ClientPlayerEntity player) {
+		if (isUsingElytra(player)) {
 			Vec3d lookVector = player.getRotationVec(1.0F);
 			player.getWorld().addParticle(ParticleTypes.FIREWORK,
 				player.getX(), player.getY() + 0.5, player.getZ(),
@@ -178,11 +149,8 @@ public class ClientJetpackHandler {
 		}
 	}
 
-	private static void spawnJetpackEffects(ClientPlayerEntity player, boolean hasElytra) {
-		if (hasElytra) {
-			if (player.getWorld().random.nextFloat() < 0.1F) {
-				player.playSound(SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, 0.2F, 1.5F);
-			}
+	private static void spawnJetpackEffects(ClientPlayerEntity player) {
+		if (isUsingElytra(player)) {
 			Vec3d lookVector = player.getRotationVec(1.0F);
 
 			player.getWorld().addParticle(ParticleTypes.FLAME,
@@ -192,10 +160,6 @@ public class ClientJetpackHandler {
 				-lookVector.x * 0.3, -lookVector.y * 0.3, -lookVector.z * 0.3);
 		}
 		else {
-			if (player.getWorld().random.nextFloat() < 0.2F) {
-				player.playSound(SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, 0.2F,
-					1.0F + (player.getWorld().random.nextFloat() * 0.3F - 0.15F));
-			}
 			Vec3d lookVector = player.getRotationVector(0, player.bodyYaw);
 
 			player.getWorld().addParticle(ParticleTypes.FLAME,

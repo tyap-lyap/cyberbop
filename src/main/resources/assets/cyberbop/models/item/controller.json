@@ -1,3 +1,6 @@
 {
-  "parent": "cyberbop:block/controller"
+  "parent": "cyberbop:block/controller",
+  "textures": {
+    "6": "cyberbop:block/controller_active"
+  }
 }

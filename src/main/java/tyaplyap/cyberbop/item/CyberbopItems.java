@@ -1,12 +1,19 @@
 package tyaplyap.cyberbop.item;
 
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import tyaplyap.cyberbop.CyberbopMod;
+import tyaplyap.cyberbop.block.CyberbopBlocks;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CyberbopItems {
@@ -24,14 +31,14 @@ public class CyberbopItems {
 	public static final Item XRAY_VISION_MODULE = add("xray_vision_module", new XrayVisionModule(new Item.Settings().maxCount(1)));
 
 	public static final Item BASIC_HEAD = add("basic_cyborg_head", new CyborgHeadPartItem("basic_head", 5000, 3, new Item.Settings().maxCount(1)));
-	public static final Item BASIC_BODY = add("basic_cyborg_body", new CyborgBodyPartItem("basic_body", 5000, 3, new Item.Settings().maxCount(1)));
-	public static final Item BASIC_ARM = add("basic_cyborg_arm", new CyborgArmPartItem("basic_right_arm", "basic_left_arm", 3000, 1.5, new Item.Settings().maxCount(1)));
-	public static final Item BASIC_LEG = add("basic_cyborg_leg", new CyborgLegPartItem("basic_right_leg", "basic_left_leg", 3000, 1.5, new Item.Settings().maxCount(1)));
+	public static final Item BASIC_BODY = add("basic_cyborg_body", new CyborgBodyPartItem("basic_body", 5000, 5, new Item.Settings().maxCount(1)));
+	public static final Item BASIC_ARM = add("basic_cyborg_arm", new CyborgArmPartItem("basic_right_arm", "basic_left_arm", 3500, 1, new Item.Settings().maxCount(1)));
+	public static final Item BASIC_LEG = add("basic_cyborg_leg", new CyborgLegPartItem("basic_right_leg", "basic_left_leg", 3500, 1, new Item.Settings().maxCount(1)));
 
-	public static final Item GOLDEN_HEAD = add("golden_cyborg_head", new CyborgHeadPartItem("golden_head", 6300, 5, new Item.Settings().maxCount(1)));
-	public static final Item GOLDEN_BODY = add("golden_cyborg_body", new CyborgBodyPartItem("golden_body", 6300, 5, new Item.Settings().maxCount(1)));
-	public static final Item GOLDEN_ARM = add("golden_cyborg_arm", new CyborgArmPartItem("golden_right_arm", "golden_left_arm", 4300, 2.5, new Item.Settings().maxCount(1)));
-	public static final Item GOLDEN_LEG = add("golden_cyborg_leg", new CyborgLegPartItem("golden_right_leg", "golden_left_leg", 4300, 2.5, new Item.Settings().maxCount(1)));
+	public static final Item GOLDEN_HEAD = add("golden_cyborg_head", new CyborgHeadPartItem("golden_head", 8000, 4, new Item.Settings().maxCount(1)));
+	public static final Item GOLDEN_BODY = add("golden_cyborg_body", new CyborgBodyPartItem("golden_body", 8000, 6, new Item.Settings().maxCount(1)));
+	public static final Item GOLDEN_ARM = add("golden_cyborg_arm", new CyborgArmPartItem("golden_right_arm", "golden_left_arm", 5000, 1.5, new Item.Settings().maxCount(1)));
+	public static final Item GOLDEN_LEG = add("golden_cyborg_leg", new CyborgLegPartItem("golden_right_leg", "golden_left_leg", 5000, 1.5, new Item.Settings().maxCount(1)));
 
 	public static final Item ADVANCED_HEAD = add("advanced_cyborg_head", new CyborgHeadPartItem("advanced_head", 11350, 6.5, new Item.Settings().maxCount(1)));
 	public static final Item ADVANCED_BODY = add("advanced_cyborg_body", new CyborgBodyPartItem("advanced_body", 11350, 6.5, new Item.Settings().maxCount(1)));
@@ -42,7 +49,34 @@ public class CyberbopItems {
 
 	public static final Item DEBUG_ENERGY_STICK = add("debug_energy_stick", new DebugEnergyStick(new Item.Settings().maxCount(1)));
 
+	static ArrayList<Item> debugItems = new ArrayList<>(List.of(CyberbopItems.DEBUG_ENERGY_STICK, CyberbopBlocks.BATTERY_TEST.asItem(), CyberbopBlocks.ENERGY_RECEIVER.asItem(), CyberbopBlocks.ENERGY_GENERATOR.asItem()));
+
+	public static final ItemGroup ITEM_GROUP = FabricItemGroup.builder()
+		.displayName(Text.translatable("itemGroup.cyberbop.items"))
+		.entries((ctx, entries) -> {
+			CyberbopItems.ITEMS.forEach((id, item) -> {
+				if(!debugItems.contains(item)) entries.add(item.getDefaultStack());
+			});
+			CyberbopBlocks.ITEMS.forEach((id, item) -> {
+				if(!debugItems.contains(item)) entries.add(item.getDefaultStack());
+			});
+		})
+		.icon(CyberbopItems.ADVANCED_HEAD::getDefaultStack).build();
+
+	public static final ItemGroup DEBUG_ITEM_GROUP = FabricItemGroup.builder()
+		.displayName(Text.translatable("itemGroup.cyberbop.debug_items"))
+		.entries((ctx, entries) -> {
+			debugItems.forEach(item -> entries.add(item.getDefaultStack()));
+		})
+		.icon(CyberbopItems.DEBUG_ENERGY_STICK::getDefaultStack).build();
+
 	public static void init() {
+		Registry.register(Registries.ITEM_GROUP, CyberbopMod.id("items"), ITEM_GROUP);
+
+		if(FabricLoader.getInstance().isDevelopmentEnvironment()) {
+			Registry.register(Registries.ITEM_GROUP, CyberbopMod.id("debug_items"), DEBUG_ITEM_GROUP);
+		}
+
 		ITEMS.forEach((id, item) -> Registry.register(Registries.ITEM, id, item));
 	}
 

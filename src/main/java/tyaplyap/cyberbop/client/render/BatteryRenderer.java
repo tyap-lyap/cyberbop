@@ -1,10 +1,12 @@
 package tyaplyap.cyberbop.client.render;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.block.EnergyBatteryBlock;
@@ -24,9 +26,21 @@ public class BatteryRenderer<T extends EnergyBatteryBlockEntity> implements Bloc
 
 		if(world != null && !entity.isRemoved() && entity.getCachedState().get(EnergyBatteryBlock.LEVEL) > 0) {
 			matrices.push();
-			matrices.translate(0.5, 1.5, 0.5);
-			matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
-			matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+			BlockState state = entity.getCachedState();
+
+			matrices.translate(0.5, 0.5, 0.5);
+
+			if(state.get(EnergyBatteryBlock.FACING).getAxis().equals(Direction.Axis.Y)) {
+				matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
+			}
+			if(state.get(EnergyBatteryBlock.FACING).getAxis().equals(Direction.Axis.Z)) {
+				matrices.multiply(RotationAxis.NEGATIVE_X.rotationDegrees(180));
+			}
+			if(state.get(EnergyBatteryBlock.FACING).getAxis().equals(Direction.Axis.X)) {
+				matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(180));
+			}
+
+			matrices.multiply(state.get(EnergyBatteryBlock.FACING).getRotationQuaternion());
 
 			VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentEmissive(CyberbopMod.id("textures/entity/battery_block_overlay_" + entity.getCachedState().get(EnergyBatteryBlock.LEVEL) + ".png")));
 

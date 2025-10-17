@@ -1,6 +1,5 @@
 package tyaplyap.cyberbop.mixin;
 
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
@@ -15,7 +14,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -205,7 +203,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 	void tick(CallbackInfo ci) {
 		if((Object)this instanceof ServerPlayerEntity player) {
 			if(isCyborg()) {
-				if(player.interactionManager.getGameMode().equals(GameMode.SURVIVAL)) {
+				if(!player.isCreative() && !player.isSpectator()) {
 					if (getEnergyStored() > 0) {
 						setEnergyStored(Math.max(getEnergyStored() - 1, 0));
 					}

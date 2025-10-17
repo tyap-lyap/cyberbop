@@ -3,6 +3,7 @@ package tyaplyap.cyberbop.block.entity;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import tyaplyap.cyberbop.block.EnergyBatteryBlock;
 import tyaplyap.cyberbop.util.transfer.BlockEnergyStorage;
 import tyaplyap.cyberbop.util.transfer.EnergyStorage;
 import tyaplyap.cyberbop.util.transfer.IEnergyStorage;
@@ -13,7 +14,6 @@ public class EnergyBatteryBlockEntity extends EnergyBlockEntity{
 
 	public EnergyBatteryBlockEntity(BlockPos pos, BlockState state) {
 		super(CyberbopBlockEntities.BATTERY_BLOCK, pos, state);
-		energyStorage.setEnergy(getCapacity());
 	}
 
 	@Override
@@ -28,13 +28,13 @@ public class EnergyBatteryBlockEntity extends EnergyBlockEntity{
 
 	@Override
 	public void getDirectionsIO(Map<Direction, BlockEnergyStorage.TypeIO> directionMap) {
-		directionMap.put(Direction.UP, BlockEnergyStorage.TypeIO.OUTPUT);
-		directionMap.put(Direction.DOWN, BlockEnergyStorage.TypeIO.INPUT);
+		directionMap.put(getCachedState().get(EnergyBatteryBlock.FACING), BlockEnergyStorage.TypeIO.OUTPUT);
+		directionMap.put(getCachedState().get(EnergyBatteryBlock.FACING).getOpposite(), BlockEnergyStorage.TypeIO.INPUT);
 	}
 
 	@Override
 	public int getCapacity() {
-		return 100000;
+		return 256000;
 	}
 
 	@Override
@@ -45,6 +45,6 @@ public class EnergyBatteryBlockEntity extends EnergyBlockEntity{
 
 	@Override
 	public int getTransferRate() {
-		return 100;
+		return 128;
 	}
 }

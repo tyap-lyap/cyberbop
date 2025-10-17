@@ -87,7 +87,7 @@ public class FurnaceGeneratorBlockEntity extends EnergyContainer {
 		if (blockEntity.isBurning()) {
 			blockEntity.burnTime--;
 			if (!blockEntity.isFull()) {
-				blockEntity.setEnergyStored(Math.min(blockEntity.getCapacity(), blockEntity.getEnergyStored() + 32));
+				blockEntity.setEnergyStored(Math.min(blockEntity.getCapacity(), blockEntity.getEnergyStored() + 16));
 			}
 		}
 

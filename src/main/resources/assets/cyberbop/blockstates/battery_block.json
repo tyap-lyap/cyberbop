@@ -1,10 +1,30 @@
 {
   "variants": {
-    "lit=false": {
+    "facing=down": {
+      "model": "cyberbop:block/battery_block_empty",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "cyberbop:block/battery_block_empty",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cyberbop:block/battery_block_empty",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "cyberbop:block/battery_block_empty",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
       "model": "cyberbop:block/battery_block_empty"
     },
-    "lit=true": {
-      "model": "cyberbop:block/battery_block"
+    "facing=west": {
+      "model": "cyberbop:block/battery_block_empty",
+      "x": 90,
+      "y": 270
     }
   }
 }

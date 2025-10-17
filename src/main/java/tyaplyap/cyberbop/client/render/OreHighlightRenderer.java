@@ -7,6 +7,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
 import org.joml.Matrix4f;
 import tyaplyap.cyberbop.client.util.ClientOreHighlightData;
+import tyaplyap.cyberbop.item.XrayVisionModule;
 
 import java.util.ArrayList;
 
@@ -66,7 +67,7 @@ public class OreHighlightRenderer {
 		float r = OUTLINE_RED;
 		float g = OUTLINE_GREEN;
 		float b = OUTLINE_BLUE;
-		float a = OUTLINE_ALPHA;
+		float a = XrayVisionModule.getAlpha();
 
 		// Bottom face (Y = 0)
 		buffer.vertex(matrix, (float)(x - offset), (float)(y - offset), (float)(z - offset)).color(r, g, b, a);

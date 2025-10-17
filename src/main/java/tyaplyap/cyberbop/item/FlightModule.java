@@ -26,7 +26,7 @@ public class FlightModule extends CyborgModuleItem {
 					player.sendAbilitiesUpdate();
 				}
 				if(player.getAbilities().flying) {
-					ex.setEnergyStored(Math.max(ex.getEnergyStored() - 10, 0));
+					ex.setEnergyStored(Math.max(ex.getEnergyStored() - 20, 0));
 				}
 			}
 			else {

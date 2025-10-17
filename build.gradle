@@ -32,11 +32,13 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api}"
 
-	modImplementation include("eu.pb4:polymer-core:0.9.18+1.21.1")
-	modImplementation include("eu.pb4:polymer-virtual-entity:0.9.18+1.21.1")
+//	modImplementation include("eu.pb4:polymer-core:0.9.18+1.21.1")
+//	modImplementation include("eu.pb4:polymer-virtual-entity:0.9.18+1.21.1")
+	modCompileOnly "eu.pb4:polymer-core:0.9.18+1.21.1"
+	modCompileOnly "eu.pb4:polymer-virtual-entity:0.9.18+1.21.1"
 
 	modRuntimeOnly "com.terraformersmc:modmenu:11.0.3"
-	modImplementation "maven.modrinth:emi:1.1.22+1.21.1+fabric"
+	modRuntimeOnly "maven.modrinth:emi:1.1.22+1.21.1+fabric"
 
 }
 

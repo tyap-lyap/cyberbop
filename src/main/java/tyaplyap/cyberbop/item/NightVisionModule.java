@@ -13,7 +13,7 @@ import tyaplyap.cyberbop.extension.PlayerExtension;
 import java.util.List;
 
 public class NightVisionModule extends CyborgModuleItem {
-	static float nightVisionStrength = 0.0F;
+	static int nightVisionStrength = 0;
 
 	public NightVisionModule(Settings settings) {
 		super(settings);
@@ -21,27 +21,27 @@ public class NightVisionModule extends CyborgModuleItem {
 
 	@Override
 	public void tick(ServerWorld world, PlayerEntity player, PlayerExtension ex) {
-		if(ex.getEnergyStored() > 0) {
-			if(world.getTime() % 4 == 0) ex.setEnergyStored(Math.max(ex.getEnergyStored() - 1, 0));
+		if(!player.isCreative() && !player.isSpectator() && ex.getEnergyStored() > 0) {
+			ex.setEnergyStored(Math.max(ex.getEnergyStored() - 2, 0));
 		}
 	}
 
 	@Override
 	public void clientTick(ClientWorld world, PlayerEntity player, PlayerExtension extension) {
 		if(extension.getEnergyStored() > 0) {
-			if(nightVisionStrength < 1.0F) {
-				nightVisionStrength = nightVisionStrength + 0.01F;
+			if(nightVisionStrength < 100) {
+				nightVisionStrength++;
 			}
 		}
 	}
 
 	@Override
 	public void onModuleRemoved(World world, PlayerEntity player) {
-		if(world.isClient()) nightVisionStrength = 0.0F;
+		if(world.isClient()) nightVisionStrength = 0;
 	}
 
 	public static float getNightVisionStrength() {
-		return nightVisionStrength;
+		return ((float)nightVisionStrength / 100F);
 	}
 
 	@Override

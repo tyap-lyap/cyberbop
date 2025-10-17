@@ -40,11 +40,11 @@ public class ChargingPadBlockEntity extends EnergyBlockEntity{
 
 	@Override
 	public int getTransferRate() {
-		return 100;
+		return 32;
 	}
 
 	@Override
 	public int getCapacity() {
-		return 16000;
+		return 64000;
 	}
 }

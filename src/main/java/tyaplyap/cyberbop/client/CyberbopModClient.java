@@ -33,6 +33,7 @@ public class CyberbopModClient implements ClientModInitializer {
 	public static final EntityModelLayer WIRES_LAYER = new EntityModelLayer(CyberbopMod.id("wires"), "main");
 	public static final EntityModelLayer ASSEMBLER_LAYER = new EntityModelLayer(CyberbopMod.id("assembler"), "main");
 	public static final EntityModelLayer CONTROLLER_LAYER = new EntityModelLayer(CyberbopMod.id("controller"), "main");
+	public static final EntityModelLayer SOLID_FUEL_GENERATOR_LAYER = new EntityModelLayer(CyberbopMod.id("solid_fuel_generator"), "main");
 	public static final EntityModelLayer ERROR_LAYER = new EntityModelLayer(CyberbopMod.id("error"), "main");
 	public static final EntityModelLayer ADVANCED_CYBORG_LAYER = new EntityModelLayer(CyberbopMod.id("advanced_cyborg"), "main");
 	public static final EntityModelLayer BASIC_CYBORG_LAYER = new EntityModelLayer(CyberbopMod.id("basic_cyborg"), "main");
@@ -67,12 +68,14 @@ public class CyberbopModClient implements ClientModInitializer {
 		EntityModelLayerRegistry.registerModelLayer(WIRES_LAYER, WiresRenderer::getTexturedModelData);
 		EntityModelLayerRegistry.registerModelLayer(ASSEMBLER_LAYER, AssemblerModel::getTexturedModelData);
 		EntityModelLayerRegistry.registerModelLayer(CONTROLLER_LAYER, ControllerModel::getTexturedModelData);
+		EntityModelLayerRegistry.registerModelLayer(SOLID_FUEL_GENERATOR_LAYER, CubeModel::getTexturedModelData);
 		EntityModelLayerRegistry.registerModelLayer(ERROR_LAYER, ErrorModel::getTexturedModelData);
 		EntityModelLayerRegistry.registerModelLayer(ADVANCED_CYBORG_LAYER, AdvancedCyborgModel::getTexturedModelData);
 		EntityModelLayerRegistry.registerModelLayer(BASIC_CYBORG_LAYER, BasicCyborgModel::getTexturedModelData);
 
 		BlockEntityRendererFactories.register(CyberbopBlockEntities.ASSEMBLER, ctx -> new AssemblerRenderer<>(ctx));
 		BlockEntityRendererFactories.register(CyberbopBlockEntities.CONTROLLER, ctx -> new ControllerRenderer<>(ctx));
+		BlockEntityRendererFactories.register(CyberbopBlockEntities.SOLID_FUEL_GENERATOR, ctx -> new SolidFuelGeneratorRenderer<>(ctx));
 		BlockEntityRendererFactories.register(CyberbopBlockEntities.ENERGY_WIRE, ctx -> new WiresRenderer<>(ctx));
 		BlockEntityRendererFactories.register(CyberbopBlockEntities.BATTERY_BLOCK, ctx -> new BatteryRenderer<>(ctx));
 

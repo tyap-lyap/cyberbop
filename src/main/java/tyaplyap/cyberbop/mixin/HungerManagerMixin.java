@@ -25,7 +25,7 @@ public abstract class HungerManagerMixin {
 
 			if(isCyborg) {
 
-				if(ex.getEnergyStored() != 0) {
+				if(ex.getEnergyStored() > 0) {
 
 					if(player.getHealth() != player.getMaxHealth()) {
 						this.foodTickTimer++;
