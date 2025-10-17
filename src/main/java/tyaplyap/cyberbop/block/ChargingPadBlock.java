@@ -15,6 +15,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -29,7 +30,7 @@ import tyaplyap.cyberbop.util.transfer.EnergyStorage;
 
 import java.util.List;
 
-public class ChargingPadBlock extends BlockWithEntity {
+public class ChargingPadBlock extends BlockWithEntity implements WireConnectable {
 
 	protected static final VoxelShape SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 5.0, 16.0);
 
@@ -85,5 +86,10 @@ public class ChargingPadBlock extends BlockWithEntity {
 		if (stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) != null) {
 			tooltip.addAll(Text.literal(stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) + " Energy Stored").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
 		}
+	}
+
+	@Override
+	public boolean canConnect(BlockState state, BlockPos pos, BlockState wireState, BlockPos wirePos, Direction direction) {
+		return !direction.equals(Direction.DOWN);
 	}
 }

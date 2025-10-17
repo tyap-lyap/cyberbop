@@ -42,9 +42,8 @@ public class EnergyBatteryBlockEntity extends EnergyBlockEntity{
 		return IEnergyStorage.Type.BATTERY;
 	}
 
-
 	@Override
 	public int getTransferRate() {
-		return 128;
+		return 256;
 	}
 }

@@ -6,13 +6,20 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ai.pathing.NavigationType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -22,7 +29,9 @@ import org.jetbrains.annotations.Nullable;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.block.entity.EnergyBatteryBlockEntity;
 import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
-import tyaplyap.cyberbop.util.DebugUtil;
+import tyaplyap.cyberbop.item.CyberbopItems;
+
+import java.util.List;
 
 public class EnergyBatteryBlock extends BlockWithEntity implements WireConnectable {
 
@@ -38,6 +47,7 @@ public class EnergyBatteryBlock extends BlockWithEntity implements WireConnectab
 		setDefaultState(getDefaultState().with(LEVEL, 0).with(FACING, Direction.UP));
 	}
 
+	@Override
 	protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		return switch ((state.get(FACING)).getAxis()) {
 			case X -> X_SHAPE;
@@ -109,5 +119,14 @@ public class EnergyBatteryBlock extends BlockWithEntity implements WireConnectab
 	@Override
 	protected boolean canPathfindThrough(BlockState state, NavigationType type) {
 		return false;
+	}
+
+	@Override
+	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+		tooltip.addAll(Text.literal("256000 Energy Capacity").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
+
+		if (stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) != null) {
+			tooltip.addAll(Text.literal(stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) + " Energy Stored").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
+		}
 	}
 }

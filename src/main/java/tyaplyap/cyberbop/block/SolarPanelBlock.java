@@ -62,7 +62,6 @@ public class SolarPanelBlock extends BlockWithEntity implements WireConnectable 
 		return world.isClient ? null : validateTicker(type, CyberbopBlockEntities.SOLAR_PANEL, SolarPanelBlockEntity::tick);
 	}
 
-	//TODO: не передавать энергию если false
 	@Override
 	public boolean canConnect(BlockState state, BlockPos pos, BlockState wireState, BlockPos wirePos, Direction direction) {
 		return !direction.equals(Direction.DOWN);
