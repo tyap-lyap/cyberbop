@@ -10,7 +10,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
@@ -22,6 +24,7 @@ import tyaplyap.cyberbop.block.entity.ChargingPadBlockEntity;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
 import tyaplyap.cyberbop.extension.PlayerExtension;
+import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.util.transfer.EnergyStorage;
 
 import java.util.List;
@@ -78,5 +81,9 @@ public class ChargingPadBlock extends BlockWithEntity {
 	@Override
 	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
 		tooltip.add(Text.literal("64000 Energy Capacity").formatted(Formatting.GRAY));
+
+		if (stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) != null) {
+			tooltip.addAll(Text.literal(stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) + " Energy Stored").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
+		}
 	}
 }

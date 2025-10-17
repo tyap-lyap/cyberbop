@@ -14,6 +14,16 @@
           "name": "cyberbop:battery_block"
         }
       ],
+      "functions": [
+        {
+          "source": "block_entity",
+          "include": [
+            "cyberbop:energy_stored"
+          ],
+          "function": "minecraft:copy_components"
+        }
+      ],
+
       "rolls": 1.0
     }
   ],

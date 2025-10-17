@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.block.entity.SolarPanelBlockEntity;
+import tyaplyap.cyberbop.item.CyberbopItems;
 
 import java.util.List;
 
@@ -71,5 +72,9 @@ public class SolarPanelBlock extends BlockWithEntity implements WireConnectable 
 	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
 		tooltip.addAll(Text.literal(energyCapacity + " Energy Capacity").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
 		tooltip.addAll(Text.literal(generationRate + "/t Generation Rate").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
+
+		if (stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) != null) {
+			tooltip.addAll(Text.literal(stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) + " Energy Stored").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
+		}
 	}
 }

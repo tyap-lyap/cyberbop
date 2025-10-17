@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
@@ -12,6 +13,7 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.util.transfer.BlockEnergyStorage;
 import tyaplyap.cyberbop.util.transfer.EnergyStorage;
 import tyaplyap.cyberbop.util.transfer.IEnergyStorage;
@@ -87,6 +89,25 @@ public final BlockEnergyStorage energyStorage = new BlockEnergyStorage() {
 		this.writeNbt(nbtCompound, registryLookup);
 		return nbtCompound;
 	}
+
+	@Override
+	protected void readComponents(ComponentsAccess components) {
+		super.readComponents(components);
+		this.energyStorage.storedEnergy = components.getOrDefault(CyberbopItems.STORED_ENERGY_COMPONENT, 0);
+	}
+
+	@Override
+	protected void addComponents(ComponentMap.Builder componentMapBuilder) {
+		super.addComponents(componentMapBuilder);
+		if (this.energyStorage.storedEnergy > 0) {
+			componentMapBuilder.add(CyberbopItems.STORED_ENERGY_COMPONENT, this.energyStorage.storedEnergy);
+		}
+	}
+
+	@Override
+	public void removeFromCopiedStackNbt(NbtCompound nbt) {
+		nbt.remove("number");
+		}
 
 	@Override
 	public Packet<ClientPlayPacketListener> toUpdatePacket() {

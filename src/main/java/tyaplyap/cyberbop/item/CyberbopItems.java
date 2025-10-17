@@ -1,7 +1,9 @@
 package tyaplyap.cyberbop.item;
 
+import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.component.ComponentType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
@@ -18,6 +20,12 @@ import java.util.Map;
 
 public class CyberbopItems {
 	public static final Map<Identifier, Item> ITEMS = new LinkedHashMap<>();
+
+	public static final ComponentType<Integer> STORED_ENERGY_COMPONENT = Registry.register(
+		Registries.DATA_COMPONENT_TYPE,
+		Identifier.of(CyberbopMod.MOD_ID, "energy_stored"),
+		ComponentType.<Integer>builder().codec(Codec.INT).build()
+	);
 
 	public static final Item FLIGHT_MODULE = add("flight_module", new FlightModule(new Item.Settings().maxCount(1)));
 	public static final Item CREATIVE_BATTERY_MODULE = add("creative_battery_module", new CreativeBatteryModule(new Item.Settings().maxCount(1)));

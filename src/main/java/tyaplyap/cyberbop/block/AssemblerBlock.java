@@ -13,7 +13,9 @@ import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
 import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -125,5 +127,9 @@ public class AssemblerBlock extends BlockWithEntity {
 	@Override
 	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
 		tooltip.add(Text.literal("128000 Energy Capacity").formatted(Formatting.GRAY));
+
+		if (stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) != null) {
+			tooltip.addAll(Text.literal(stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) + " Energy Stored").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
+		}
 	}
 }
