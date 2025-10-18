@@ -36,7 +36,7 @@ public class EnergyWireBlockEntity extends BlockEntity {
 		for (var directionNeighbor : Direction.values()) {
 			BlockEnergyStorage energyStorage = BlockEnergyStorage.SIDED.find(wire.getWorld(), wire.getPos().offset(directionNeighbor), directionNeighbor.getOpposite());
 			if (energyStorage != null && energyStorage.type() != null) {
-				if (energyStorage.type().equals(IEnergyStorage.Type.RECEIVER)) {
+				if (energyStorage.type().equals(IEnergyStorage.Type.RECEIVER) && !energyStorage.isFull()) {
 					addStorages(receivers, energyStorage, directionNeighbor);
 				}
 				if (energyStorage.type().equals(IEnergyStorage.Type.BATTERY) || energyStorage.type().equals(IEnergyStorage.Type.GENERATOR)) {
@@ -111,6 +111,7 @@ public class EnergyWireBlockEntity extends BlockEntity {
 				}
 			}
 			blockEntity.transferEnergy(storages, receivers);
+
 			blockEntity.transferEnergy(storages, storages);
 			wires.clear();
 			storages.clear();
@@ -132,11 +133,13 @@ public class EnergyWireBlockEntity extends BlockEntity {
 	}
 
 	private void transferEnergy(Map<BlockEnergyStorage, List<Direction>> sources, Map<BlockEnergyStorage, List<Direction>> targets) {
-		for (var source : sources.keySet()) {
-			for (var target : targets.keySet()) {
-
-				if (canIO(source, sources.get(source), false) && canIO(target, targets.get(target), true)) {
-					BlockEnergyStorage.transfer(source, target, source.transferRate(), IEnergyStorage.Type.WIRE);
+		if (!sources.isEmpty() && !targets.isEmpty()) {
+			for (var source : sources.keySet()) {
+				int balancedEnergy = Math.min(source.transferRate(), source.storedEnergy) / targets.size();
+				for (var target : targets.keySet()) {
+					if (canIO(source, sources.get(source), false) && canIO(target, targets.get(target), true)) {
+						BlockEnergyStorage.transfer(source, target, Math.clamp(balancedEnergy, 1, source.transferRate()), IEnergyStorage.Type.WIRE);
+					}
 				}
 			}
 		}

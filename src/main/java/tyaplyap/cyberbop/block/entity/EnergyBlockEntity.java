@@ -23,7 +23,6 @@ import java.util.*;
 
 
 public abstract class EnergyBlockEntity extends BlockEntity  {
-//todo СДЕЛАТЬ СОХРАНЕНИЕ ЭНЕРГИИ ПРИ ЛОМАНИИИ!!!!!!!!!!!!!!!!!!!ё
 public final BlockEnergyStorage energyStorage = new BlockEnergyStorage() {
 	@Override
 	public void getDirectionIO(Map<Direction, TypeIO> direction) {
@@ -106,7 +105,7 @@ public final BlockEnergyStorage energyStorage = new BlockEnergyStorage() {
 
 	@Override
 	public void removeFromCopiedStackNbt(NbtCompound nbt) {
-		nbt.remove("number");
+		nbt.remove("EnergyStored");
 		}
 
 	@Override
