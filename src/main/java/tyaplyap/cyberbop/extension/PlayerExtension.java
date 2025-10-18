@@ -118,11 +118,15 @@ public interface PlayerExtension {
 		double maxHealth = 0;
 
 		for(CyborgPartType partType : CyborgPartType.values()) {
-			maxHealth = maxHealth + ((CyborgPartItem)this.getCyborgPart(partType).getItem()).getHealth();
+			if (this.getCyborgPart(partType).getItem() instanceof CyborgPartItem partItem) {
+				maxHealth = maxHealth + ((CyborgPartItem)this.getCyborgPart(partType).getItem()).getHealth();
+			}
 		}
-		maxHealth = maxHealth - player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).getBaseValue();
+		if(maxHealth > 0) {
+			maxHealth = maxHealth - player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).getBaseValue();
 
-		player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).addPersistentModifier(new EntityAttributeModifier(CyberbopMod.id("cyborg_health"), maxHealth, EntityAttributeModifier.Operation.ADD_VALUE));
+			player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).addPersistentModifier(new EntityAttributeModifier(CyberbopMod.id("cyborg_health"), maxHealth, EntityAttributeModifier.Operation.ADD_VALUE));
+		}
 	}
 
 //	Vec3d getAssemblePos();

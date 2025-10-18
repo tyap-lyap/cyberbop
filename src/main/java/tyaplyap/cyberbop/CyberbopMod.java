@@ -57,7 +57,7 @@ public class CyberbopMod implements ModInitializer {
 		ServerPlayerEvents.COPY_FROM.register((oldPlayer, newPlayer, alive) -> {
 			if(alive) {
 				((PlayerExtension)newPlayer).copyFrom((PlayerExtension) oldPlayer);
-				((PlayerExtension)newPlayer).setupAttributes(newPlayer);
+				if(((PlayerExtension)newPlayer).isCyborg()) ((PlayerExtension)newPlayer).setupAttributes(newPlayer);
 			}
 		});
 
