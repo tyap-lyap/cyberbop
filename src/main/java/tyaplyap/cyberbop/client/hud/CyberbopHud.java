@@ -42,7 +42,7 @@ public class CyberbopHud {
 		int y = context.getScaledWindowHeight() - 39;
 		var interactionManager = MinecraftClient.getInstance().interactionManager;
 
-		if(player instanceof PlayerExtension ex && ex.isCyborg() && interactionManager != null && interactionManager.hasStatusBars()) {
+		if(player instanceof PlayerExtension ex && ex.isCyborg() && interactionManager != null && interactionManager.hasStatusBars() && !MinecraftClient.getInstance().options.hudHidden) {
 			context.drawTexture(ENERGY_BACKGROUND, x, y, 0, 0, 81, 8, 81, 8);
 
 			int width = (int)(80.0F * Math.clamp((float)ex.getEnergyStored() / (float)ex.getCapacity(), 0, 1));
