@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import tyaplyap.cyberbop.block.CyberbopBlocks;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
+import tyaplyap.cyberbop.compat.ToughAsNailsCyberbop;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.packet.UseJetpackPacket;
@@ -51,6 +53,8 @@ public class CyberbopMod implements ModInitializer {
 		UseJetpackPacket.registerC2SPackets();
 		UseJetpackPacket.registerS2CPackets();
 		UseJetpackPacket.registerServerReceivers();
+
+		if(FabricLoader.getInstance().isModLoaded("toughasnails")) ToughAsNailsCyberbop.init();
 
 //		FabricDefaultAttributeRegistry.register(FAKE_PLAYER_ENTITY, LivingEntity.createLivingAttributes());
 

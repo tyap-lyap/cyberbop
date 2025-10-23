@@ -48,8 +48,8 @@ public class CyberbopItems {
 	public static final Item GOLDEN_ARM = add("golden_cyborg_arm", new CyborgArmPartItem("golden_right_arm", "golden_left_arm", 5000, 1.5, new Item.Settings().maxCount(1)));
 	public static final Item GOLDEN_LEG = add("golden_cyborg_leg", new CyborgLegPartItem("golden_right_leg", "golden_left_leg", 5000, 1.5, new Item.Settings().maxCount(1)));
 
-	public static final Item ADVANCED_HEAD = add("advanced_cyborg_head", new CyborgHeadPartItem("advanced_head", 11350, 6.5, new Item.Settings().maxCount(1)));
-	public static final Item ADVANCED_BODY = add("advanced_cyborg_body", new CyborgBodyPartItem("advanced_body", 11350, 6.5, new Item.Settings().maxCount(1)));
+	public static final Item ADVANCED_HEAD = add("advanced_cyborg_head", new CyborgHeadPartItem("advanced_head", 11350, 7, new Item.Settings().maxCount(1)));
+	public static final Item ADVANCED_BODY = add("advanced_cyborg_body", new CyborgBodyPartItem("advanced_body", 11350, 7, new Item.Settings().maxCount(1)));
 	public static final Item ADVANCED_ARM = add("advanced_cyborg_arm", new CyborgArmPartItem("advanced_right_arm", "advanced_left_arm", 7350, 4, new Item.Settings().maxCount(1)));
 	public static final Item ADVANCED_LEG = add("advanced_cyborg_leg", new CyborgLegPartItem("advanced_right_leg", "advanced_left_leg", 7350, 4, new Item.Settings().maxCount(1)));
 

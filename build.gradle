@@ -23,6 +23,14 @@ repositories {
 			includeGroup "maven.modrinth"
 		}
 	}
+	
+	maven {
+		name = 'GeckoLib'
+		url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+		content {
+			includeGroup("software.bernie.geckolib")
+		}
+	}
 }
 
 dependencies {
@@ -31,6 +39,10 @@ dependencies {
 
 	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api}"
+	modImplementation "software.bernie.geckolib:geckolib-fabric-1.21.1:4.8.2"
+
+	modCompileOnly "maven.modrinth:tough-as-nails:dLxSK1xF"
+	modCompileOnly "maven.modrinth:glitchcore:lbSHOhee"
 
 //	modImplementation include("eu.pb4:polymer-core:0.9.18+1.21.1")
 //	modImplementation include("eu.pb4:polymer-virtual-entity:0.9.18+1.21.1")

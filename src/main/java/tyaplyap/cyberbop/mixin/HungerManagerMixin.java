@@ -24,9 +24,7 @@ public abstract class HungerManagerMixin {
 			isCyborg = ex.isCyborg();
 
 			if(isCyborg) {
-
 				if(ex.getEnergyStored() > 0) {
-
 					if(player.getHealth() != player.getMaxHealth()) {
 						this.foodTickTimer++;
 						if (this.foodTickTimer >= 40) {
@@ -39,14 +37,10 @@ public abstract class HungerManagerMixin {
 							this.foodTickTimer = 0;
 						}
 					}
-
-
 				}
-
 				ci.cancel();
 			}
 		}
-
 	}
 
 	@Inject(method = "getFoodLevel", at = @At("HEAD"), cancellable = true)

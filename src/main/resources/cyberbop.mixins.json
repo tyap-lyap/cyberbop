@@ -8,16 +8,21 @@
     "PiglinBrainMixin",
     "PlayerEntityMixin",
     "ServerPlayerMixin",
-    "ServerPlayNetworkHandlerMixin"
+    "ServerPlayNetworkHandlerMixin",
+    "toughasnails.ThirstDataMixin",
+    "toughasnails.ThirstHooksMixin"
   ],
   "client": [
     "ClientPlayerMixin",
     "InGameHudMixin",
     "LightmapTextureManagerMixin",
     "LivingEntityRenderMixin",
-    "PlayerRendererMixin"
+    "PlayerRendererMixin",
+    "toughasnails.TemperatureHooksClientMixin",
+    "toughasnails.ThirstOverlayRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "plugin": "tyaplyap.cyberbop.mixin.CyberbopMixins"
 }
