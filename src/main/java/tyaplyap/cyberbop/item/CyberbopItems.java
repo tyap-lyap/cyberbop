@@ -10,6 +10,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.GlobalPos;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.block.CyberbopBlocks;
 
@@ -27,6 +28,18 @@ public class CyberbopItems {
 		ComponentType.<Integer>builder().codec(Codec.INT).build()
 	);
 
+	public static final ComponentType<GlobalPos> RETREAT_MODULE_COMPONENT = Registry.register(
+		Registries.DATA_COMPONENT_TYPE,
+		CyberbopMod.id("retreat_module_pos"),
+		ComponentType.<GlobalPos>builder().codec(GlobalPos.CODEC).build()
+	);
+
+	public static final ComponentType<Boolean> RETREAT_MODULE_STATUS_COMPONENT = Registry.register(
+		Registries.DATA_COMPONENT_TYPE,
+		CyberbopMod.id("retreat_module_status"),
+		ComponentType.<Boolean>builder().codec(Codec.BOOL).build()
+	);
+
 	public static final Item FLIGHT_MODULE = add("flight_module", new FlightModule(new Item.Settings().maxCount(1)));
 	public static final Item CREATIVE_BATTERY_MODULE = add("creative_battery_module", new CreativeBatteryModule(new Item.Settings().maxCount(1)));
 	public static final Item LARGE_BATTERY_MODULE = add("large_battery_module", new BatteryModule(128000, new Item.Settings().maxCount(1)));
@@ -37,6 +50,7 @@ public class CyberbopItems {
 	public static final Item SOLAR_CELL = add("solar_cell", new Item(new Item.Settings()));
 	public static final Item NIGHT_VISION_MODULE = add("night_vision_module", new NightVisionModule(new Item.Settings().maxCount(1)));
 	public static final Item XRAY_VISION_MODULE = add("xray_vision_module", new XrayVisionModule(new Item.Settings().maxCount(1)));
+	public static final Item RETREAT_MODULE = add("retreat_module", new RetreatModule(new Item.Settings().maxCount(1)));
 
 	public static final Item BASIC_HEAD = add("basic_cyborg_head", new CyborgHeadPartItem("basic_head", 5000, 3, new Item.Settings().maxCount(1)));
 	public static final Item BASIC_BODY = add("basic_cyborg_body", new CyborgBodyPartItem("basic_body", 5000, 5, new Item.Settings().maxCount(1)));
@@ -56,6 +70,7 @@ public class CyberbopItems {
 	public static final Item CHRONOSTEEL_INGOT = add("chronosteel_ingot", new Item(new Item.Settings()));
 
 	public static final Item DEBUG_ENERGY_STICK = add("debug_energy_stick", new DebugEnergyStick(new Item.Settings().maxCount(1)));
+
 
 	static ArrayList<Item> debugItems = new ArrayList<>(List.of(CyberbopItems.DEBUG_ENERGY_STICK, CyberbopBlocks.BATTERY_TEST.asItem(), CyberbopBlocks.ENERGY_RECEIVER.asItem(), CyberbopBlocks.ENERGY_GENERATOR.asItem()));
 
