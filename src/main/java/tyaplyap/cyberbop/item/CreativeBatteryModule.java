@@ -17,7 +17,7 @@ public class CreativeBatteryModule extends CyborgModuleItem {
 	}
 
 	@Override
-	public void tick(ServerWorld world, PlayerEntity player, PlayerExtension extension) {
+	public void tick(ServerWorld world, PlayerEntity player, PlayerExtension extension, ItemStack stack) {
 		extension.setEnergyStored(extension.getCapacity());
 	}
 

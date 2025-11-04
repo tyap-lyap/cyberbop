@@ -49,7 +49,7 @@ public class AssemblerBlock extends BlockWithEntity {
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
 		// Make sure to check world.isClient if you only want to tick only on serverside.
-		return !world.isClient ? validateTicker(type, CyberbopBlockEntities.ASSEMBLER, DebugUtil::updateEnergyDebug) : null;
+		return world.isClient ? validateTicker(type, CyberbopBlockEntities.ASSEMBLER, AssemblerBlockEntity::animateError) : null;
 	}
 
 	@Override

@@ -18,7 +18,7 @@ public class FlightModule extends CyborgModuleItem {
 	}
 
 	@Override
-	public void tick(ServerWorld world, PlayerEntity player, PlayerExtension ex) {
+	public void tick(ServerWorld world, PlayerEntity player, PlayerExtension ex, ItemStack stack) {
 		if(ex.isCyborg() && !player.isCreative() && !player.isSpectator()) {
 			if(ex.getEnergyStored() > 0) {
 				if(!player.getAbilities().allowFlying) {

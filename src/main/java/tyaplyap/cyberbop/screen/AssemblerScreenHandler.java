@@ -39,8 +39,8 @@ public class AssemblerScreenHandler extends ScreenHandler {
 		this.inventory = inventory;
 		this.addSlot(new CyborgPartSlot(inventory, 0, 80, 13, CyborgPartType.HEAD));
 		this.addSlot(new CyborgPartSlot(inventory, 1, 80, 35,CyborgPartType.BODY));
-		this.addSlot(new CyborgPartSlot(inventory, 2, 102, 30,CyborgPartType.RIGHT_ARM));
-		this.addSlot(new CyborgPartSlot(inventory, 3, 58, 30,CyborgPartType.LEFT_ARM));
+		this.addSlot(new CyborgPartSlot(inventory, 2, 102, 25,CyborgPartType.RIGHT_ARM));
+		this.addSlot(new CyborgPartSlot(inventory, 3, 58, 25,CyborgPartType.LEFT_ARM));
 		this.addSlot(new CyborgPartSlot(inventory, 4, 96, 57,CyborgPartType.RIGHT_LEG));
 		this.addSlot(new CyborgPartSlot(inventory, 5, 64, 57,CyborgPartType.LEFT_LEG));
 		this.addSlot(new CyborgModuleSlot(inventory,6,8, 12, MODULE_SLOTS));

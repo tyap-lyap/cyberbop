@@ -18,7 +18,7 @@ public class SolarCellModule extends CyborgModuleItem {
 	}
 
 	@Override
-	public void tick(ServerWorld world, PlayerEntity player, PlayerExtension extension) {
+	public void tick(ServerWorld world, PlayerEntity player, PlayerExtension extension, ItemStack stack) {
 		if (world.getTimeOfDay() % 24000 < 13000) {
 			if(world.getLightLevel(LightType.SKY, player.getBlockPos()) == 15) {
 				extension.setEnergyStored(Math.min(extension.getEnergyStored() + (world.isRaining() ? 1 : 2), extension.getCapacity()));

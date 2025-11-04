@@ -216,7 +216,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 				}
 
 				getModules().forEach(stack -> {
-					if(stack.getItem() instanceof CyborgModuleItem moduleItem) moduleItem.tick(player.getServerWorld(), player, this);
+					if(stack.getItem() instanceof CyborgModuleItem moduleItem) moduleItem.tick(player.getServerWorld(), player, this, stack);
 				});
 			}
 		}

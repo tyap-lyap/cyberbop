@@ -29,7 +29,7 @@ public class JetpackModule extends CyborgModuleItem {
 	}
 
 	@Override
-	public void tick(ServerWorld world, PlayerEntity player, PlayerExtension ex) {
+	public void tick(ServerWorld world, PlayerEntity player, PlayerExtension ex, ItemStack stack) {
 		if (ex.isCyborg() && ex.containsModule(CyberbopItems.JETPACK_MODULE) && !ex.containsModule(CyberbopItems.FLIGHT_MODULE) && !player.isCreative() && !player.isSpectator()) {
 
 			if (JetpackUseTracker.usesJetpack(player.getUuid())) {

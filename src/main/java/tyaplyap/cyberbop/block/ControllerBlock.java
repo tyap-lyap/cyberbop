@@ -151,7 +151,7 @@ public class ControllerBlock extends BlockWithEntity {
 			if(blockEntity instanceof AssemblerBlockEntity assembler && player instanceof PlayerExtension cyborg) {
 				if (!cyborg.isCyborg() && assembler.isComplete()) {
 					if(!world.isClient) {
-						becomeCyborg(world, player, assemblerPos, assembler);
+						becomeCyborg(world, pos, player, assemblerPos, assembler);
 						player.teleport((ServerWorld) world, assemblerPos.getX() + 0.5, assemblerPos.getY() + 1, assemblerPos.getZ() + 0.5, Set.of(), assembler.getCachedState().get(AssemblerBlock.FACING).asRotation(), 0);
 					}
 					return ActionResult.SUCCESS;
@@ -198,7 +198,7 @@ public class ControllerBlock extends BlockWithEntity {
 		assembler.updateListeners();
 	}
 
-	private void becomeCyborg(World world, PlayerEntity player, BlockPos assemblerPos, AssemblerBlockEntity assembler) {
+	private void becomeCyborg(World world, BlockPos pos, PlayerEntity player, BlockPos assemblerPos, AssemblerBlockEntity assembler) {
 		PlayerExtension cyborg = (PlayerExtension)player;
 		cyborg.setCyborg(true);
 
@@ -210,19 +210,28 @@ public class ControllerBlock extends BlockWithEntity {
 		cyborg.setCyborgLeftLeg(assembler.getLeftLeg());
 
 		if (!assembler.getModule(1).isEmpty())
-			if (assembler.getModule(1).getItem() instanceof CyborgModuleItem)
+			if (assembler.getModule(1).getItem() instanceof CyborgModuleItem moduleItem) {
+				moduleItem.controllerLogic(this, pos, world, player, assembler.getModule(1));
 				cyborg.setModule1(assembler.getModule(1));
-			else ItemScatterer.spawn(world, assemblerPos.getX(), assemblerPos.getY(), assemblerPos.getZ(), assembler.getModule(1));
+			} else {
+				ItemScatterer.spawn(world, assemblerPos.getX(), assemblerPos.getY(), assemblerPos.getZ(), assembler.getModule(1));
+			}
 
 		if (!assembler.getModule(2).isEmpty())
-			if (assembler.getModule(2).getItem() instanceof CyborgModuleItem)
+			if (assembler.getModule(2).getItem() instanceof CyborgModuleItem moduleItem) {
+				moduleItem.controllerLogic(this, pos, world, player, assembler.getModule(2));
 				cyborg.setModule2(assembler.getModule(2));
-			else ItemScatterer.spawn(world, assemblerPos.getX(), assemblerPos.getY(), assemblerPos.getZ(), assembler.getModule(2));
+			} else {
+				ItemScatterer.spawn(world, assemblerPos.getX(), assemblerPos.getY(), assemblerPos.getZ(), assembler.getModule(2));
+			}
 
 		if (!assembler.getModule(3).isEmpty())
-			if (assembler.getModule(3).getItem() instanceof CyborgModuleItem)
+			if (assembler.getModule(3).getItem() instanceof CyborgModuleItem moduleItem) {
+				moduleItem.controllerLogic(this, pos, world, player, assembler.getModule(3));
 				cyborg.setModule3(assembler.getModule(3));
-			else ItemScatterer.spawn(world, assemblerPos.getX(), assemblerPos.getY(), assemblerPos.getZ(), assembler.getModule(3));
+			} else {
+				ItemScatterer.spawn(world, assemblerPos.getX(), assemblerPos.getY(), assemblerPos.getZ(), assembler.getModule(3));
+			}
 
 		assembler.getItems().clear();
 		EnergyStorage.transfer(assembler.energyStorage, cyborg.getEnergyStorage(), cyborg.getCapacity(), IEnergyStorage.Type.RECEIVER);

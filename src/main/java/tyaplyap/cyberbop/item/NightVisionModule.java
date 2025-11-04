@@ -20,7 +20,7 @@ public class NightVisionModule extends CyborgModuleItem {
 	}
 
 	@Override
-	public void tick(ServerWorld world, PlayerEntity player, PlayerExtension ex) {
+	public void tick(ServerWorld world, PlayerEntity player, PlayerExtension ex, ItemStack stack) {
 		if(!player.isCreative() && !player.isSpectator() && ex.getEnergyStored() > 0) {
 			ex.setEnergyStored(Math.max(ex.getEnergyStored() - 2, 0));
 		}

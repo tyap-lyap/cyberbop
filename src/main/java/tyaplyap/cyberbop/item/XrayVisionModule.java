@@ -30,7 +30,7 @@ public class XrayVisionModule extends CyborgModuleItem {
 	}
 
 	@Override
-	public void tick(ServerWorld world, PlayerEntity player, PlayerExtension extension) {
+	public void tick(ServerWorld world, PlayerEntity player, PlayerExtension extension, ItemStack stack) {
 		if(player.age % 100L == 0L && extension.getEnergyStored() > 0 && !player.isCreative() && !player.isSpectator()) {
 			extension.setEnergyStored(Math.max(extension.getEnergyStored() - 500, 0));
 		}

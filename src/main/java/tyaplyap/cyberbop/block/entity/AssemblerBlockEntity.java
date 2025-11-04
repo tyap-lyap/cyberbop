@@ -17,6 +17,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.item.CyborgModuleItem;
 import tyaplyap.cyberbop.item.CyborgPartItem;
@@ -214,5 +215,18 @@ public class AssemblerBlockEntity extends EnergyContainer {
 	public void updateListeners() {
 		this.markDirty();
 		this.getWorld().updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), Block.NOTIFY_ALL);
+	}
+
+	public static void animateError(World world, BlockPos pos, BlockState state, AssemblerBlockEntity blockEntity) {
+		if (blockEntity.tickError <= 255 && !blockEntity.reverse) {
+			blockEntity.tickError += 16;
+		} else {
+			blockEntity.reverse = true;
+		}
+		if (blockEntity.tickError > 60 && blockEntity.reverse) {
+			blockEntity.tickError -= 16;
+		} else {
+			blockEntity.reverse = false;
+		}
 	}
 }

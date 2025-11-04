@@ -44,19 +44,6 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 		errorModel = ctx.getLayerModelPart(CyberbopModClient.ERROR_LAYER);
 	}
 
-	public void animateError(AssemblerBlockEntity blockEntity) {
-		if (blockEntity.tickError <= 255 && !blockEntity.reverse) {
-			blockEntity.tickError += 16;
-		} else {
-			blockEntity.reverse = true;
-		}
-		if (blockEntity.tickError > 60 && blockEntity.reverse) {
-			blockEntity.tickError -= 16;
-		} else {
-			blockEntity.reverse = false;
-		}
-	}
-
 	@Override
 	public void render(T entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
 		var world = entity.getWorld();
@@ -86,7 +73,6 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 					}
 				}
 			});
-			animateError(entity);
 			renderOverlay(entity, tickDelta, matrices, vertexConsumers, light, overlay);
 			if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
 				DebugRender.DebugRender(entity, tickDelta, matrices, vertexConsumers,  light,  overlay);

@@ -1,4 +1,4 @@
-package tyaplyap.cyberbop.mixin;
+package tyaplyap.cyberbop;
 
 import net.fabricmc.loader.api.FabricLoader;
 import org.objectweb.asm.tree.ClassNode;
