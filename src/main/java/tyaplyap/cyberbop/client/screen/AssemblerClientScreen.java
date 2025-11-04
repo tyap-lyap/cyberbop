@@ -23,7 +23,6 @@ import tyaplyap.cyberbop.block.AssemblerBlock;
 import tyaplyap.cyberbop.client.render.CyborgPartRenderer;
 import tyaplyap.cyberbop.client.render.CyborgPartRenderers;
 import tyaplyap.cyberbop.client.util.EnergySynchronization;
-import tyaplyap.cyberbop.entity.TestCyborgEntity;
 import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.screen.AssemblerScreenHandler;
 import tyaplyap.cyberbop.screen.FurnaceGeneratorScreenHandler;
@@ -49,7 +48,7 @@ public class AssemblerClientScreen extends HandledScreen<AssemblerScreenHandler>
 		RenderSystem.setShaderTexture(0, TEXTURE);
 		int x = (width - backgroundWidth) / 2;
 		int y = (height - backgroundHeight) / 2;
-		drawEntity(context, x + 26, y + 8, x + 20, y + 78, 30, 0.0625F, mouseX, mouseY, new TestCyborgEntity(CyberbopMod.CYBORG_ENTITY,this.client.world));
+		drawEntity(context, x + 26, y + 8, x + 20, y + 78, 30, 0.0625F, mouseX, mouseY, this.client.player);
 
 		context.drawTexture(TEXTURE, x, y,20, 0, 0, 179, backgroundHeight, 256, 256);
 		context.getMatrices().translate(0,0,100);
