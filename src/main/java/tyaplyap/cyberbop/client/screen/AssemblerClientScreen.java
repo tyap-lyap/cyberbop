@@ -10,7 +10,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
 import org.joml.Vector3f;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.client.render.CyborgPartRenderer;
@@ -106,7 +105,6 @@ public class AssemblerClientScreen extends HandledScreen<AssemblerScreenHandler>
 		matrices.translate(2.17, -1.51, 0.5);
 		model.translate(new Vector3f(x2, y2, 0));
 		model.rotate(rotate);
-		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(0));
 		matrices.scale(1.3f,1.3f,1.3f);
 
 		VertexConsumer vertexConsumer = context.getVertexConsumers().getBuffer(RenderLayer.getEntityCutoutNoCull(CyberbopMod.id("textures/entity/cyborg_gui.png")));
