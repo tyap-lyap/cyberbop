@@ -11,6 +11,7 @@ import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -19,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import tyaplyap.cyberbop.CyberbopMod;
+import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.item.CyborgModuleItem;
 import tyaplyap.cyberbop.item.CyborgPartItem;
 import tyaplyap.cyberbop.screen.AssemblerScreenHandler;
@@ -35,7 +37,7 @@ public class AssemblerBlockEntity extends EnergyContainer {
 
 	public boolean reverse;
 
-	protected DefaultedList<ItemStack> inventory = DefaultedList.ofSize(9, ItemStack.EMPTY);
+	protected DefaultedList<ItemStack> inventory = DefaultedList.ofSize(10, ItemStack.EMPTY);
 
 	@Override
 	protected Text getContainerName() {
@@ -149,7 +151,7 @@ public class AssemblerBlockEntity extends EnergyContainer {
 		}
 		return false;
 	}
-
+	
 	public ItemStack getHead() {return this.getItems().get(0);}
 
 	public ItemStack getBody() {return this.getItems().get(1);}

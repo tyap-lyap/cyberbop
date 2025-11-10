@@ -1,10 +1,13 @@
 package tyaplyap.cyberbop.screen.slot;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 import tyaplyap.cyberbop.item.CyborgPartItem;
 import tyaplyap.cyberbop.util.CyborgPartType;
+import tyaplyap.cyberbop.util.ScreenUtil;
+
 
 public class CyborgPartSlot extends Slot {
 
@@ -18,6 +21,11 @@ public class CyborgPartSlot extends Slot {
 	@Override
 	public boolean canInsert(ItemStack stack) {
 		return (stack.getItem() instanceof CyborgPartItem partItem && partItem.getPartName(partType) != null);
+	}
+
+	@Override
+	public boolean canTakeItems(PlayerEntity playerEntity) {
+		return !ScreenUtil.isUnlockExtraModule(inventory) || !ScreenUtil.haveExtraModuleStack(inventory);
 	}
 
 	@Override

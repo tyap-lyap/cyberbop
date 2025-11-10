@@ -17,16 +17,18 @@ import tyaplyap.cyberbop.screen.slot.CyborgModuleSlot;
 import tyaplyap.cyberbop.screen.slot.CyborgPartSlot;
 import tyaplyap.cyberbop.util.CyborgPartType;
 import tyaplyap.cyberbop.util.ImplInventory;
+import tyaplyap.cyberbop.util.ScreenUtil;
 
 public class AssemblerScreenHandler extends ScreenHandler {
 
 	private final Inventory inventory;
 	private final ServerPlayerEntity serverPlayer;
 	private AssemblerBlockEntity assemblerBlockEntity;
-	public static final int[] MODULE_SLOTS = {6,7,8};
+	public static final int[] MODULE_SLOTS = {6,7,8,9};
+	public static final int[] EXTRA_MODULE_SLOTS = {9};
 
 	public AssemblerScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos) {
-		this(CyberbopMod.FURNACE_GENERATOR_SCREEN, syncId, playerInventory, ImplInventory.ofSize(9), pos, null);
+		this(CyberbopMod.FURNACE_GENERATOR_SCREEN, syncId, playerInventory, ImplInventory.ofSize(10), pos, null);
 	}
 
 	public AssemblerScreenHandler(ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ImplInventory inventory, BlockPos pos, ServerPlayerEntity serverPlayer) {
@@ -35,7 +37,7 @@ public class AssemblerScreenHandler extends ScreenHandler {
 		if (serverPlayer != null && !serverPlayer.getWorld().isClient) {
 			this.assemblerBlockEntity = (AssemblerBlockEntity) playerInventory.player.getWorld().getBlockEntity(pos);
 		}
-		checkSize(inventory,9);
+		checkSize(inventory,10);
 		this.inventory = inventory;
 		this.addSlot(new CyborgPartSlot(inventory, 0, 80, 13, CyborgPartType.HEAD));
 		this.addSlot(new CyborgPartSlot(inventory, 1, 80, 35,CyborgPartType.BODY));
@@ -46,6 +48,7 @@ public class AssemblerScreenHandler extends ScreenHandler {
 		this.addSlot(new CyborgModuleSlot(inventory,6,8, 12, MODULE_SLOTS));
 		this.addSlot(new CyborgModuleSlot(inventory,7,8, 30, MODULE_SLOTS));
 		this.addSlot(new CyborgModuleSlot(inventory,8,8, 48, MODULE_SLOTS));
+		this.addSlot(new CyborgModuleSlot(inventory,9,30, 12, MODULE_SLOTS, true));
 
 
 		for (int y = 0; y < 3; y++) {
@@ -57,7 +60,6 @@ public class AssemblerScreenHandler extends ScreenHandler {
 		for (int i = 0; i < 9; i++) {
 			this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
 		}
-
 	}
 
 	@Override
@@ -65,6 +67,7 @@ public class AssemblerScreenHandler extends ScreenHandler {
 		if (!player.getWorld().isClient) {
 			assemblerBlockEntity.updateListeners();
 		}
+
 		super.onSlotClick(slotIndex, button, actionType, player);
 	}
 	@Override
@@ -79,6 +82,14 @@ public class AssemblerScreenHandler extends ScreenHandler {
 		ServerPlayNetworking.send(serverPlayer, new EnergyGuiUpdatePacket(0, 0));
 		}
 		super.onClosed(player);
+	}
+
+	public boolean isBlockedPartsSlots() {
+		return ScreenUtil.haveExtraModuleStack(inventory);
+	}
+
+	public boolean isBlockedExtraModuleSlots() {
+		return !ScreenUtil.isUnlockExtraModule(inventory);
 	}
 
 	@Override

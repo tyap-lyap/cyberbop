@@ -18,6 +18,7 @@ import tyaplyap.cyberbop.client.util.EnergySynchronization;
 import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.screen.AssemblerScreenHandler;
 import tyaplyap.cyberbop.util.CyborgPartType;
+import tyaplyap.cyberbop.util.ScreenUtil;
 
 import java.util.List;
 
@@ -29,7 +30,8 @@ public class AssemblerClientScreen extends HandledScreen<AssemblerScreenHandler>
 
 	private static final Identifier TEXTURE = CyberbopMod.id("textures/gui/container/assembler.png");
 	private static final Identifier ENERGY_BAR = CyberbopMod.id("container/energy_bar");
-	private static final Identifier SLOT = CyberbopMod.id("container/container_slot");
+	private static final Identifier SLOT = CyberbopMod.id("container/slot");
+	private static final Identifier LOCKED_SLOT = CyberbopMod.id("container/locked_slot");
 
 	@Override
 	protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
@@ -42,17 +44,31 @@ public class AssemblerClientScreen extends HandledScreen<AssemblerScreenHandler>
 
 		context.drawTexture(TEXTURE, x, y,20, 0, 0, 179, backgroundHeight, 256, 256);
 		context.getMatrices().translate(0,0,100);
+
 		context.drawGuiTexture(SLOT, 18, 18, 0, 0, this.x + 79, this.y + 12,50, 18, 18);
 		context.drawGuiTexture(SLOT, 18, 18, 0, 0, this.x + 79, this.y + 34,50, 18, 18);
 		context.drawGuiTexture(SLOT, 18, 18, 0, 0, this.x + 101, this.y + 24,50, 18, 18);
 		context.drawGuiTexture(SLOT, 18, 18, 0, 0, this.x + 57, this.y + 24,50, 18, 18);
 		context.drawGuiTexture(SLOT, 18, 18, 0, 0, this.x + 95, this.y + 56,50, 18, 18);
 		context.drawGuiTexture(SLOT, 18, 18, 0, 0, this.x + 63, this.y + 56,50, 18, 18);
+		context.drawGuiTexture(SLOT, 18, 18, 0, 0, this.x + 29, this.y + 11,50, 18, 18);
 		int height_bar = (int)(68 * (MathHelper.clamp((float) EnergySynchronization.getEnergy()[0] / EnergySynchronization.getEnergy()[1], 0.0F, 1.0F))) +1;
 
 		context.drawGuiTexture(ENERGY_BAR, 12, 69, 0, 69 - height_bar, this.x + 156, this.y + 78 - height_bar, 12, height_bar);
 
+		if (this.getScreenHandler().isBlockedExtraModuleSlots()) {
+			context.drawGuiTexture(LOCKED_SLOT, 18, 18, 0, 0, this.x + 29, this.y + 11,50, 18, 18);
+		}
+		if (this.getScreenHandler().isBlockedPartsSlots()) {
+			context.drawGuiTexture(LOCKED_SLOT, 18, 18, 0, 0, this.x + 79, this.y + 12,350, 18, 18);
+			context.drawGuiTexture(LOCKED_SLOT, 18, 18, 0, 0, this.x + 79, this.y + 34,350, 18, 18);
+			context.drawGuiTexture(LOCKED_SLOT, 18, 18, 0, 0, this.x + 101, this.y + 24,350, 18, 18);
+			context.drawGuiTexture(LOCKED_SLOT, 18, 18, 0, 0, this.x + 57, this.y + 24,350, 18, 18);
+			context.drawGuiTexture(LOCKED_SLOT, 18, 18, 0, 0, this.x + 95, this.y + 56,350, 18, 18);
+			context.drawGuiTexture(LOCKED_SLOT, 18, 18, 0, 0, this.x + 63, this.y + 56,350, 18, 18);
+		}
 	}
+
 
 	@Override
 	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
@@ -72,17 +88,16 @@ public class AssemblerClientScreen extends HandledScreen<AssemblerScreenHandler>
 		titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2;
 		titleY = 4;
 	}
-	public static void drawCyborg(DrawContext context, int x1, int y1, int x2, int y2) {
+	public void drawCyborg(DrawContext context, int x1, int y1, int x2, int y2) {
 		float x = (float)(x1 + x2) / 2.0F;
 		float y = (float)(y1 + y2) / 2.0F;
 		context.getMatrices().push();
-		context.getMatrices().translate((double)x, (double)y+31.6, 50);
+		context.getMatrices().translate(x, (double)y+31.6, 50);
 		context.getMatrices().scale(30, 30, -30);
 
 		DiffuseLighting.method_34742();
 
 		CyborgPartRenderer renderer = CyborgPartRenderers.get(CyberbopItems.BASIC_HEAD.getDefaultStack(), CyborgPartType.HEAD);
-
 		renderPart(context.getMatrices(), renderer.model.get().getHead(), context, 0, 0,new Vector3f(0,0,0));
 		renderPart(context.getMatrices(), renderer.model.get().getBody(), context, 0, 0,new Vector3f());
 		renderPart(context.getMatrices(), renderer.model.get().getLeftArm(), context, 5, 2,new Vector3f(0,0,(float) Math.toRadians(-125)));
@@ -101,7 +116,6 @@ public class AssemblerClientScreen extends HandledScreen<AssemblerScreenHandler>
 	private static void renderPart(MatrixStack matrices, ModelPart model, DrawContext context, float x2, float y2, Vector3f rotate) {
 		matrices.push();
 		model.resetTransform();
-		model.translate(new Vector3f(0, 0, 0));
 		matrices.translate(2.17, -1.51, 0.5);
 		model.translate(new Vector3f(x2, y2, 0));
 		model.rotate(rotate);

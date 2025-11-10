@@ -28,7 +28,7 @@ public class FurnaceGeneratorScreenHandler extends ScreenHandler {
 	private final ServerPlayerEntity serverPlayer;
 	private FurnaceGeneratorBlockEntity furnaceGeneratorBlock;
 	public FurnaceGeneratorScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos) {
-		this(CyberbopMod.FURNACE_GENERATOR_SCREEN, syncId, playerInventory, ImplInventory.ofSize(2), new ArrayPropertyDelegate(4), pos, null);
+		this(CyberbopMod.FURNACE_GENERATOR_SCREEN, syncId, playerInventory, ImplInventory.ofSize(2), new ArrayPropertyDelegate(2), pos, null);
 	}
 
 	public FurnaceGeneratorScreenHandler(ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ImplInventory inventory, PropertyDelegate propertyDelegate, BlockPos pos, ServerPlayerEntity serverPlayer) {

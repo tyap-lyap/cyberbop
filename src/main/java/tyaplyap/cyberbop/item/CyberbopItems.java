@@ -8,6 +8,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.GlobalPos;
@@ -40,6 +42,11 @@ public class CyberbopItems {
 		ComponentType.<Boolean>builder().codec(Codec.BOOL).build()
 	);
 
+	public static final TagKey<Item> SLOT_HEAD_UNLOCK = TagKey.of(RegistryKeys.ITEM, CyberbopMod.id("extra_slot_head_unlock"));
+	public static final TagKey<Item> SLOT_BODY_UNLOCK = TagKey.of(RegistryKeys.ITEM, CyberbopMod.id("extra_slot_body_unlock"));
+	public static final TagKey<Item> SLOT_ARMS_UNLOCK = TagKey.of(RegistryKeys.ITEM, CyberbopMod.id("extra_slot_arms_unlock"));
+	public static final TagKey<Item> SLOT_LEGS_UNLOCK = TagKey.of(RegistryKeys.ITEM, CyberbopMod.id("extra_slot_legs_unlock"));
+
 	public static final Item FLIGHT_MODULE = add("flight_module", new FlightModule(new Item.Settings().maxCount(1)));
 	public static final Item CREATIVE_BATTERY_MODULE = add("creative_battery_module", new CreativeBatteryModule(new Item.Settings().maxCount(1)));
 	public static final Item LARGE_BATTERY_MODULE = add("large_battery_module", new BatteryModule(128000, new Item.Settings().maxCount(1)));
@@ -52,6 +59,7 @@ public class CyberbopItems {
 	public static final Item XRAY_VISION_MODULE = add("xray_vision_module", new XrayVisionModule(new Item.Settings().maxCount(1)));
 	public static final Item RETREAT_MODULE = add("retreat_module", new RetreatModule(new Item.Settings().maxCount(1)));
 	public static final Item EXTRA_HEALTH_MODULE = add("extra_health_module", new ExtendedHealthModule(new Item.Settings().maxCount(1)));
+	public static final Item MINING_GAUNTLETS_MODULE = add("mining_gauntlets_module", new MiningGauntletsModule(new Item.Settings().maxCount(1)));
 
 	public static final Item BASIC_HEAD = add("basic_cyborg_head", new CyborgHeadPartItem("basic_head", 5000, 3, new Item.Settings().maxCount(1)));
 	public static final Item BASIC_BODY = add("basic_cyborg_body", new CyborgBodyPartItem("basic_body", 5000, 5, new Item.Settings().maxCount(1)));
