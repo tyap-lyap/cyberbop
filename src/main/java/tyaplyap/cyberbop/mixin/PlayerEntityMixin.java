@@ -82,6 +82,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 	private static final TrackedData<ItemStack> MODULE_1 = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
 	private static final TrackedData<ItemStack> MODULE_2 = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
 	private static final TrackedData<ItemStack> MODULE_3 = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
+	private static final TrackedData<ItemStack> MODULE_4 = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
 
 //	private Vec3d assemblePos = null;
 
@@ -103,6 +104,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 		builder.add(MODULE_1, ItemStack.EMPTY);
 		builder.add(MODULE_2, ItemStack.EMPTY);
 		builder.add(MODULE_3, ItemStack.EMPTY);
+		builder.add(MODULE_4, ItemStack.EMPTY);
 	}
 
 	@Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
@@ -122,6 +124,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 		if (!getModule1().isEmpty()) nbt.put("module1", getModule1().encode(registry));
 		if (!getModule2().isEmpty()) nbt.put("module2", getModule2().encode(registry));
 		if (!getModule3().isEmpty()) nbt.put("module3", getModule3().encode(registry));
+		if (!getModule3().isEmpty()) nbt.put("module4", getModule4().encode(registry));
 
 //		if (getAssemblePos() != null) {
 //			nbt.putDouble("assemblePosX", getAssemblePos().x);
@@ -193,7 +196,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 		}
 		else setModule3(ItemStack.EMPTY);
 
-
+		if (nbt.contains("module4", NbtElement.COMPOUND_TYPE)) {
+			NbtCompound nbtCompound = nbt.getCompound("module4");
+			setModule4(ItemStack.fromNbt(registry, nbtCompound).orElse(ItemStack.EMPTY));
+		}
+		else setModule4(ItemStack.EMPTY);
 //		if(nbt.contains("assemblePosX") && nbt.contains("assemblePosY") && nbt.contains("assemblePosZ")) {
 //			setAssemblePos(new Vec3d(nbt.getDouble("assemblePosX"), nbt.getDouble("assemblePosY"), nbt.getDouble("assemblePosZ")));
 //		}
@@ -331,6 +338,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 	}
 
 	@Override
+	public ItemStack getModule4() {
+		return PlayerEntity.class.cast(this).getDataTracker().get(MODULE_4);
+	}
+
+	@Override
 	public void setModule1(ItemStack module) {
 		PlayerEntity.class.cast(this).getDataTracker().set(MODULE_1, module);
 	}
@@ -346,8 +358,13 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 	}
 
 	@Override
+	public void setModule4(ItemStack module) {
+		PlayerEntity.class.cast(this).getDataTracker().set(MODULE_4, module);
+	}
+
+	@Override
 	public List<ItemStack> getModules() {
-		return List.of(getModule1(), getModule2(), getModule3());
+		return List.of(getModule1(), getModule2(), getModule3(), getModule4());
 	}
 
 	@Override

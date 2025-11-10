@@ -84,10 +84,12 @@ public interface PlayerExtension {
 	ItemStack getModule1();
 	ItemStack getModule2();
 	ItemStack getModule3();
+	ItemStack getModule4();
 
 	void setModule1(ItemStack module);
 	void setModule2(ItemStack module);
 	void setModule3(ItemStack module);
+	void setModule4(ItemStack module);
 
 	List<ItemStack> getModules();
 
@@ -112,6 +114,7 @@ public interface PlayerExtension {
 		this.setModule1(old.getModule1());
 		this.setModule2(old.getModule2());
 		this.setModule3(old.getModule3());
+		this.setModule4(old.getModule4());
 	}
 
 	default void setupAttributes(PlayerEntity player) {

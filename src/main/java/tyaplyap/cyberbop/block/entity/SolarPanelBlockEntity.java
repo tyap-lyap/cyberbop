@@ -4,6 +4,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.Heightmap;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import tyaplyap.cyberbop.util.transfer.BlockEnergyStorage;
 import tyaplyap.cyberbop.util.transfer.EnergyStorage;
@@ -12,7 +13,6 @@ import tyaplyap.cyberbop.util.transfer.IEnergyStorage;
 import java.util.Map;
 
 public class SolarPanelBlockEntity extends EnergyBlockEntity{
-	private int minY;
 	public final int energyCapacity;
 	public final int generationRate;
 
@@ -38,35 +38,15 @@ public class SolarPanelBlockEntity extends EnergyBlockEntity{
 	}
 
 	public static void tick (World world, BlockPos pos, BlockState state, SolarPanelBlockEntity blockEntity) {
-		if (world.getTimeOfDay() % 24000 < 13000) {
-
-			BlockPos blockPos = new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ());
-
-			int topY = world.getTopY(Heightmap.Type.WORLD_SURFACE, pos.getX(), pos.getZ());
-			for (int y = pos.getY(); y < topY; y++) {
-				BlockState blockState = world.getBlockState(new BlockPos(pos.getX(), y, pos.getZ()));
-				if (blockEntity.getCapacity() == blockEntity.getEnergyStored() || blockState.getOpacity(world, blockPos) >= 15) {
-
-					return;
-				}
-				blockPos = blockPos.up();
-			}
-
+		if (world.getLightLevel(LightType.SKY, pos) == 15) {
 			int generationRate = world.isRaining() ? blockEntity.generationRate / 2 : blockEntity.generationRate;
 
 			if (blockEntity.getEnergyStored() < blockEntity.getCapacity()) {
 				blockEntity.setEnergyStored(Math.min(blockEntity.getCapacity(), blockEntity.getEnergyStored() + generationRate));
 				blockEntity.markDirty();
 			}
-
 		}
 		EnergyBlockEntity.BatteryTick(world, pos, state, blockEntity);
-	}
-
-	@Override
-	public void setWorld(World world) {
-		super.setWorld(world);
-		this.minY = world.getBottomY() - 1;
 	}
 
 	@Override

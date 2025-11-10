@@ -188,6 +188,7 @@ public class ControllerBlock extends BlockWithEntity {
 		assembler.setModule(1, cyborg.getModule1());
 		assembler.setModule(2, cyborg.getModule2());
 		assembler.setModule(3, cyborg.getModule3());
+		assembler.setModule(4, cyborg.getModule4());
 
 		cyborg.clearAllParts();
 		player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).removeModifier(CyberbopMod.id("cyborg_health"));
@@ -195,6 +196,7 @@ public class ControllerBlock extends BlockWithEntity {
 		cyborg.setModule1(ItemStack.EMPTY);
 		cyborg.setModule2(ItemStack.EMPTY);
 		cyborg.setModule3(ItemStack.EMPTY);
+		cyborg.setModule4(ItemStack.EMPTY);
 		assembler.updateListeners();
 	}
 
@@ -231,6 +233,14 @@ public class ControllerBlock extends BlockWithEntity {
 				cyborg.setModule3(assembler.getModule(3));
 			} else {
 				ItemScatterer.spawn(world, assemblerPos.getX(), assemblerPos.getY(), assemblerPos.getZ(), assembler.getModule(3));
+			}
+
+		if (!assembler.getModule(4).isEmpty())
+			if (assembler.getModule(4).getItem() instanceof CyborgModuleItem moduleItem) {
+				moduleItem.controllerLogic(this, pos, world, player, assembler.getModule(4));
+				cyborg.setModule4(assembler.getModule(4));
+			} else {
+				ItemScatterer.spawn(world, assemblerPos.getX(), assemblerPos.getY(), assemblerPos.getZ(), assembler.getModule(4));
 			}
 
 		assembler.getItems().clear();

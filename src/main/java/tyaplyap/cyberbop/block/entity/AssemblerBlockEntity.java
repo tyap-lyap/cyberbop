@@ -115,7 +115,7 @@ public class AssemblerBlockEntity extends EnergyContainer {
 	}
 
 	public boolean containsModule(Item moduleStack) {
-		return moduleStack instanceof CyborgModuleItem module && ((!getModule(1).isEmpty() && getModule(1).getItem().equals(module)) || (!getModule(2).isEmpty() && getModule(2).getItem().equals(module)) || (!getModule(3).isEmpty() && getModule(3).getItem().equals(module)));
+		return moduleStack instanceof CyborgModuleItem module && ((!getModule(1).isEmpty() && getModule(1).getItem().equals(module)) || (!getModule(2).isEmpty() && getModule(2).getItem().equals(module)) || (!getModule(3).isEmpty() && getModule(4).getItem().equals(module)));
 	}
 
 	public ItemStack getModule(int id) {
@@ -123,6 +123,7 @@ public class AssemblerBlockEntity extends EnergyContainer {
 			case 1 -> this.getItems().get(6);
 			case 2 -> this.getItems().get(7);
 			case 3 -> this.getItems().get(8);
+			case 4 -> this.getItems().get(9);
 			default -> ItemStack.EMPTY;
 		};
 	}
@@ -132,6 +133,7 @@ public class AssemblerBlockEntity extends EnergyContainer {
 				case 1 -> this.getItems().set(6, module);
 				case 2 -> this.getItems().set(7, module);
 				case 3 -> this.getItems().set(8, module);
+				case 4 -> this.getItems().set(9, module);
 			}
 	}
 
@@ -139,10 +141,11 @@ public class AssemblerBlockEntity extends EnergyContainer {
 		if(getModule(1).isEmpty()) setModule(1, module);
 		else if(getModule(2).isEmpty()) setModule(2, module);
 		else if(getModule(3).isEmpty()) setModule(3, module);
+		else if(getModule(4).isEmpty()) setModule(4, module);
 	}
 
 	public boolean hasEmptyModuleSlot() {
-		return (getModule(1).isEmpty()) || (getModule(2).isEmpty()) || (getModule(3).isEmpty());
+		return (getModule(1).isEmpty()) || (getModule(2).isEmpty()) || (getModule(3).isEmpty() || (getModule(4).isEmpty()));
 	}
 
 	public boolean isValid(ItemStack itemStack, CyborgPartType partType) {
@@ -151,7 +154,7 @@ public class AssemblerBlockEntity extends EnergyContainer {
 		}
 		return false;
 	}
-	
+
 	public ItemStack getHead() {return this.getItems().get(0);}
 
 	public ItemStack getBody() {return this.getItems().get(1);}
