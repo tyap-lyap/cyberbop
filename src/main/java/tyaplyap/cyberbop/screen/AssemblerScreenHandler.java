@@ -28,7 +28,7 @@ public class AssemblerScreenHandler extends ScreenHandler {
 	public static final int[] EXTRA_MODULE_SLOTS = {9};
 
 	public AssemblerScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos) {
-		this(CyberbopMod.FURNACE_GENERATOR_SCREEN, syncId, playerInventory, ImplInventory.ofSize(10), pos, null);
+		this(CyberbopMod.ASSEMBLER_SCREEN, syncId, playerInventory, ImplInventory.ofSize(10), pos, null);
 	}
 
 	public AssemblerScreenHandler(ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ImplInventory inventory, BlockPos pos, ServerPlayerEntity serverPlayer) {
