@@ -1,4 +1,4 @@
-package tyaplyap.cyberbop.animation.module;
+package tyaplyap.cyberbop.client.animation.module;
 
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.util.RenderUtil;

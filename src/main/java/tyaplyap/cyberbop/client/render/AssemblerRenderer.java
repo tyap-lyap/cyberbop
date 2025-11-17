@@ -9,6 +9,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
@@ -17,6 +18,7 @@ import tyaplyap.cyberbop.block.AssemblerBlock;
 import tyaplyap.cyberbop.block.entity.AssemblerBlockEntity;
 import tyaplyap.cyberbop.client.CyberbopModClient;
 import tyaplyap.cyberbop.client.render.debug.DebugRender;
+import tyaplyap.cyberbop.item.CyborgModuleItem;
 import tyaplyap.cyberbop.util.CyborgPartType;
 
 import java.util.Map;
@@ -73,6 +75,13 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 					}
 				}
 			});
+
+			for(ItemStack stack : entity.getItems()) {
+				if(stack.getItem() instanceof CyborgModuleItem module) {
+					if(module.getModuleRenderer() != null) module.getModuleRenderer().renderAssembler(entity, entity.getCachedState(), tickDelta, matrices, vertexConsumers, light, overlay);
+				}
+			}
+
 			renderOverlay(entity, tickDelta, matrices, vertexConsumers, light, overlay);
 			if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
 				DebugRender.DebugRender(entity, tickDelta, matrices, vertexConsumers,  light,  overlay);

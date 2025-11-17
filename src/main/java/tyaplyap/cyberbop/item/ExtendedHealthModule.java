@@ -4,12 +4,18 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.block.ControllerBlock;
 
-public class ExtendedHealthModule extends CyborgModuleItem{
+import java.util.List;
+
+public class ExtendedHealthModule extends CyborgModuleItem {
+
 	public ExtendedHealthModule(Settings settings) {
 		super(settings);
 	}
@@ -22,5 +28,11 @@ public class ExtendedHealthModule extends CyborgModuleItem{
 	@Override
 	public void onModuleRemoved(World world, PlayerEntity player) {
 		player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).removeModifier(CyberbopMod.id("cyborg_health_module"));
+	}
+
+	@Override
+	public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
+		tooltip.add(Text.literal("Grants 20 health, this extra health").formatted(Formatting.GRAY));
+		tooltip.add(Text.literal("takes extra energy.").formatted(Formatting.GRAY));
 	}
 }

@@ -1,5 +1,7 @@
 package tyaplyap.cyberbop.item;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -8,9 +10,12 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import tyaplyap.cyberbop.block.ControllerBlock;
+import tyaplyap.cyberbop.client.render.module.ModuleRenderer;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 
 public abstract class CyborgModuleItem extends Item {
+
+	private ModuleRenderer renderer;
 
 	public CyborgModuleItem(Settings settings) {
 		super(settings);
@@ -19,6 +24,7 @@ public abstract class CyborgModuleItem extends Item {
 	public void tick(ServerWorld world, PlayerEntity player, PlayerExtension extension, ItemStack stack) {
 	}
 
+	@Environment(EnvType.CLIENT)
 	public void clientTick(ClientWorld world, PlayerEntity player, PlayerExtension extension) {
 	}
 
@@ -28,5 +34,15 @@ public abstract class CyborgModuleItem extends Item {
 
 	public  void controllerLogic(ControllerBlock controllerBlock, BlockPos pos, World world, PlayerEntity player, ItemStack itemStack) {
 
+	}
+
+	@Environment(EnvType.CLIENT)
+	public void setModuleRenderer(ModuleRenderer renderer) {
+		this.renderer = renderer;
+	}
+
+	@Environment(EnvType.CLIENT)
+	public ModuleRenderer getModuleRenderer() {
+		return this.renderer;
 	}
 }

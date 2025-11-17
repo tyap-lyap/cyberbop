@@ -1,4 +1,4 @@
-package tyaplyap.cyberbop.animation.module;
+package tyaplyap.cyberbop.client.animation.module;
 
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;

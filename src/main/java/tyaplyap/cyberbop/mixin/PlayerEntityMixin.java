@@ -319,7 +319,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 
 	@Override
 	public boolean containsModule(Item module) {
-		return (getModule1().getItem().equals(module) || getModule2().getItem().equals(module) || getModule3().getItem().equals(module));
+		return (getModule1().getItem().equals(module) || getModule2().getItem().equals(module) || getModule3().getItem().equals(module) || getModule4().getItem().equals(module));
 	}
 
 	@Override

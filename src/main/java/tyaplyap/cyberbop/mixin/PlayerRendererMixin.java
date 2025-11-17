@@ -10,21 +10,18 @@ import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.RotationAxis;
-import org.joml.Vector3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import software.bernie.geckolib.model.DefaultedGeoModel;
-import software.bernie.geckolib.model.GeoModel;
 import tyaplyap.cyberbop.CyberbopMod;
-import tyaplyap.cyberbop.animation.module.AnimatableModule;
-import tyaplyap.cyberbop.animation.module.LongArmModuleAnimation;
+import tyaplyap.cyberbop.client.animation.module.LongArmModuleAnimation;
 import tyaplyap.cyberbop.client.render.CyborgPartRenderers;
 import tyaplyap.cyberbop.client.render.ModelTestRenderer;
 import tyaplyap.cyberbop.extension.PlayerExtension;
+import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.util.CyborgPartType;
 
 @Mixin(PlayerEntityRenderer.class)
@@ -38,6 +35,9 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
 			return "module";
 		}
 	};;
+
+	@Unique
+	ModelTestRenderer testRenderer = new ModelTestRenderer(geoModel);
 	@Shadow
 	protected abstract void setModelPose(AbstractClientPlayerEntity player);
 
@@ -80,20 +80,20 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
 				playerEntityModel.setAngles(player, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
 
 				modelPart.render(this.model, matrices, vertexConsumers, light, player);
-				VertexConsumer vertexConsumer1 = vertexConsumers.getBuffer(RenderLayer.getEntityCutout(CyberbopMod.id("textures/module/long_arm.png")));
-				ModelTestRenderer testRenderer = new ModelTestRenderer(geoModel);
+				if(ex.containsModule(CyberbopItems.MINING_GAUNTLETS_MODULE)) {
+					VertexConsumer vertexConsumer1 = vertexConsumers.getBuffer(RenderLayer.getEntityCutout(CyberbopMod.id("textures/module/long_arm.png")));
 
-				//matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
-				//matrices.translate(-0.9,0.2,-1.6);
-				//matrices.scale(2,2,2);
-				//matrices.translate(modelPart.model.get().getRightArm().pivotX, modelPart.model.get().getRightArm().pivotY,modelPart.model.get().getRightArm().pivotZ);
+					//matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+					//matrices.translate(-0.9,0.2,-1.6);
+					//matrices.scale(2,2,2);
+					//matrices.translate(modelPart.model.get().getRightArm().pivotX, modelPart.model.get().getRightArm().pivotY,modelPart.model.get().getRightArm().pivotZ);
 
-				if (player.handSwinging) {
-					if (player.getWorld().isClient()) {
-						animatable.getAnimatableInstanceCache().getManagerForId(player.getId()).tryTriggerAnimation("hook", "hook");
+					if (player.handSwinging) {
+						if (player.getWorld().isClient()) {
+							animatable.getAnimatableInstanceCache().getManagerForId(player.getId()).tryTriggerAnimation("hook", "hook");
+						}
 					}
-				}
-				testRenderer.render(matrices, animatable,  vertexConsumers, null, vertexConsumer1, light, 0);
+					testRenderer.render(matrices, animatable,  vertexConsumers, null, vertexConsumer1, light, 0);
 //				if (geoModel.getBone("root").isPresent()) {
 //					geoModel.getBone("root").get().setPivotX(5);
 //					geoModel.getBone("root").get().setPivotY(22);
@@ -103,6 +103,8 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
 //					geoModel.getBone("root").get().setRotZ(this.model.rightArm.roll);
 //					geoModel.getBone("root").get().setModelPosition(new Vector3d(this.model.rightArm.pivotX, this.model.rightArm.pivotY, this.model.rightArm.pivotZ));
 //				}
+				}
+
 				ci.cancel();
 			}
 		}

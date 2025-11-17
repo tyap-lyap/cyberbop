@@ -2,9 +2,7 @@ package tyaplyap.cyberbop.item;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import tyaplyap.cyberbop.util.CyborgPartType;
 
@@ -38,7 +36,7 @@ public abstract class CyborgPartItem extends EnergyItem {
 
 	@Override
 	public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-		tooltip.addAll(Text.literal("+" + getCapacity() + " Energy Capacity").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
-		tooltip.addAll(Text.literal("+" + getHealth() + " Max Health").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
+		tooltip.add(Text.literal("+" + getCapacity() + " Energy Capacity").formatted(Formatting.GRAY));
+		tooltip.add(Text.literal("+" + getHealth() + " Max Health").formatted(Formatting.GRAY));
 	}
 }
