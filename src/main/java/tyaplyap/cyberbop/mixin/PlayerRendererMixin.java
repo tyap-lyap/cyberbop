@@ -94,15 +94,15 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
 					}
 				}
 				testRenderer.render(matrices, animatable,  vertexConsumers, null, vertexConsumer1, light, 0);
-				if (geoModel.getBone("root").isPresent()) {
-					geoModel.getBone("root").get().setPivotX(5);
-					geoModel.getBone("root").get().setPivotY(22);
-					geoModel.getBone("root").get().setPivotZ(0);
-					geoModel.getBone("root").get().setRotX(this.model.rightArm.yaw);
-					geoModel.getBone("root").get().setRotY(this.model.rightArm.pitch);
-					geoModel.getBone("root").get().setRotZ(this.model.rightArm.roll);
-					geoModel.getBone("root").get().setModelPosition(new Vector3d(this.model.rightArm.pivotX, this.model.rightArm.pivotY, this.model.rightArm.pivotZ));
-				}
+//				if (geoModel.getBone("root").isPresent()) {
+//					geoModel.getBone("root").get().setPivotX(5);
+//					geoModel.getBone("root").get().setPivotY(22);
+//					geoModel.getBone("root").get().setPivotZ(0);
+//					geoModel.getBone("root").get().setRotX(this.model.rightArm.yaw);
+//					geoModel.getBone("root").get().setRotY(this.model.rightArm.pitch);
+//					geoModel.getBone("root").get().setRotZ(this.model.rightArm.roll);
+//					geoModel.getBone("root").get().setModelPosition(new Vector3d(this.model.rightArm.pivotX, this.model.rightArm.pivotY, this.model.rightArm.pivotZ));
+//				}
 				ci.cancel();
 			}
 		}
