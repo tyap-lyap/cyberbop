@@ -10,6 +10,7 @@ import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.RotationAxis;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -35,7 +36,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
 		protected String subtype() {
 			return "module";
 		}
-	};;
+	};
 
 	@Unique
 	ModelTestRenderer testRenderer = new ModelTestRenderer(geoModel);
@@ -98,7 +99,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
 							animatable.getAnimatableInstanceCache().getManagerForId(player.getId()).tryTriggerAnimation("hook", "hook");
 						}
 					}
-					RenderUtils.setPositionGeoBone(geoModel.getBone("root"),-1,0,0, 22, 0, model.rightArm, false, 0, 135, 0);
+					RenderUtils.setPositionGeoBone(geoModel.getBone("root"),1,0,0, 22, 0, model.rightArm, false, 0, 135, 0, geoModel.getBone("local_root"));
 					testRenderer.render(matrices, animatable,  vertexConsumers, null, vertexConsumer1, light, 0);
 				}
 				ci.cancel();

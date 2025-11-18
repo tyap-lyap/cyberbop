@@ -53,7 +53,7 @@ public class LongArmModuleRenderer extends ModuleRenderer {
 			}
 
 			if (player.getMainArm() == Arm.RIGHT) {
-				RenderUtils.setPositionGeoBone(geoModel.getBone("root"), 0, 0, 0, 22, contextModel.sneaking ? 3.2f : 0, contextModel.rightArm, false);
+				RenderUtils.setPositionGeoBone(geoModel.getBone("root"), 0, 0, 0, 22, contextModel.sneaking ? 3.2f : 0, contextModel.rightArm, false, 0, 0, 0, geoModel.getBone("local_root"));
 			} else {
 				RenderUtils.setPositionGeoBone(geoModel.getBone("root"), 0, 0, 0, 22, contextModel.sneaking ? 3.2f : 0, contextModel.leftArm, true);
 			}
