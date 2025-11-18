@@ -8,6 +8,7 @@ import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Arm;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RotationAxis;
 import software.bernie.geckolib.model.DefaultedGeoModel;
@@ -17,6 +18,7 @@ import tyaplyap.cyberbop.block.AssemblerBlock;
 import tyaplyap.cyberbop.block.entity.AssemblerBlockEntity;
 import tyaplyap.cyberbop.client.model.module.ModuleModel;
 import tyaplyap.cyberbop.client.render.ModelTestRenderer;
+import tyaplyap.cyberbop.util.RenderUtils;
 
 //TODO прикрепить к левой руке если игрок левша
 public class LongArmModuleRenderer extends ModuleRenderer {
@@ -44,27 +46,22 @@ public class LongArmModuleRenderer extends ModuleRenderer {
 	public void render(PlayerEntityModel<?> contextModel, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, LivingEntity entity) {
 		if (entity instanceof PlayerEntity player) {
 			VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityCutout(CyberbopMod.id(this.texture)));
-//			matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
-//			matrices.translate(-0.9,0.2,-1.6);
-//			matrices.scale(2,2,2);
-//			matrices.translate(contextModel.rightArm.pivotX, contextModel.rightArm.pivotY, contextModel.rightArm.pivotZ);
-
 			if (player.handSwinging) {
 				if (player.getWorld().isClient()) {
 					animatable.getAnimatableInstanceCache().getManagerForId(player.getId()).tryTriggerAnimation("hook", "hook");
 				}
 			}
 
-			if (geoModel.getBone("root").isPresent()) {
-				geoModel.getBone("root").get().updatePivot(contextModel.rightArm.pivotX, contextModel.rightArm.pivotY, contextModel.rightArm.pivotZ);
-				geoModel.getBone("root").get().updatePosition(15, -5, -8);
-				geoModel.getBone("root").get().updateRotation(contextModel.rightArm.yaw, contextModel.rightArm.pitch, contextModel.rightArm.roll);
-//				geoModel.getBone("root").get().setModelPosition(new Vector3d(contextModel.rightArm.pivotX, contextModel.rightArm.pivotY, contextModel.rightArm.pivotZ));
+			if (player.getMainArm() == Arm.RIGHT) {
+				RenderUtils.setPositionGeoBone(geoModel.getBone("root"), 0, 0, 0, 22, contextModel.sneaking ? 3.2f : 0, contextModel.rightArm, false);
+			} else {
+				RenderUtils.setPositionGeoBone(geoModel.getBone("root"), 0, 0, 0, 22, contextModel.sneaking ? 3.2f : 0, contextModel.leftArm, true);
 			}
-
 			testRenderer.render(matrices, animatable,  vertexConsumers, null, vertexConsumer, light, 0);
 		}
 	}
+
+
 
 	@Override
 	public void renderAssembler(AssemblerBlockEntity assembler, BlockState state, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {

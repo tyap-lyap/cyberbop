@@ -23,6 +23,7 @@ import tyaplyap.cyberbop.client.render.ModelTestRenderer;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.util.CyborgPartType;
+import tyaplyap.cyberbop.util.RenderUtils;
 
 @Mixin(PlayerEntityRenderer.class)
 public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
@@ -60,8 +61,18 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
 				playerEntityModel.sneaking = false;
 				playerEntityModel.leaningPitch = 0.0F;
 				playerEntityModel.setAngles(player, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
-				modelPart.render(this.model, matrices, vertexConsumers, light, player);
 
+				modelPart.render(this.model, matrices, vertexConsumers, light, player);
+				if(ex.containsModule(CyberbopItems.MINING_GAUNTLETS_MODULE)) {
+					VertexConsumer vertexConsumer1 = vertexConsumers.getBuffer(RenderLayer.getEntityCutout(CyberbopMod.id("textures/module/long_arm.png")));
+					if (player.handSwinging) {
+						if (player.getWorld().isClient()) {
+							animatable.getAnimatableInstanceCache().getManagerForId(player.getId()).tryTriggerAnimation("hook", "hook");
+						}
+					}
+					RenderUtils.setPositionGeoBone(geoModel.getBone("root"),0f,0,-1, 22, 0, model.leftArm, true);
+					testRenderer.render(matrices, animatable,  vertexConsumers, null, vertexConsumer1, light, 0);
+				}
 				ci.cancel();
 			}
 		}
@@ -82,29 +93,14 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
 				modelPart.render(this.model, matrices, vertexConsumers, light, player);
 				if(ex.containsModule(CyberbopItems.MINING_GAUNTLETS_MODULE)) {
 					VertexConsumer vertexConsumer1 = vertexConsumers.getBuffer(RenderLayer.getEntityCutout(CyberbopMod.id("textures/module/long_arm.png")));
-
-					//matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
-					//matrices.translate(-0.9,0.2,-1.6);
-					//matrices.scale(2,2,2);
-					//matrices.translate(modelPart.model.get().getRightArm().pivotX, modelPart.model.get().getRightArm().pivotY,modelPart.model.get().getRightArm().pivotZ);
-
 					if (player.handSwinging) {
 						if (player.getWorld().isClient()) {
 							animatable.getAnimatableInstanceCache().getManagerForId(player.getId()).tryTriggerAnimation("hook", "hook");
 						}
 					}
+					RenderUtils.setPositionGeoBone(geoModel.getBone("root"),-1,0,0, 22, 0, model.rightArm, false, 0, 135, 0);
 					testRenderer.render(matrices, animatable,  vertexConsumers, null, vertexConsumer1, light, 0);
-//				if (geoModel.getBone("root").isPresent()) {
-//					geoModel.getBone("root").get().setPivotX(5);
-//					geoModel.getBone("root").get().setPivotY(22);
-//					geoModel.getBone("root").get().setPivotZ(0);
-//					geoModel.getBone("root").get().setRotX(this.model.rightArm.yaw);
-//					geoModel.getBone("root").get().setRotY(this.model.rightArm.pitch);
-//					geoModel.getBone("root").get().setRotZ(this.model.rightArm.roll);
-//					geoModel.getBone("root").get().setModelPosition(new Vector3d(this.model.rightArm.pivotX, this.model.rightArm.pivotY, this.model.rightArm.pivotZ));
-//				}
 				}
-
 				ci.cancel();
 			}
 		}
