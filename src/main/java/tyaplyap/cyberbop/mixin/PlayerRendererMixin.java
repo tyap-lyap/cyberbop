@@ -99,7 +99,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
 							animatable.getAnimatableInstanceCache().getManagerForId(player.getId()).tryTriggerAnimation("hook", "hook");
 						}
 					}
-					RenderUtils.setPositionGeoBone(geoModel.getBone("root"),1,0,0, 22, 0, model.rightArm, false, 0, 135, 0, geoModel.getBone("local_root"));
+					RenderUtils.setPositionGeoBone(geoModel.getBone("root"),0,0,0, 22, 0, model.rightArm, false, 0, (float)Math.toRadians(180), 0, geoModel.getBone("local_root"));
 					testRenderer.render(matrices, animatable,  vertexConsumers, null, vertexConsumer1, light, 0);
 				}
 				ci.cancel();
