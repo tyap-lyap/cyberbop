@@ -53,9 +53,11 @@ public class LongArmModuleRenderer extends ModuleRenderer {
 			}
 
 			if (player.getMainArm() == Arm.RIGHT) {
-				RenderUtils.setPositionGeoBone(geoModel.getBone("root"), 0, 0, 0, 22, contextModel.sneaking ? 3.2f : 0, contextModel.rightArm, false, 0,(float)Math.toRadians(90) , 0, geoModel.getBone("local_root"));
+				 RenderUtils.setPositionGeoBone(geoModel.getBone("root"), -1f, 0, 0.0f, 22, contextModel.sneaking ? 3.2f : 0, contextModel.rightArm, 0, 90, 0, geoModel.getBone("local_root"));
+				//New Test Model RenderUtils.setPositionGeoBone(geoModel.getBone("root"), -1f, 0, 0.0f, 22, contextModel.sneaking ? 3.2f : 0, contextModel.rightArm, 0, 90, 0, geoModel.getBone("local_root"));
 			} else {
-				RenderUtils.setPositionGeoBone(geoModel.getBone("root"), 0, 0, 0, 22, contextModel.sneaking ? 3.2f : 0, contextModel.leftArm, true);
+				//New Test Model RenderUtils.setPositionGeoBone(geoModel.getBone("root"), 1, 0, 0, 22, contextModel.sneaking ? 3.2f : 0, contextModel.leftArm, 0, 90, 0, geoModel.getBone("local_root"));
+				RenderUtils.setPositionGeoBone(geoModel.getBone("root"), 1, 0, 0, 22, contextModel.sneaking ? 3.2f : 0, contextModel.leftArm, 0, 90, 0, geoModel.getBone("local_root"));
 			}
 			testRenderer.render(matrices, animatable,  vertexConsumers, null, vertexConsumer, light, 0);
 		}
