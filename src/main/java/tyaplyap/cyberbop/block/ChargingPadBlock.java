@@ -81,10 +81,10 @@ public class ChargingPadBlock extends BlockWithEntity implements WireConnectable
 
 	@Override
 	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-		tooltip.add(Text.literal("64000 Energy Capacity").formatted(Formatting.GRAY));
+		tooltip.add(Text.literal("§b64000 §7Energy Capacity").formatted(Formatting.GRAY));
 
 		if (stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) != null) {
-			tooltip.addAll(Text.literal(stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) + " Energy Stored").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
+			tooltip.addAll(Text.literal("§b" + stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) + " §7Energy Stored").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
 		}
 	}
 

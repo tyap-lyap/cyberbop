@@ -18,6 +18,6 @@ public class AdvancedCyborgLeg extends CyborgLegPartItem {
 	public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
 		super.appendTooltip(stack, context, tooltip, type);
 		tooltip.add(Text.literal("").formatted(Formatting.GRAY));
-		tooltip.add(Text.literal("Full Set Bonus: +1 Module slot").formatted(Formatting.GRAY));
+		tooltip.add(Text.literal("Full Set Bonus: +§61 §7Module slot").formatted(Formatting.GRAY));
 	}
 }

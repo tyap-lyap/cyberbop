@@ -142,6 +142,6 @@ public class JetpackModule extends CyborgModuleItem {
 	public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
 		tooltip.add(Text.literal("Double jump to start ascending").formatted(Formatting.GRAY));
 		tooltip.add(Text.literal("and hold to continue flying.").formatted(Formatting.GRAY));
-		tooltip.add(Text.literal("Consumes 4/t of energy.").formatted(Formatting.GRAY));
+		tooltip.add(Text.literal("Consumes §b4/t §7of energy.").formatted(Formatting.GRAY));
 	}
 }

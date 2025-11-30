@@ -125,11 +125,11 @@ public class FurnaceGeneratorBlock extends BlockWithEntity {
 
 	@Override
 	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-		tooltip.addAll(Text.literal("64000 Energy Capacity").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
-		tooltip.addAll(Text.literal("16/t Generation Rate").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
+		tooltip.addAll(Text.literal("§b64000 §7Energy Capacity").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
+		tooltip.addAll(Text.literal("§b16/t §7Generation Rate").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
 
 		if (stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) != null) {
-			tooltip.addAll(Text.literal(stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) + " Energy Stored").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
+			tooltip.addAll(Text.literal("§b" + stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) + " §7Energy Stored").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
 		}
 	}
 

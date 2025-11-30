@@ -62,7 +62,7 @@ public class XrayVisionModule extends CyborgModuleItem {
 	@Override
 	public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
 		tooltip.add(Text.literal("Highlights nearby ores through").formatted(Formatting.GRAY));
-		tooltip.add(Text.literal("walls every 5 seconds.").formatted(Formatting.GRAY));
+		tooltip.add(Text.literal("walls every §f5 §7seconds.").formatted(Formatting.GRAY));
 	}
 
 	private void highlightNearbyOres(ClientWorld world, BlockPos center) {

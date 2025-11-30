@@ -21,6 +21,6 @@ public class BatteryModule extends CyborgModuleItem {
 
 	@Override
 	public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-		tooltip.add(Text.literal("+" + getEnergyCapacity() + " Energy Capacity").formatted(Formatting.GRAY));
+		tooltip.add(Text.literal("+§b" + getEnergyCapacity() + " §7Energy Capacity").formatted(Formatting.GRAY));
 	}
 }

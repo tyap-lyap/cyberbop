@@ -123,10 +123,10 @@ public class EnergyBatteryBlock extends BlockWithEntity implements WireConnectab
 
 	@Override
 	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-		tooltip.addAll(Text.literal("256000 Energy Capacity").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
+		tooltip.addAll(Text.literal("§b256000 §7Energy Capacity").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
 
 		if (stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) != null) {
-			tooltip.addAll(Text.literal(stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) + " Energy Stored").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
+			tooltip.addAll(Text.literal("§b" + stack.get(CyberbopItems.STORED_ENERGY_COMPONENT) + " §7Energy Stored").getWithStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY))));
 		}
 	}
 }

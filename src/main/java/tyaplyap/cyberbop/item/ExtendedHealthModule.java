@@ -32,7 +32,7 @@ public class ExtendedHealthModule extends CyborgModuleItem {
 
 	@Override
 	public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-		tooltip.add(Text.literal("Grants 20 health, this extra health").formatted(Formatting.GRAY));
+		tooltip.add(Text.literal("Grants §a20.0 §7health, this extra health").formatted(Formatting.GRAY));
 		tooltip.add(Text.literal("takes extra energy.").formatted(Formatting.GRAY));
 	}
 }

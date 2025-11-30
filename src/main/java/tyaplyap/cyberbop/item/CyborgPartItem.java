@@ -36,7 +36,7 @@ public abstract class CyborgPartItem extends EnergyItem {
 
 	@Override
 	public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-		tooltip.add(Text.literal("+" + getCapacity() + " Energy Capacity").formatted(Formatting.GRAY));
-		tooltip.add(Text.literal("+" + getHealth() + " Max Health").formatted(Formatting.GRAY));
+		tooltip.add(Text.literal("+§b" + getCapacity() + " §7Energy Capacity").formatted(Formatting.GRAY));
+		tooltip.add(Text.literal("+§a" + getHealth() + " §7Max Health").formatted(Formatting.GRAY));
 	}
 }
