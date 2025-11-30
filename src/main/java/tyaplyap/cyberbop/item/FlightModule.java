@@ -51,7 +51,7 @@ public class FlightModule extends CyborgModuleItem {
 
 	@Override
 	public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-		tooltip.add(Text.literal("Grants creative flight but").formatted(Formatting.GRAY));
+		tooltip.add(Text.literal("Grants §fcreative flight §7but").formatted(Formatting.GRAY));
 		tooltip.add(Text.literal("consumes a lot of energy.").formatted(Formatting.GRAY));
 	}
 }

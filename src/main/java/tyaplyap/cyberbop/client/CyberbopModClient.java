@@ -16,6 +16,7 @@ import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.client.hud.CyberbopHud;
 import tyaplyap.cyberbop.client.model.*;
 import tyaplyap.cyberbop.client.model.debug.ErrorModel;
+import tyaplyap.cyberbop.client.model.module.FlightModuleModel;
 import tyaplyap.cyberbop.client.model.module.JetpackModuleModel;
 import tyaplyap.cyberbop.client.render.*;
 import tyaplyap.cyberbop.client.screen.AssemblerClientScreen;
@@ -40,6 +41,7 @@ public class CyberbopModClient implements ClientModInitializer {
 	public static final EntityModelLayer ADVANCED_CYBORG_LAYER = new EntityModelLayer(CyberbopMod.id("advanced_cyborg"), "main");
 	public static final EntityModelLayer BASIC_CYBORG_LAYER = new EntityModelLayer(CyberbopMod.id("basic_cyborg"), "main");
 	public static final EntityModelLayer JETPACK_MODULE_LAYER = new EntityModelLayer(CyberbopMod.id("jetpack_module"), "main");
+	public static final EntityModelLayer FLIGHT_MODULE_LAYER = new EntityModelLayer(CyberbopMod.id("flight_module"), "main");
 
 	@Override
 	public void onInitializeClient() {
@@ -78,6 +80,7 @@ public class CyberbopModClient implements ClientModInitializer {
 		EntityModelLayerRegistry.registerModelLayer(ADVANCED_CYBORG_LAYER, AdvancedCyborgModel::getTexturedModelData);
 		EntityModelLayerRegistry.registerModelLayer(BASIC_CYBORG_LAYER, BasicCyborgModel::getTexturedModelData);
 		EntityModelLayerRegistry.registerModelLayer(JETPACK_MODULE_LAYER, JetpackModuleModel::getTexturedModelData);
+		EntityModelLayerRegistry.registerModelLayer(FLIGHT_MODULE_LAYER, FlightModuleModel::getTexturedModelData);
 
 		BlockEntityRendererFactories.register(CyberbopBlockEntities.ASSEMBLER, ctx -> new AssemblerRenderer<>(ctx));
 		BlockEntityRendererFactories.register(CyberbopBlockEntities.CONTROLLER, ctx -> new ControllerRenderer<>(ctx));

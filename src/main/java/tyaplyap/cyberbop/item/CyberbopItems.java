@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.component.ComponentType;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
@@ -12,6 +13,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
 import net.minecraft.util.math.GlobalPos;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.block.CyberbopBlocks;
@@ -51,8 +53,8 @@ public class CyberbopItems {
 	public static final TagKey<Item> SLOT_ARMS_UNLOCK = TagKey.of(RegistryKeys.ITEM, CyberbopMod.id("extra_slot_arms_unlock"));
 	public static final TagKey<Item> SLOT_LEGS_UNLOCK = TagKey.of(RegistryKeys.ITEM, CyberbopMod.id("extra_slot_legs_unlock"));
 
-	public static final Item FLIGHT_MODULE = add("flight_module", new FlightModule(new Item.Settings().maxCount(1)));
-	public static final Item CREATIVE_BATTERY_MODULE = add("creative_battery_module", new CreativeBatteryModule(new Item.Settings().maxCount(1)));
+	public static final Item FLIGHT_MODULE = add("flight_module", new FlightModule(new Item.Settings().maxCount(1).rarity(Rarity.RARE).component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true)));
+	public static final Item CREATIVE_BATTERY_MODULE = add("creative_battery_module", new CreativeBatteryModule(new Item.Settings().maxCount(1).rarity(Rarity.EPIC)));
 	public static final Item LARGE_BATTERY_MODULE = add("large_battery_module", new BatteryModule(128000, new Item.Settings().maxCount(1)));
 	public static final Item EXTRA_BATTERY_MODULE = add("extra_battery_module", new BatteryModule(32000, new Item.Settings().maxCount(1)));
 	public static final Item BATTERY = add("battery", new Item(new Item.Settings()));
