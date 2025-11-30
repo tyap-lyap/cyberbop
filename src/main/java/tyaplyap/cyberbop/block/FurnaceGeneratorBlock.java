@@ -151,6 +151,12 @@ public class FurnaceGeneratorBlock extends BlockWithEntity {
 			double zi = axis == Direction.Axis.Z ? (double)direction.getOffsetZ() * 0.52 : range;
 			world.addParticle(ParticleTypes.SMOKE, x + xi, y + yi, z + zi, 0.0F, 0.0F, 0.0F);
 			world.addParticle(ParticleTypes.FLAME, x + xi, y + yi, z + zi, 0.0F, 0.0F, 0.0F);
+
+			if (random.nextFloat() < 0.11F) {
+				for(int i = 0; i < random.nextInt(2) + 2; ++i) {
+					CampfireBlock.spawnSmokeParticle(world, pos, false, false);
+				}
+			}
 		}
 	}
 }
