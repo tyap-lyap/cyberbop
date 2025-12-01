@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.item.BatteryModule;
-import tyaplyap.cyberbop.item.CyborgModuleItem;
+import tyaplyap.cyberbop.item.BaseCyborgModuleItem;
 import tyaplyap.cyberbop.item.CyborgPartItem;
 import tyaplyap.cyberbop.util.transfer.EnergyStorage;
 import tyaplyap.cyberbop.util.CyborgPartType;
@@ -223,7 +223,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerEx
 				}
 
 				getModules().forEach(stack -> {
-					if(stack.getItem() instanceof CyborgModuleItem moduleItem) moduleItem.tick(player.getServerWorld(), player, this, stack);
+					if(stack.getItem() instanceof BaseCyborgModuleItem moduleItem) moduleItem.tick(player.getServerWorld(), player, this, stack);
 				});
 			}
 		}

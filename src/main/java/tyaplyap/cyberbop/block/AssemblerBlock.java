@@ -25,7 +25,6 @@ import tyaplyap.cyberbop.block.entity.AssemblerBlockEntity;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.item.*;
 import tyaplyap.cyberbop.util.CyborgPartType;
-import tyaplyap.cyberbop.util.DebugUtil;
 
 import java.util.List;
 
@@ -62,7 +61,7 @@ public class AssemblerBlock extends BlockWithEntity {
 		if(!world.isClient() && world.getBlockEntity(pos) instanceof AssemblerBlockEntity assembler) {
 			ItemStack stack = player.getStackInHand(Hand.MAIN_HAND);
 
-			if(stack.getItem() instanceof CyborgModuleItem moduleItem) {
+			if(stack.getItem() instanceof BaseCyborgModuleItem moduleItem) {
 				if(assembler.hasEmptyModuleSlot() && !assembler.containsModule(moduleItem)) {
 					assembler.addModule(stack);
 					player.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);

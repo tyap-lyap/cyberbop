@@ -66,6 +66,7 @@ public class CyberbopItems {
 	public static final Item RETREAT_MODULE = add("retreat_module", new RetreatModule(new Item.Settings().maxCount(1)));
 	public static final Item EXTRA_HEALTH_MODULE = add("extra_health_module", new ExtendedHealthModule(new Item.Settings().maxCount(1)));
 	public static final Item MINING_GAUNTLETS_MODULE = add("mining_gauntlets_module", new MiningGauntletsModule(new Item.Settings().maxCount(1)));
+	public static final Item LONG_ARM_MODULE = add("long_arm_module", new LongArmModule(new Item.Settings().maxCount(1)));
 
 	public static final Item BASIC_HEAD = add("basic_cyborg_head", new CyborgHeadPartItem("basic_head", 5000, 3, new Item.Settings().maxCount(1)));
 	public static final Item BASIC_BODY = add("basic_cyborg_body", new CyborgBodyPartItem("basic_body", 5000, 5, new Item.Settings().maxCount(1)));

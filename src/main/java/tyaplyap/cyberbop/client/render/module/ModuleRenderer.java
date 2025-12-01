@@ -11,10 +11,7 @@ import tyaplyap.cyberbop.client.CyberbopModClient;
 import tyaplyap.cyberbop.client.model.module.FlightModuleModel;
 import tyaplyap.cyberbop.client.model.module.JetpackModuleModel;
 import tyaplyap.cyberbop.client.model.module.ModuleModel;
-import tyaplyap.cyberbop.item.CyberbopItems;
-import tyaplyap.cyberbop.item.FlightModule;
-import tyaplyap.cyberbop.item.JetpackModule;
-import tyaplyap.cyberbop.item.MiningGauntletsModule;
+import tyaplyap.cyberbop.item.*;
 
 public abstract class ModuleRenderer {
 	private static boolean initialized = false;
@@ -34,7 +31,7 @@ public abstract class ModuleRenderer {
 		if(!initialized) {
 			((JetpackModule)CyberbopItems.JETPACK_MODULE).setModuleRenderer(new JetpackModuleRenderer("textures/entity/jetpack_module.png", new JetpackModuleModel(context.getPart(CyberbopModClient.JETPACK_MODULE_LAYER))));
 			((FlightModule)CyberbopItems.FLIGHT_MODULE).setModuleRenderer(new FlightModuleRenderer("textures/entity/flight_module.png", new FlightModuleModel(context.getPart(CyberbopModClient.FLIGHT_MODULE_LAYER))));
-			((MiningGauntletsModule)CyberbopItems.MINING_GAUNTLETS_MODULE).setModuleRenderer(new LongArmModuleRenderer("textures/module/long_arm.png", null));
+			((LongArmModule)CyberbopItems.LONG_ARM_MODULE).setModuleRenderer(new LongArmModuleRenderer());
 
 			initialized = true;
 		}

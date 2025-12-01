@@ -5,9 +5,15 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.screen.ScreenHandlerType;
@@ -22,6 +28,7 @@ import tyaplyap.cyberbop.block.CyberbopBlocks;
 import tyaplyap.cyberbop.block.entity.CyberbopBlockEntities;
 import tyaplyap.cyberbop.block.entity.EnergyBlockEntity;
 import tyaplyap.cyberbop.compat.ToughAsNailsCyberbop;
+import tyaplyap.cyberbop.entity.CyborgAnimationTestEntity;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.packet.UseJetpackPacket;
@@ -38,6 +45,7 @@ public class CyberbopMod implements ModInitializer {
 
 	public static final ScreenHandlerType<FurnaceGeneratorScreenHandler> FURNACE_GENERATOR_SCREEN = Registry.register(Registries.SCREEN_HANDLER, id("furnace_generator"), new ExtendedScreenHandlerType<>(FurnaceGeneratorScreenHandler::new, BlockPos.PACKET_CODEC));
 	public static final ScreenHandlerType<AssemblerScreenHandler> ASSEMBLER_SCREEN = Registry.register(Registries.SCREEN_HANDLER, id("assembler"), new ExtendedScreenHandlerType<>(AssemblerScreenHandler::new, BlockPos.PACKET_CODEC));
+	public static final EntityType<CyborgAnimationTestEntity> CYBORG_ENTITY = Registry.register(Registries.ENTITY_TYPE, Identifier.of(MOD_ID, "cyborg"), FabricEntityTypeBuilder.<CyborgAnimationTestEntity>create(SpawnGroup.MISC, CyborgAnimationTestEntity::new).dimensions(EntityDimensions.changing(0.6F, 1.99F)).trackedUpdateRate(2).build());
 
 //	public static final EntityType<FakePlayerEntity> FAKE_PLAYER_ENTITY = Registry.register(Registries.ENTITY_TYPE, Identifier.of(MOD_ID, "fake_player"), FabricEntityTypeBuilder.<FakePlayerEntity>create(SpawnGroup.MISC,FakePlayerEntity::new).dimensions(EntityDimensions.changing(0.6F, 1.99F)).trackedUpdateRate(2).build());
 
@@ -56,7 +64,7 @@ public class CyberbopMod implements ModInitializer {
 
 		if(FabricLoader.getInstance().isModLoaded("toughasnails")) ToughAsNailsCyberbop.init();
 
-//		FabricDefaultAttributeRegistry.register(FAKE_PLAYER_ENTITY, LivingEntity.createLivingAttributes());
+		FabricDefaultAttributeRegistry.register(CYBORG_ENTITY, LivingEntity.createLivingAttributes());
 
 		ServerPlayerEvents.COPY_FROM.register((oldPlayer, newPlayer, alive) -> {
 			if(alive) {

@@ -4,6 +4,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
@@ -87,6 +88,8 @@ public class CyberbopModClient implements ClientModInitializer {
 		BlockEntityRendererFactories.register(CyberbopBlockEntities.SOLID_FUEL_GENERATOR, ctx -> new SolidFuelGeneratorRenderer<>(ctx));
 		BlockEntityRendererFactories.register(CyberbopBlockEntities.ENERGY_WIRE, ctx -> new WiresRenderer<>(ctx));
 		BlockEntityRendererFactories.register(CyberbopBlockEntities.BATTERY_BLOCK, ctx -> new BatteryRenderer<>(ctx));
+
+		EntityRendererRegistry.register(CyberbopMod.CYBORG_ENTITY, TestCyborgEntityRenderer::new);
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			if (client.player != null) {

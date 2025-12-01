@@ -3,7 +3,6 @@ package tyaplyap.cyberbop.block;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -30,10 +29,8 @@ import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.block.entity.AssemblerBlockEntity;
 import tyaplyap.cyberbop.block.entity.ControllerBlockEntity;
 import tyaplyap.cyberbop.extension.PlayerExtension;
-import tyaplyap.cyberbop.item.CyborgModuleItem;
-import tyaplyap.cyberbop.item.CyborgPartItem;
+import tyaplyap.cyberbop.item.BaseCyborgModuleItem;
 import tyaplyap.cyberbop.util.transfer.EnergyStorage;
-import tyaplyap.cyberbop.util.CyborgPartType;
 import tyaplyap.cyberbop.util.transfer.IEnergyStorage;
 
 import java.util.List;
@@ -158,7 +155,7 @@ public class ControllerBlock extends BlockWithEntity {
 				}
 				else if (cyborg.isCyborg() && assembler.isEmpty()) {
 					cyborg.getModules().forEach(stack -> {
-						if(stack.getItem() instanceof CyborgModuleItem moduleItem) moduleItem.onModuleRemoved(world, player);
+						if(stack.getItem() instanceof BaseCyborgModuleItem moduleItem) moduleItem.onModuleRemoved(world, player);
 					});
 					if(!world.isClient) {
 						becomeFlesh(player, assembler);
@@ -212,7 +209,7 @@ public class ControllerBlock extends BlockWithEntity {
 		cyborg.setCyborgLeftLeg(assembler.getLeftLeg());
 
 		if (!assembler.getModule(1).isEmpty())
-			if (assembler.getModule(1).getItem() instanceof CyborgModuleItem moduleItem) {
+			if (assembler.getModule(1).getItem() instanceof BaseCyborgModuleItem moduleItem) {
 				moduleItem.controllerLogic(this, pos, world, player, assembler.getModule(1));
 				cyborg.setModule1(assembler.getModule(1));
 			} else {
@@ -220,7 +217,7 @@ public class ControllerBlock extends BlockWithEntity {
 			}
 
 		if (!assembler.getModule(2).isEmpty())
-			if (assembler.getModule(2).getItem() instanceof CyborgModuleItem moduleItem) {
+			if (assembler.getModule(2).getItem() instanceof BaseCyborgModuleItem moduleItem) {
 				moduleItem.controllerLogic(this, pos, world, player, assembler.getModule(2));
 				cyborg.setModule2(assembler.getModule(2));
 			} else {
@@ -228,7 +225,7 @@ public class ControllerBlock extends BlockWithEntity {
 			}
 
 		if (!assembler.getModule(3).isEmpty())
-			if (assembler.getModule(3).getItem() instanceof CyborgModuleItem moduleItem) {
+			if (assembler.getModule(3).getItem() instanceof BaseCyborgModuleItem moduleItem) {
 				moduleItem.controllerLogic(this, pos, world, player, assembler.getModule(3));
 				cyborg.setModule3(assembler.getModule(3));
 			} else {
@@ -236,7 +233,7 @@ public class ControllerBlock extends BlockWithEntity {
 			}
 
 		if (!assembler.getModule(4).isEmpty())
-			if (assembler.getModule(4).getItem() instanceof CyborgModuleItem moduleItem) {
+			if (assembler.getModule(4).getItem() instanceof BaseCyborgModuleItem moduleItem) {
 				moduleItem.controllerLogic(this, pos, world, player, assembler.getModule(4));
 				cyborg.setModule4(assembler.getModule(4));
 			} else {

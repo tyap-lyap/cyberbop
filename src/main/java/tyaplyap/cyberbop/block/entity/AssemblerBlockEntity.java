@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import tyaplyap.cyberbop.CyberbopMod;
-import tyaplyap.cyberbop.item.CyborgModuleItem;
+import tyaplyap.cyberbop.item.BaseCyborgModuleItem;
 import tyaplyap.cyberbop.item.CyborgPartItem;
 import tyaplyap.cyberbop.screen.AssemblerScreenHandler;
 import tyaplyap.cyberbop.util.transfer.BlockEnergyStorage;
@@ -113,7 +113,7 @@ public class AssemblerBlockEntity extends EnergyContainer {
 	}
 
 	public boolean containsModule(Item moduleStack) {
-		return moduleStack instanceof CyborgModuleItem module && ((!getModule(1).isEmpty() && getModule(1).getItem().equals(module)) || (!getModule(2).isEmpty() && getModule(2).getItem().equals(module)) || (!getModule(3).isEmpty() && getModule(4).getItem().equals(module)));
+		return moduleStack instanceof BaseCyborgModuleItem module && ((!getModule(1).isEmpty() && getModule(1).getItem().equals(module)) || (!getModule(2).isEmpty() && getModule(2).getItem().equals(module)) || (!getModule(3).isEmpty() && getModule(4).getItem().equals(module)));
 	}
 
 	public ItemStack getModule(int id) {

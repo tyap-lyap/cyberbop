@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tyaplyap.cyberbop.extension.PlayerExtension;
-import tyaplyap.cyberbop.item.CyborgModuleItem;
+import tyaplyap.cyberbop.item.BaseCyborgModuleItem;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class ClientPlayerMixin implements PlayerExtension {
@@ -17,7 +17,7 @@ public abstract class ClientPlayerMixin implements PlayerExtension {
 			if(isCyborg()) {
 
 				getModules().forEach(stack -> {
-					if(stack.getItem() instanceof CyborgModuleItem moduleItem) moduleItem.clientTick(player.clientWorld, player, this);
+					if(stack.getItem() instanceof BaseCyborgModuleItem moduleItem) moduleItem.clientTick(player.clientWorld, player, this);
 				});
 			}
 		}

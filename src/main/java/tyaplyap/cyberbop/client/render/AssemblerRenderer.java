@@ -18,6 +18,7 @@ import tyaplyap.cyberbop.block.AssemblerBlock;
 import tyaplyap.cyberbop.block.entity.AssemblerBlockEntity;
 import tyaplyap.cyberbop.client.CyberbopModClient;
 import tyaplyap.cyberbop.client.render.debug.DebugRender;
+import tyaplyap.cyberbop.item.AnimatableCyborgModule;
 import tyaplyap.cyberbop.item.CyborgModuleItem;
 import tyaplyap.cyberbop.util.CyborgPartType;
 
@@ -79,6 +80,9 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 			for(ItemStack stack : entity.getItems()) {
 				if(stack.getItem() instanceof CyborgModuleItem module) {
 					if(module.getModuleRenderer() != null) module.getModuleRenderer().renderAssembler(entity, entity.getCachedState(), tickDelta, matrices, vertexConsumers, light, overlay);
+				}
+				if(stack.getItem() instanceof AnimatableCyborgModule module) {
+					if(module.getModuleRenderer() != null) module.getModuleRenderer().renderModuleAssembler(stack, entity, entity.getCachedState(), tickDelta, matrices, vertexConsumers, light, overlay);
 				}
 			}
 

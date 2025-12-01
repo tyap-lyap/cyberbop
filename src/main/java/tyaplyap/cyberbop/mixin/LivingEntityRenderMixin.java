@@ -20,6 +20,7 @@ import tyaplyap.cyberbop.client.render.module.ModuleRenderer;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 import tyaplyap.cyberbop.client.render.CyborgPartRenderer;
 import tyaplyap.cyberbop.client.render.CyborgPartRenderers;
+import tyaplyap.cyberbop.item.AnimatableCyborgModule;
 import tyaplyap.cyberbop.item.CyborgModuleItem;
 import tyaplyap.cyberbop.util.CyborgPartType;
 
@@ -58,6 +59,9 @@ public abstract class LivingEntityRenderMixin<T extends LivingEntity, M extends 
 			for(ItemStack stack : ex.getModules()) {
 				if(stack.getItem() instanceof CyborgModuleItem module) {
 					if(module.getModuleRenderer() != null) module.getModuleRenderer().render((PlayerEntityModel<?>)model, matrixStack, vertexConsumerProvider, i, livingEntity);
+				}
+				if(stack.getItem() instanceof AnimatableCyborgModule module) {
+					if(module.getModuleRenderer() != null) module.getModuleRenderer().renderModule(stack,(PlayerEntityModel<?>)model, matrixStack, vertexConsumerProvider, i, livingEntity, g);
 				}
 			}
 		}
