@@ -20,6 +20,7 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoObjectRenderer;
 import tyaplyap.cyberbop.block.entity.AssemblerBlockEntity;
 import tyaplyap.cyberbop.item.AnimatableCyborgModule;
+import tyaplyap.cyberbop.item.CyberbopItems;
 
 public abstract class AnimatableModuleRenderer<M extends AnimatableCyborgModule> extends GeoObjectRenderer<M> {
 
@@ -81,8 +82,8 @@ public abstract class AnimatableModuleRenderer<M extends AnimatableCyborgModule>
 		super.render(matrices, animatable,  vertexConsumers, null, vertexConsumers.getBuffer(RenderLayer.getEntityCutout((this.getTexture()))), light, g);
 	}
 
-	public void renderModuleAssembler(ItemStack stack, AssemblerBlockEntity assembler, BlockState state, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-		this.currentItemStack = stack;
+	public void renderModuleAssembler(AssemblerBlockEntity assembler, BlockState state, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+		this.currentItemStack = CyberbopItems.LONG_ARM_MODULE.getDefaultStack();
 		super.render(matrices, animatable,  vertexConsumers, null, vertexConsumers.getBuffer(RenderLayer.getEntityCutout((this.getTexture()))), light, tickDelta);
 	}
 }

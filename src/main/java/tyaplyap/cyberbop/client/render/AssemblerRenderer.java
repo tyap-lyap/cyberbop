@@ -82,7 +82,7 @@ public class AssemblerRenderer<T extends AssemblerBlockEntity> implements BlockE
 					if(module.getModuleRenderer() != null) module.getModuleRenderer().renderAssembler(entity, entity.getCachedState(), tickDelta, matrices, vertexConsumers, light, overlay);
 				}
 				if(stack.getItem() instanceof AnimatableCyborgModule module) {
-					if(module.getModuleRenderer() != null) module.getModuleRenderer().renderModuleAssembler(stack, entity, entity.getCachedState(), tickDelta, matrices, vertexConsumers, light, overlay);
+					if(module.getModuleRenderer() != null) module.getModuleRenderer().renderModuleAssembler(entity, entity.getCachedState(), tickDelta, matrices, vertexConsumers, light, overlay);
 				}
 			}
 

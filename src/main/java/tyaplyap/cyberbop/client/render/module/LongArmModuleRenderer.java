@@ -16,6 +16,7 @@ import software.bernie.geckolib.model.DefaultedGeoModel;
 import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.block.AssemblerBlock;
 import tyaplyap.cyberbop.block.entity.AssemblerBlockEntity;
+import tyaplyap.cyberbop.item.CyberbopItems;
 import tyaplyap.cyberbop.item.LongArmModule;
 import tyaplyap.cyberbop.util.RenderUtils;
 
@@ -44,8 +45,8 @@ public class LongArmModuleRenderer extends AnimatableModuleRenderer<LongArmModul
 	}
 
 	@Override
-	public void renderModuleAssembler(ItemStack stack, AssemblerBlockEntity assembler, BlockState state, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-		this.animatable = (LongArmModule) stack.getItem();
+	public void renderModuleAssembler(AssemblerBlockEntity assembler, BlockState state, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+		this.animatable = (LongArmModule) CyberbopItems.LONG_ARM_MODULE;
 		matrices.push();
 		matrices.translate(0.5, 1, 0.5);
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
@@ -57,7 +58,7 @@ public class LongArmModuleRenderer extends AnimatableModuleRenderer<LongArmModul
 			this.getGeoModel().getBone("root").get().updatePosition(15, -30, -8);
 		}
 
-		super.renderModuleAssembler(stack, assembler, state, tickDelta, matrices, vertexConsumers, light, overlay);
+		super.renderModuleAssembler(assembler, state, tickDelta, matrices, vertexConsumers, light, overlay);
 		matrices.pop();
 	}
 

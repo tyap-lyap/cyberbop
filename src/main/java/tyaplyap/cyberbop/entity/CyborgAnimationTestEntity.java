@@ -25,7 +25,7 @@ public class CyborgAnimationTestEntity extends LivingEntity implements GeoEntity
 
 	//protected static final RawAnimation WAKE_ANIM = RawAnimation.begin().thenPlay("wake_default");
 	//protected static final RawAnimation WAKE_ATTACK_ANIM = RawAnimation.begin().thenPlay("wake_attack");
-	protected static final RawAnimation FAN = RawAnimation.begin().thenPlayAndHold("fall");
+	protected static final RawAnimation FAN = RawAnimation.begin().thenPlayAndHold("fan");
 	//protected static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle_cd");
 
 	private AnimationController test = new AnimationController<>(this, "wake", state -> PlayState.STOP)
@@ -108,7 +108,7 @@ public class CyborgAnimationTestEntity extends LivingEntity implements GeoEntity
 				var player = list.get(this.getRandom().nextInt(list.size()));
 				this.setOff(false);
 				if (this.canSee(player)) {
-					triggerAnim("wake", "dead");
+					triggerAnim("wake", "fan");
 					player.damage(getWorld().getDamageSources().mobAttack(this), 1);
 					this.setWake(true);
 
