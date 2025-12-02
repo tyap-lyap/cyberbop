@@ -29,7 +29,7 @@ public class CyborgAnimationTestEntity extends LivingEntity implements GeoEntity
 	//protected static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle_cd");
 
 	private AnimationController test = new AnimationController<>(this, "wake", state -> PlayState.STOP)
-		/*.triggerableAnim("wake_default", WAKE_ANIM)*/.triggerableAnim("dead", FAN);
+		/*.triggerableAnim("wake_default", WAKE_ANIM)*/.triggerableAnim("fan", FAN);
 
 	private static final TrackedData<Boolean> OFF = DataTracker.registerData(CyborgAnimationTestEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 	private static final TrackedData<Boolean> WAKE = DataTracker.registerData(CyborgAnimationTestEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
