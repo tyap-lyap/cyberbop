@@ -62,8 +62,7 @@ public class AssemblerBlock extends BlockWithEntity {
 			ItemStack stack = player.getStackInHand(Hand.MAIN_HAND);
 
 			if(stack.getItem() instanceof BaseCyborgModuleItem moduleItem) {
-				if(assembler.hasEmptyModuleSlot() && !assembler.containsModule(moduleItem)) {
-					assembler.addModule(stack);
+				if(assembler.hasEmptyModuleSlot() && !assembler.containsModule(moduleItem) && assembler.addModule(stack)) {
 					player.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
 					assembler.updateListeners();
 					return ActionResult.SUCCESS;

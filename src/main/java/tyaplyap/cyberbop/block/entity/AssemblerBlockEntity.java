@@ -22,6 +22,7 @@ import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.item.BaseCyborgModuleItem;
 import tyaplyap.cyberbop.item.CyborgPartItem;
 import tyaplyap.cyberbop.screen.AssemblerScreenHandler;
+import tyaplyap.cyberbop.util.ScreenUtil;
 import tyaplyap.cyberbop.util.transfer.BlockEnergyStorage;
 import tyaplyap.cyberbop.util.transfer.EnergyStorage;
 import tyaplyap.cyberbop.util.transfer.IEnergyStorage;
@@ -135,11 +136,12 @@ public class AssemblerBlockEntity extends EnergyContainer {
 			}
 	}
 
-	public void addModule(ItemStack module) {
-		if(getModule(1).isEmpty()) setModule(1, module);
-		else if(getModule(2).isEmpty()) setModule(2, module);
-		else if(getModule(3).isEmpty()) setModule(3, module);
-		else if(getModule(4).isEmpty()) setModule(4, module);
+	public boolean addModule(ItemStack module) {
+		if(getModule(1).isEmpty()) { setModule(1, module); return true;}
+		else if(getModule(2).isEmpty()) { setModule(2, module); return true;}
+		else if(getModule(3).isEmpty()) { setModule(3, module); return true;}
+		else if(ScreenUtil.isUnlockExtraModule(inventory) && getModule(4).isEmpty()) { setModule(4, module); return true;}
+		else return false;
 	}
 
 	public boolean hasEmptyModuleSlot() {
