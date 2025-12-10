@@ -30,8 +30,9 @@ public abstract class ModuleRenderer {
 	public static void init(EntityRendererFactory.Context context) {
 		if(!initialized) {
 			((JetpackModule)CyberbopItems.JETPACK_MODULE).setModuleRenderer(new JetpackModuleRenderer("textures/entity/jetpack_module.png", new JetpackModuleModel(context.getPart(CyberbopModClient.JETPACK_MODULE_LAYER))));
-			((FlightModule)CyberbopItems.FLIGHT_MODULE).setModuleRenderer(new FlightModuleRenderer("textures/entity/flight_module.png", new FlightModuleModel(context.getPart(CyberbopModClient.FLIGHT_MODULE_LAYER))));
+			//((FlightModule)CyberbopItems.FLIGHT_MODULE).setModuleRenderer(new FlightModuleRenderer("textures/entity/flight_module.png", new FlightModuleModel(context.getPart(CyberbopModClient.FLIGHT_MODULE_LAYER))));
 			((LongArmModule)CyberbopItems.LONG_ARM_MODULE).setModuleRenderer(new LongArmModuleRenderer());
+			((FlightModule)CyberbopItems.FLIGHT_MODULE).setModuleRenderer(new FlightModuleRenderer());
 
 			initialized = true;
 		}

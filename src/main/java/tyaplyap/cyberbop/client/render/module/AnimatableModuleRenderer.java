@@ -9,6 +9,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.RotationAxis;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -18,6 +19,7 @@ import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoObjectRenderer;
+import tyaplyap.cyberbop.block.AssemblerBlock;
 import tyaplyap.cyberbop.block.entity.AssemblerBlockEntity;
 import tyaplyap.cyberbop.item.AnimatableCyborgModule;
 import tyaplyap.cyberbop.item.CyberbopItems;
@@ -79,11 +81,26 @@ public abstract class AnimatableModuleRenderer<M extends AnimatableCyborgModule>
 
 	public void renderModule(ItemStack stack, PlayerEntityModel<?> contextModel, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, LivingEntity entity, float g) {
 		this.currentItemStack = stack;
+		matrices.push();
+//		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
+//		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+
 		super.render(matrices, animatable,  vertexConsumers, null, vertexConsumers.getBuffer(RenderLayer.getEntityCutout((this.getTexture()))), light, g);
+
+		matrices.pop();
 	}
 
 	public void renderModuleAssembler(AssemblerBlockEntity assembler, BlockState state, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
 		this.currentItemStack = CyberbopItems.LONG_ARM_MODULE.getDefaultStack();
+		matrices.push();
+
+		matrices.translate(0.5, 1, 0.5);
+
+		matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(state.get(AssemblerBlock.FACING).asRotation() + 180),0f,0,0);
+
+		matrices.scale(0.95f, 0.95f, 0.95f);
+
 		super.render(matrices, animatable,  vertexConsumers, null, vertexConsumers.getBuffer(RenderLayer.getEntityCutout((this.getTexture()))), light, tickDelta);
+		matrices.pop();
 	}
 }

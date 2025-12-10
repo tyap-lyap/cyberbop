@@ -1,7 +1,6 @@
 package tyaplyap.cyberbop.util;
 
 import net.minecraft.client.model.ModelPart;
-import org.joml.Matrix4f;
 import software.bernie.geckolib.cache.object.GeoBone;
 
 import java.util.Optional;
@@ -15,9 +14,15 @@ public class RenderUtils {
 			bone.get().updatePosition(8f - (referenceModel.pivotX), 16f - (originalY - sneakingOffset), -8 - (-referenceModel.pivotZ));
 			bone.get().updateRotation(referenceModel.pitch, referenceModel.yaw, referenceModel.roll);
 		}
-		if (bone_local.isPresent()) {
-			bone_local.get().updatePosition((-x),y,z);
+		if (bone_local.isPresent() && bone != bone_local) {
+			bone_local.get().updatePosition((x),y,z);
 			bone_local.get().updateRotation((float)Math.toRadians(xr), (float)Math.toRadians(yr), (float)Math.toRadians(zr));
+		}
+	}
+	public static void setPositionGeoBoneAssembler(Optional<GeoBone> bone, float x, float y, float z, float pitch, float yaw, float roll) {
+		if (bone.isPresent()) {
+			bone.get().updatePosition(8f - x, y - 8, -8 - (-z));
+			bone.get().updateRotation((float)Math.toRadians(pitch), (float)Math.toRadians(yaw), (float)Math.toRadians(roll));
 		}
 	}
 }

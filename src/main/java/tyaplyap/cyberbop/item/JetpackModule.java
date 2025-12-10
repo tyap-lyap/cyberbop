@@ -33,11 +33,12 @@ public class JetpackModule extends CyborgModuleItem {
 		if (ex.isCyborg() && ex.containsModule(CyberbopItems.JETPACK_MODULE) && !ex.containsModule(CyberbopItems.FLIGHT_MODULE) && !player.isCreative() && !player.isSpectator()) {
 
 			if (JetpackUseTracker.usesJetpack(player.getUuid())) {
-				if (ex.getEnergyStored() > 0) {
-					int energyConsume = 4;
-					if (player.getEquippedStack(EquipmentSlot.CHEST).getItem() instanceof ElytraItem && player.isFallFlying()) {
-						energyConsume = energyConsume * 3;
-					}
+				int energyConsume = 4;
+				if (player.getEquippedStack(EquipmentSlot.CHEST).getItem() instanceof ElytraItem && player.isFallFlying()) {
+					energyConsume = energyConsume * 3;
+				}
+
+				if (ex.getEnergyStored() > energyConsume) {
 					ex.setEnergyStored(Math.max(ex.getEnergyStored() - energyConsume, 0));
 					JetpackModule.useJetpack(player);
 					spawnJetpackEffects(world, player);

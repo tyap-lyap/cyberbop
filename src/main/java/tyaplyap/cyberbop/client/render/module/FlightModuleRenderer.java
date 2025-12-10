@@ -1,47 +1,43 @@
 package tyaplyap.cyberbop.client.render.module;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.RotationAxis;
-import org.joml.Vector3f;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
 import tyaplyap.cyberbop.CyberbopMod;
-import tyaplyap.cyberbop.block.AssemblerBlock;
 import tyaplyap.cyberbop.block.entity.AssemblerBlockEntity;
-import tyaplyap.cyberbop.client.model.module.ModuleModel;
+import tyaplyap.cyberbop.client.model.DefaultedModuleGeoModel;
+import tyaplyap.cyberbop.item.CyberbopItems;
+import tyaplyap.cyberbop.item.FlightModule;
+import tyaplyap.cyberbop.util.RenderUtils;
 
-public class FlightModuleRenderer extends ModuleRenderer {
+public class FlightModuleRenderer extends AnimatableModuleRenderer<FlightModule> {
 
-	public FlightModuleRenderer(String texture, ModuleModel model) {
-		super(texture, model);
+
+	public FlightModuleRenderer() {
+		super(new DefaultedModuleGeoModel<>(Identifier.of(CyberbopMod.MOD_ID, "flight_module")));
 	}
 
 	@Override
-	public void render(PlayerEntityModel<?> contextModel, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, LivingEntity entity) {
-		this.model.getRoot().copyTransform(contextModel.body);
+	public void renderModule(ItemStack stack, PlayerEntityModel<?> contextModel, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, LivingEntity entity, float tickDelta) {
+		this.animatable = (FlightModule) stack.getItem();
+		RenderUtils.setPositionGeoBone(this.getGeoModel().getBone("root"), 0f, 2.5f, 2, 24, contextModel.sneaking ? 3.2f : 0f, contextModel.body, 180, 180, 0, this.getGeoModel().getBone("local_root"));
 
-		VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityCutout(CyberbopMod.id(this.texture)));
-		this.model.getRoot().render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
+		super.renderModule(stack, contextModel, matrices, vertexConsumers, light, entity, tickDelta);
 	}
 
 	@Override
-	public void renderAssembler(AssemblerBlockEntity assembler, BlockState state, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-		matrices.push();
-		this.model.getRoot().resetTransform();
-		this.model.getRoot().translate(new Vector3f(0, -24, 0));
+	public void renderModuleAssembler(AssemblerBlockEntity assembler, BlockState state, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+		this.animatable = (FlightModule) CyberbopItems.FLIGHT_MODULE;
+		RenderUtils.setPositionGeoBoneAssembler(this.getGeoModel().getBone("root"), 0, 24-3, 2, 0, 0, 0);
+		super.renderModuleAssembler(assembler, state, tickDelta, matrices, vertexConsumers, light, overlay);
+	}
 
-		matrices.translate(0.5, 1, 0.5);
-		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
-		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(state.get(AssemblerBlock.FACING).asRotation()));
-		matrices.scale(0.95f,0.95f,0.95f);
-
-		VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityCutout(CyberbopMod.id(this.texture)));
-		this.model.getRoot().render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
-		matrices.pop();
+	@Override
+	public Identifier getTexture() {
+		return CyberbopMod.id("textures/module/flight_module.png");
 	}
 }

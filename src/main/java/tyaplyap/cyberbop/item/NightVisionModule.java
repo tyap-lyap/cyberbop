@@ -28,7 +28,7 @@ public class NightVisionModule extends CyborgModuleItem {
 
 	@Override
 	public void clientTick(ClientWorld world, PlayerEntity player, PlayerExtension extension) {
-		if(extension.getEnergyStored() > 0) {
+		if(extension.getEnergyStored() > 2) {
 			if(nightVisionStrength < 100) {
 				nightVisionStrength++;
 			}
