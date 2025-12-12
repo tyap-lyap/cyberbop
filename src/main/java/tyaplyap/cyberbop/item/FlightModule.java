@@ -7,7 +7,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
-import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -30,13 +29,13 @@ public class FlightModule extends AnimatableCyborgModule {
 	}
 
 	@Override
-	public void tick(ServerWorld world, PlayerEntity player, PlayerExtension ex, ItemStack stack) {
+	public void tick(ServerWorld serverWorld, PlayerEntity player, PlayerExtension ex, ItemStack stack) {
 		if (ex.isCyborg() && player.getAbilities().flying && !player.isSpectator()) {
-			triggerAnim(player, GeoItem.getOrAssignId(stack, world), "flight_module", "fly");
-			stopTriggeredAnim(player, GeoItem.getOrAssignId(stack, world), "flight_module", "idle");
+			triggerAnim(player, getOrAssignIdUpdate(stack, serverWorld, player), "flight_module", "fly");
+			stopTriggeredAnim(player, getOrAssignIdUpdate(stack, serverWorld, player), "flight_module", "idle");
 		} else {
-			stopTriggeredAnim(player, GeoItem.getOrAssignId(stack, world), "flight_module", "fly");
-			triggerAnim(player, GeoItem.getOrAssignId(stack, world), "flight_module", "idle");
+			stopTriggeredAnim(player, getOrAssignIdUpdate(stack, serverWorld, player), "flight_module", "fly");
+			triggerAnim(player, getOrAssignIdUpdate(stack, serverWorld, player), "flight_module", "idle");
 		}
 
 		if(ex.isCyborg() && !player.isCreative() && !player.isSpectator()) {

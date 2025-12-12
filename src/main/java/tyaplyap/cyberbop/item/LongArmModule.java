@@ -2,6 +2,8 @@ package tyaplyap.cyberbop.item;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.s2c.play.EntityEquipmentUpdateS2CPacket;
+import net.minecraft.network.packet.s2c.play.EntityTrackerUpdateS2CPacket;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -30,6 +32,7 @@ public class LongArmModule extends AnimatableCyborgModule {
 	public void controllerLogic(ControllerBlock controllerBlock, BlockPos pos, World world, PlayerEntity player, ItemStack itemStack) {
 		if (world instanceof ServerWorld serverWorld) {
 			GeoItem.getOrAssignId(itemStack, serverWorld);
+
 		}
 	}
 
@@ -37,9 +40,9 @@ public class LongArmModule extends AnimatableCyborgModule {
 	public void tick(ServerWorld world, PlayerEntity player, PlayerExtension extension, ItemStack stack) {
 			if (world instanceof ServerWorld serverWorld) {
 				if (player.handSwinging) {
-					triggerAnim(player, GeoItem.getOrAssignId(stack, serverWorld), "hook", "hook");
+					triggerAnim(player, getOrAssignIdUpdate(stack, serverWorld, player), "hook", "hook");
 				} else {
-					stopTriggeredAnim(player, GeoItem.getOrAssignId(stack, serverWorld), "hook", "hook");
+					stopTriggeredAnim(player, getOrAssignIdUpdate(stack, serverWorld, player), "hook", "hook");
 				}
 			}
 		super.tick(world, player, extension, stack);

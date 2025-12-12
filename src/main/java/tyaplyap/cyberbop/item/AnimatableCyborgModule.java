@@ -5,10 +5,8 @@ import net.fabricmc.api.Environment;
 import net.minecraft.component.ComponentMapImpl;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.s2c.play.EntityTrackerUpdateS2CPacket;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.world.World;
 import software.bernie.geckolib.GeckoLibConstants;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.cache.AnimatableIdCache;
@@ -23,15 +21,16 @@ public abstract class AnimatableCyborgModule extends BaseCyborgModuleItem implem
 	}
 
 
-	public static long getOrAssignIdUpdate(ItemStack stack, ServerWorld level) {
+	public static long getOrAssignIdUpdate(ItemStack stack, ServerWorld serverWorld, PlayerEntity player) {
 		if (!(stack.getComponents() instanceof ComponentMapImpl components))
 			return Long.MAX_VALUE;
 
 		Long id = components.get(GeckoLibConstants.STACK_ANIMATABLE_ID_COMPONENT.get());
 
-		if (id == null)
-			components.set(GeckoLibConstants.STACK_ANIMATABLE_ID_COMPONENT.get(), id = AnimatableIdCache.getFreeId(level));
-
+		if (id == null) {
+			components.set(GeckoLibConstants.STACK_ANIMATABLE_ID_COMPONENT.get(), id = AnimatableIdCache.getFreeId(serverWorld));
+			serverWorld.getChunkManager().sendToNearbyPlayers(player, new EntityTrackerUpdateS2CPacket(player.getId(), player.getDataTracker().getChangedEntries()));
+		}
 
 		return id;
 	}
