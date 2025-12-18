@@ -8,6 +8,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import tyaplyap.cyberbop.block.entity.AssemblerBlockEntity;
 import tyaplyap.cyberbop.client.CyberbopModClient;
+import tyaplyap.cyberbop.client.model.module.ExtraBatteryModuleModel;
 import tyaplyap.cyberbop.client.model.module.FlightModuleModel;
 import tyaplyap.cyberbop.client.model.module.JetpackModuleModel;
 import tyaplyap.cyberbop.client.model.module.ModuleModel;
@@ -33,6 +34,7 @@ public abstract class ModuleRenderer {
 			//((FlightModule)CyberbopItems.FLIGHT_MODULE).setModuleRenderer(new FlightModuleRenderer("textures/entity/flight_module.png", new FlightModuleModel(context.getPart(CyberbopModClient.FLIGHT_MODULE_LAYER))));
 			((LongArmModule)CyberbopItems.LONG_ARM_MODULE).setModuleRenderer(new LongArmModuleRenderer());
 			((FlightModule)CyberbopItems.FLIGHT_MODULE).setModuleRenderer(new FlightModuleRenderer());
+			((BatteryModule)CyberbopItems.EXTRA_BATTERY_MODULE).setModuleRenderer(new ExtraBatteryModuleRenderer("textures/entity/extra_battery_module.png", new ExtraBatteryModuleModel(context.getPart(CyberbopModClient.EXTRA_BATTERY_MODULE_LAYER))));
 
 			initialized = true;
 		}

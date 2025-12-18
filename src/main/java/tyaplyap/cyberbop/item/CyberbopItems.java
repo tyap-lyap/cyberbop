@@ -48,10 +48,7 @@ public class CyberbopItems {
 		ComponentType.<Boolean>builder().codec(Codec.BOOL).build()
 	);
 
-	public static final TagKey<Item> SLOT_HEAD_UNLOCK = TagKey.of(RegistryKeys.ITEM, CyberbopMod.id("extra_slot_head_unlock"));
-	public static final TagKey<Item> SLOT_BODY_UNLOCK = TagKey.of(RegistryKeys.ITEM, CyberbopMod.id("extra_slot_body_unlock"));
-	public static final TagKey<Item> SLOT_ARMS_UNLOCK = TagKey.of(RegistryKeys.ITEM, CyberbopMod.id("extra_slot_arms_unlock"));
-	public static final TagKey<Item> SLOT_LEGS_UNLOCK = TagKey.of(RegistryKeys.ITEM, CyberbopMod.id("extra_slot_legs_unlock"));
+	public static final TagKey<Item> UNLOCKS_MODULE_SLOT = TagKey.of(RegistryKeys.ITEM, CyberbopMod.id("unlocks_module_slot"));
 
 	public static final Item FLIGHT_MODULE = add("flight_module", new FlightModule(new Item.Settings().maxCount(1).rarity(Rarity.RARE).component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true)));
 	public static final Item CREATIVE_BATTERY_MODULE = add("creative_battery_module", new CreativeBatteryModule(new Item.Settings().maxCount(1).rarity(Rarity.EPIC)));
