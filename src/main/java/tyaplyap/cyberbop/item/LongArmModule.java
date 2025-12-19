@@ -1,5 +1,7 @@
 package tyaplyap.cyberbop.item;
 
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.EntityEquipmentUpdateS2CPacket;
@@ -15,10 +17,13 @@ import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import tyaplyap.cyberbop.CyberbopMod;
 import tyaplyap.cyberbop.block.ControllerBlock;
 import tyaplyap.cyberbop.extension.PlayerExtension;
 
 public class LongArmModule extends AnimatableCyborgModule {
+
+	public static final int ENERGY_CONSUME = 10;
 
 	private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 	protected static final RawAnimation HOOK_ANIM = RawAnimation.begin().thenPlay("hook");
@@ -29,22 +34,38 @@ public class LongArmModule extends AnimatableCyborgModule {
 	}
 
 	@Override
+	public void onModuleRemoved(World world, PlayerEntity player) {
+		player.getAttributeInstance(EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE).removeModifier(CyberbopMod.id("long_arm_module"));
+		player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE).removeModifier(CyberbopMod.id("long_arm_module"));
+	}
+
+	@Override
 	public void controllerLogic(ControllerBlock controllerBlock, BlockPos pos, World world, PlayerEntity player, ItemStack itemStack) {
 		if (world instanceof ServerWorld serverWorld) {
 			GeoItem.getOrAssignId(itemStack, serverWorld);
-
 		}
 	}
 
 	@Override
 	public void tick(ServerWorld world, PlayerEntity player, PlayerExtension extension, ItemStack stack) {
 			if (world instanceof ServerWorld serverWorld) {
-				if (player.handSwinging) {
-					triggerAnim(player, getOrAssignIdUpdate(stack, serverWorld, player), "hook", "hook");
+				if (ENERGY_CONSUME <= extension.getEnergyStored()) {
+					if (!player.getAttributeInstance(EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE).hasModifier(CyberbopMod.id("long_arm_module")) && !player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE).hasModifier(CyberbopMod.id("long_arm_module"))) {
+						player.getAttributeInstance(EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE).addPersistentModifier(new EntityAttributeModifier(CyberbopMod.id("long_arm_module"), 3, EntityAttributeModifier.Operation.ADD_VALUE));
+						player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE).addPersistentModifier(new EntityAttributeModifier(CyberbopMod.id("long_arm_module"), 3, EntityAttributeModifier.Operation.ADD_VALUE));
+					}
 				} else {
-					stopTriggeredAnim(player, getOrAssignIdUpdate(stack, serverWorld, player), "hook", "hook");
+					player.getAttributeInstance(EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE).removeModifier(CyberbopMod.id("long_arm_module"));
+					player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE).removeModifier(CyberbopMod.id("long_arm_module"));
 				}
-			}
+
+					if (player.handSwinging) {
+						triggerAnim(player, getOrAssignIdUpdate(stack, serverWorld, player), "hook", "hook");
+					} else {
+						stopTriggeredAnim(player, getOrAssignIdUpdate(stack, serverWorld, player), "hook", "hook");
+					}
+				}
+
 		super.tick(world, player, extension, stack);
 	}
 
