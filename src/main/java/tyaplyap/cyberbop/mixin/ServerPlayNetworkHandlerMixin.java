@@ -29,34 +29,34 @@ public class ServerPlayNetworkHandlerMixin {
 		}
 	}
 
-	@Inject(
-		method = "onPlayerInteractEntity",
-		at = @At(
-			value = "INVOKE",
-			target = "Lnet/minecraft/server/network/ServerPlayerEntity;canInteractWithEntityIn(Lnet/minecraft/util/math/Box;D)Z",
-			shift = At.Shift.AFTER
-		),
-		cancellable = true
-	)
-	private void takeEnergyInteractEntity(PlayerInteractEntityC2SPacket packet, CallbackInfo ci) {
-		if (player instanceof ServerPlayerEntity && player instanceof PlayerExtension ex && ex.isCyborg() && ex.containsModule(CyberbopItems.LONG_ARM_MODULE) && LongArmModule.ENERGY_CONSUME <= ex.getEnergyStored()) {
-			ex.setEnergyStored(ex.getEnergyStored() - LongArmModule.ENERGY_CONSUME);
-		}
-	}
-
-	@Inject(
-		method = "onPlayerInteractBlock",
-		at = @At(
-			value = "INVOKE",
-			target = "Lnet/minecraft/util/ActionResult;isAccepted()Z",
-			ordinal = 0,
-			shift = At.Shift.AFTER
-		),
-		cancellable = true
-	)
-	private void takeEnergyInteractBlock(PlayerInteractBlockC2SPacket packet, CallbackInfo ci) {
-		if (player instanceof ServerPlayerEntity && player instanceof PlayerExtension ex && ex.isCyborg() && ex.containsModule(CyberbopItems.LONG_ARM_MODULE) && LongArmModule.ENERGY_CONSUME <= ex.getEnergyStored()) {
-			ex.setEnergyStored(ex.getEnergyStored() - LongArmModule.ENERGY_CONSUME);
-		}
-	}
+//	@Inject(
+//		method = "onPlayerInteractEntity",
+//		at = @At(
+//			value = "INVOKE",
+//			target = "Lnet/minecraft/server/network/ServerPlayerEntity;canInteractWithEntityIn(Lnet/minecraft/util/math/Box;D)Z",
+//			shift = At.Shift.AFTER
+//		),
+//		cancellable = true
+//	)
+//	private void takeEnergyInteractEntity(PlayerInteractEntityC2SPacket packet, CallbackInfo ci) {
+//		if (player instanceof ServerPlayerEntity && player instanceof PlayerExtension ex && ex.isCyborg() && ex.containsModule(CyberbopItems.LONG_ARM_MODULE) && LongArmModule.ENERGY_CONSUME <= ex.getEnergyStored()) {
+//			ex.setEnergyStored(ex.getEnergyStored() - LongArmModule.ENERGY_CONSUME);
+//		}
+//	}
+//
+//	@Inject(
+//		method = "onPlayerInteractBlock",
+//		at = @At(
+//			value = "INVOKE",
+//			target = "Lnet/minecraft/util/ActionResult;isAccepted()Z",
+//			ordinal = 0,
+//			shift = At.Shift.AFTER
+//		),
+//		cancellable = true
+//	)
+//	private void takeEnergyInteractBlock(PlayerInteractBlockC2SPacket packet, CallbackInfo ci) {
+//		if (player instanceof ServerPlayerEntity && player instanceof PlayerExtension ex && ex.isCyborg() && ex.containsModule(CyberbopItems.LONG_ARM_MODULE) && LongArmModule.ENERGY_CONSUME <= ex.getEnergyStored()) {
+//			ex.setEnergyStored(ex.getEnergyStored() - LongArmModule.ENERGY_CONSUME);
+//		}
+//	}
 }

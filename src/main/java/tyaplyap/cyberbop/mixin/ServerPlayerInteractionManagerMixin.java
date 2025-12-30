@@ -20,19 +20,19 @@ public class ServerPlayerInteractionManagerMixin {
 	@Final
 	protected ServerPlayerEntity player;
 
-	@Inject(
-		method = "finishMining",
-		at = @At(
-			value = "INVOKE",
-			target = "Lnet/minecraft/server/network/ServerPlayerInteractionManager;tryBreakBlock(Lnet/minecraft/util/math/BlockPos;)Z",
-			shift = At.Shift.AFTER
-		),
-		cancellable = true
-	)
-	private void takeEnergyBreakBlock(BlockPos pos, int sequence, String reason, CallbackInfo ci) {
-		if (player instanceof ServerPlayerEntity && player instanceof PlayerExtension ex && ex.isCyborg() && ex.containsModule(CyberbopItems.LONG_ARM_MODULE) && LongArmModule.ENERGY_CONSUME <= ex.getEnergyStored()) {
-			ex.setEnergyStored(ex.getEnergyStored() - LongArmModule.ENERGY_CONSUME);
-		}
-	}
+//	@Inject(
+//		method = "finishMining",
+//		at = @At(
+//			value = "INVOKE",
+//			target = "Lnet/minecraft/server/network/ServerPlayerInteractionManager;tryBreakBlock(Lnet/minecraft/util/math/BlockPos;)Z",
+//			shift = At.Shift.AFTER
+//		),
+//		cancellable = true
+//	)
+//	private void takeEnergyBreakBlock(BlockPos pos, int sequence, String reason, CallbackInfo ci) {
+//		if (player instanceof ServerPlayerEntity && player instanceof PlayerExtension ex && ex.isCyborg() && ex.containsModule(CyberbopItems.LONG_ARM_MODULE) && LongArmModule.ENERGY_CONSUME <= ex.getEnergyStored()) {
+//			ex.setEnergyStored(ex.getEnergyStored() - LongArmModule.ENERGY_CONSUME);
+//		}
+//	}
 
 }

@@ -54,6 +54,9 @@ public class LongArmModule extends AnimatableCyborgModule {
 						player.getAttributeInstance(EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE).addPersistentModifier(new EntityAttributeModifier(CyberbopMod.id("long_arm_module"), 3, EntityAttributeModifier.Operation.ADD_VALUE));
 						player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE).addPersistentModifier(new EntityAttributeModifier(CyberbopMod.id("long_arm_module"), 3, EntityAttributeModifier.Operation.ADD_VALUE));
 					}
+					if(!player.isCreative() && !player.isSpectator()) {
+						extension.setEnergyStored(Math.max(extension.getEnergyStored() - 1, 0));
+					}
 				} else {
 					player.getAttributeInstance(EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE).removeModifier(CyberbopMod.id("long_arm_module"));
 					player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_INTERACTION_RANGE).removeModifier(CyberbopMod.id("long_arm_module"));
